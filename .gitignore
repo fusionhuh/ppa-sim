@@ -6,7 +6,7 @@
 **/*.vcd
 **/.vscode
 /misc
-**/.v
+**/*.v
 *.v
 verilog/*
 
