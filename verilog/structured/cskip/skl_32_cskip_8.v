@@ -4,7 +4,7 @@
 // NAND count: 48, AND count: 32
 // NOR count: 48, OR count: 16
 // NOT count: 44, Transistor count: 760
-module skl8cskip32(x1, x2, s, cin, cout);
+module skl_32_cskip_8(x1, x2, s, cin, cout);
 	input[31:0]x1;
 	input[31:0]x2;
 	input cin;

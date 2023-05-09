@@ -1,7 +1,8 @@
 
 `include "cla/bk_16_cla_4.v"
+`include "cla/serial_64_cla_4.v"
 
-`define WIDTH 16
+`define WIDTH 64
 
 module tb;
 	reg [`WIDTH-1:0]x1;
@@ -9,7 +10,7 @@ module tb;
 	wire [`WIDTH-1:0]s;
 	reg cin;
 	wire cout;
-	bk_16_cla_4 test(.x1(x1), .x2(x2), .s(s), .cin(cin), .cout(cout));
+	serial_64_cla_4 test(.x1(x1), .x2(x2), .s(s), .cin(cin), .cout(cout));
 
 	initial begin
 		$monitor($time,,"x1: %d, x2: %d, s: %d, cout: %d", x1, x2, s, cout);
@@ -17,9 +18,9 @@ module tb;
 		$dumpfile("test.vcd");
 		$dumpvars(s, test);
 		#100
-		x1 = 1;
+		x1 = 999;
 		x2 = -1;
-		cin = 0;
+		cin = 1;
 		$display("x1=%d", x1);
 		$display("x2=%d", x2);
 //		$display("sum=%d", s);

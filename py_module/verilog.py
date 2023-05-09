@@ -28,18 +28,19 @@ class adder:
             assert len(structure_info) == 1
             self.block_size: int = self.width
             self.block_count: int = 1
-        elif self.structure == "cselect":
-            pass
+
         else:
             assert len(structure_info) == 2
+            if self.structure == "cla":
+                assert int(structure_info[1]) == 4
+                assert self.width == 16 or self.width == 64
             self.block_size: int = int(structure_info[1])
             self.block_count: int = self.width//self.block_size
-
 
         # 4) generate graph
         gen_function_name = "generate_{type}_graph".format(type=self.base_type)
         if self.base_type == "hybrid":
-            self.graph: list = graph.get_globals()(self.block_size, self.hybrid_levels)
+            self.graph: list = graph.get_globals()[gen_function_name](self.block_size, self.hybrid_levels)
         else:
             self.graph: list = graph.get_globals()[gen_function_name](self.block_size)
         graph.test_graph_completeness(self.block_size, self.graph)
@@ -113,18 +114,24 @@ def generate_adder_info_block(a: adder) -> str:
     info_block += "// NOT count: {not_count}, Transistor count: {transistor_count}\n".format(not_count=a.not_count, transistor_count=a.transistor_count)
     return info_block
 
-def generate_port_declare_block(width: int) -> str:
+def generate_port_declare_block(width: int, group_signals: bool = True) -> str:
     declare_block = "\tinput[{len}:0]x1;\n".format(len=width-1)
     declare_block += "\tinput[{len}:0]x2;\n".format(len=width-1)
     declare_block += "\tinput cin;\n"
     declare_block += "\twire[{len}:0]p_in;\n".format(len=width-1)
     declare_block += "\twire[{len}:0]g_in;\n".format(len=width-1)
     declare_block += "\toutput[{len}:0]s;\n".format(len=width-1)
-    declare_block += "\toutput cout;\n\n"
+    if group_signals:
+        declare_block += "\toutput cout, g_out, p_out;\n\n"
+    else:
+        declare_block += "\toutput cout;\n\n"
     return declare_block 
 
-def generate_module_declaration(module_name: str):
-    return "module {module_name}(x1, x2, s, cin, cout, p_out, g_out);\n".format(module_name=module_name)
+def generate_module_declaration(module_name: str, group_signals: bool = True):
+    if group_signals:
+        return "module {module_name}(x1, x2, s, cin, cout, p_out, g_out);\n".format(module_name=module_name)
+    else:
+        return f"module {module_name}(x1, x2, s, cin, cout);\n"
 
 
 def generate_structured_adder(a: adder):
@@ -132,8 +139,8 @@ def generate_structured_adder(a: adder):
         include_block = "`include \"{name}.v\"\n".format(name=a.verilog_base_name)
         module_definition: str = include_block
         module_definition += generate_adder_info_block(a)
-        module_definition += generate_module_declaration(a.verilog_structured_name)
-        module_definition += generate_port_declare_block(a.width)
+        module_definition += generate_module_declaration(a.verilog_structured_name, False)
+        module_definition += generate_port_declare_block(a.width, False)
         for i in range(0, a.block_count):
             block_declaration = "\twire block{num}_cout;\n".format(num=i)
             bit_slice_range = "[{a}:{b}]".format(a=a.block_size*i + a.block_size-1, b=a.block_size*i)
@@ -149,8 +156,8 @@ def generate_structured_adder(a: adder):
         include_block = "`include \"{name}.v\"\n".format(name=a.verilog_base_name)
         module_definition: str = include_block
         module_definition += generate_adder_info_block(a)
-        module_definition += generate_module_declaration(a.verilog_structured_name)
-        module_definition += generate_port_declare_block(a.width)
+        module_definition += generate_module_declaration(a.verilog_structured_name, False)
+        module_definition += generate_port_declare_block(a.width, False)
         module_definition += "\twire[{width}:0]p = x1 ^ x2;\n\n".format(width=a.width-1)   
         for i in range(0, a.block_count):
             block_cout = "block{num}_cout".format(num=i)
@@ -189,6 +196,8 @@ def generate_structured_adder(a: adder):
         include_block += "`ifndef {up_name}\n`include \"{name}.v\"\n`endif\n".format(up_name="cla4".upper(), name="cla4")
         include_block += "`ifndef {up_name}\n`include \"{name}.v\"\n`endif\n".format(up_name="block_signals4".upper(), name="block_signals4")
         subadder_name = "_16bit_subadd"
+        include_block += "`ifndef {up_name}\n`include \"{name}.v\"\n`endif\n".format(up_name=subadder_name.upper(), name=subadder_name)
+        """
         subadder_definition: str = "module {name}(x1, x2, s, cin, cout, p_out, g_out);\n".format(name=subadder_name)
         subadder_definition += generate_port_declare_block(16)
         subadder_definition += "\toutput p_out, g_out;\n\n"
@@ -219,15 +228,36 @@ def generate_structured_adder(a: adder):
         for i in range(0, 4):
             subadder_definition += "\tassign adder{num}_cin = cla_cout[{num}];\n".format(num=i)
         subadder_definition += "endmodule\n"
-        
+        """
         module_definition: str = include_block
-        module_definition += "\n" + subadder_definition + "\n\n"
-        module_definition += generate_module_declaration(a.verilog_structured_name)
+        #module_definition += "\n" + subadder_definition + "\n\n"
+        module_definition += generate_module_declaration(a.verilog_structured_name, False)
+        module_definition += generate_port_declare_block(a.width, False)
         if a.width == 16:
-            module_definition += generate_port_declare_block(a.width)
             module_definition += "\t{subadder_name} adder(.x1(x1), .x2(x2), .s(s), .cin(cin), .cout(cout));\n".format(subadder_name=subadder_name)
             module_definition += "endmodule\n"
-        
+        else:
+            # process:
+            # 1) declare each of the four 16-bit adders with wire connections from
+            # g/p_out and cin
+            # 2) wire them up to 4-bit cla generator after 
+            for i in range(0, 4):
+                cin = f"adder{i}_cin"
+                g_out = f"adder{i}_g_out"
+                p_out = f"adder{i}_p_out"
+                module_definition += f"\twire {cin};\n"
+                module_definition += f"\twire {g_out};\n"
+                module_definition += f"\twire {p_out};\n"
+                bit_range = f"[{16*i + 15}:{16*i}]"
+                module_definition += f"\t{subadder_name} adder{i}(.x1(x1{bit_range}), .x2(x2{bit_range}), .s(s{bit_range}), .cin({cin}), .p_out({p_out}), .g_out({g_out}));\n\n"
+            module_definition += "\twire[3:0]cla_cout;\n"
+            cla_p: str = "{adder3_p_out, adder2_p_out, adder1_p_out, adder0_p_out}"
+            cla_g: str = "{adder3_g_out, adder2_g_out, adder1_g_out, adder0_g_out}"
+            cla_cin: str = "cin"
+            module_definition += "\tcla4 cla_block(.p_in({p}), .g_in({g}), .cin({cin}), .cout(cla_cout), .p_out(p_out), .g_out(g_out));\n".format(p=cla_p, g=cla_g, cin=cla_cin)
+            for i in range(0, 4):
+                module_definition += f"\tassign adder{i}_cin = cla_cout[{i}];\n"
+            module_definition += "endmodule\n"
         return module_definition
 
     def generate_cselect_adder():
@@ -272,7 +302,7 @@ def generate_basic_adder(a: adder):
     else:
         module_name = "{adder_type}{bit_width}".format(adder_type=a.base_type, bit_width=a.block_size)
     module_definition += generate_module_declaration(a.verilog_base_name)
-    module_definition += generate_port_declare_block(a.block_size)
+    module_definition += generate_port_declare_block(a.block_size, False)
     module_definition += "\toutput[{len}:0]p_out;\n\toutput[{len}:0]g_out;\n".format(len=a.block_size-1)
     module_definition += "\tassign p_in = x1 ^ x2;\n\tassign p_out = p_in;\n"
     module_definition += "\tassign g_in[{len}:1] = x1[{len}:1] & x2[{len}:1];\n".format(len=a.block_size-1)

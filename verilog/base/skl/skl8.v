@@ -7,11 +7,12 @@
 `ifndef POS_CARRY_OPERATOR
 `include "pos_operator.v"
 `endif
+`define SKL8
 // number of levels: 4
-// number of nodes: 48
-// NAND count: 48, AND count: 32
-// NOR count: 48, OR count: 16
-// NOT count: 44, Transistor count: 760
+// number of nodes: 12
+// NAND count: 12, AND count: 8
+// NOR count: 12, OR count: 4
+// NOT count: 11, Transistor count: 190
 module skl8(x1, x2, s, cin, cout, p_out, g_out);
 	input[7:0]x1;
 	input[7:0]x2;
@@ -21,9 +22,13 @@ module skl8(x1, x2, s, cin, cout, p_out, g_out);
 	output[7:0]s;
 	output cout;
 
+	output[7:0]p_out;
+	output[7:0]g_out;
 	assign p_in = x1 ^ x2;
+	assign p_out = p_in;
 	assign g_in[7:1] = x1[7:1] & x2[7:1];
 	assign g_in[0] = (x1[0] & x2[0]) | (p_in[0] & cin);
+	assign g_out = g_in;
 	wire node_level1_pos1_outg;
 	wire node_level1_pos1_outp;
 	neg_operator node_level1_pos1(.p1(p_in[1]), .g1(g_in[1]), .p0(p_in[0]), .g0(g_in[0]), .gp(node_level1_pos1_outg), .pp(node_level1_pos1_outp));

@@ -7,12 +7,13 @@
 `ifndef POS_CARRY_OPERATOR
 `include "pos_operator.v"
 `endif
+`define KS16
 // number of levels: 5
-// number of nodes: 49
-// NAND count: 49, AND count: 27
-// NOR count: 49, OR count: 22
-// NOT count: 15, Transistor count: 716
-module ks16(x1, x2, s, cin, cout);
+// number of nodes: 98
+// NAND count: 98, AND count: 54
+// NOR count: 98, OR count: 44
+// NOT count: 30, Transistor count: 1432
+module ks16(x1, x2, s, cin, cout, p_out, g_out);
 	input[15:0]x1;
 	input[15:0]x2;
 	input cin;
@@ -21,9 +22,13 @@ module ks16(x1, x2, s, cin, cout);
 	output[15:0]s;
 	output cout;
 
+	output[15:0]p_out;
+	output[15:0]g_out;
 	assign p_in = x1 ^ x2;
+	assign p_out = p_in;
 	assign g_in[15:1] = x1[15:1] & x2[15:1];
 	assign g_in[0] = (x1[0] & x2[0]) | (p_in[0] & cin);
+	assign g_out = g_in;
 	wire node_level1_pos1_outg;
 	wire node_level1_pos1_outp;
 	neg_operator node_level1_pos1(.p1(p_in[1]), .g1(g_in[1]), .p0(p_in[0]), .g0(g_in[0]), .gp(node_level1_pos1_outg), .pp(node_level1_pos1_outp));
@@ -191,4 +196,3 @@ module ks16(x1, x2, s, cin, cout);
 	assign s[15] = p_in[15] ^ node_level4_pos14_outg;
 	assign cout = (x1[15] & x2[15]) | (~s[15] & (x1[15] | x2[15]));
 endmodule
-
