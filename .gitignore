@@ -5,10 +5,10 @@
 /*.vcd
 **/*.vcd
 **/.vscode
+verilog/structured/**/*.v
+verilog/base/**/*.v
+
 /misc
-**/*.v
-*.v
-verilog/*
 
 
 # ignore ModelSim generated files and directories (temp files and so on)

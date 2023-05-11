@@ -9,10 +9,10 @@
 `endif
 `define BK4
 // number of levels: 3
-// number of nodes: 32
-// NAND count: 32, AND count: 16
-// NOR count: 32, OR count: 16
-// NOT count: 24, Transistor count: 496
+// number of nodes: 64
+// NAND count: 64, AND count: 32
+// NOR count: 64, OR count: 32
+// NOT count: 48, Transistor count: 992
 module bk4(x1, x2, s, cin, cout, p_out, g_out);
 	input[3:0]x1;
 	input[3:0]x2;

@@ -9,10 +9,10 @@
 `endif
 `define BK8
 // number of levels: 5
-// number of nodes: 11
-// NAND count: 11, AND count: 6
-// NOR count: 11, OR count: 5
-// NOT count: 13, Transistor count: 180
+// number of nodes: 44
+// NAND count: 44, AND count: 24
+// NOR count: 44, OR count: 20
+// NOT count: 52, Transistor count: 720
 module bk8(x1, x2, s, cin, cout, p_out, g_out);
 	input[7:0]x1;
 	input[7:0]x2;

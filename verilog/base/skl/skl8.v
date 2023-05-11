@@ -9,10 +9,10 @@
 `endif
 `define SKL8
 // number of levels: 4
-// number of nodes: 12
-// NAND count: 12, AND count: 8
-// NOR count: 12, OR count: 4
-// NOT count: 11, Transistor count: 190
+// number of nodes: 48
+// NAND count: 48, AND count: 32
+// NOR count: 48, OR count: 16
+// NOT count: 44, Transistor count: 760
 module skl8(x1, x2, s, cin, cout, p_out, g_out);
 	input[7:0]x1;
 	input[7:0]x2;

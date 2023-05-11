@@ -9,10 +9,10 @@
 `endif
 `define KS8
 // number of levels: 4
-// number of nodes: 17
-// NAND count: 17, AND count: 11
-// NOR count: 17, OR count: 6
-// NOT count: 9, Transistor count: 256
+// number of nodes: 68
+// NAND count: 68, AND count: 44
+// NOR count: 68, OR count: 24
+// NOT count: 36, Transistor count: 1024
 module ks8(x1, x2, s, cin, cout, p_out, g_out);
 	input[7:0]x1;
 	input[7:0]x2;

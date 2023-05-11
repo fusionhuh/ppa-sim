@@ -14,6 +14,7 @@ parser.add_argument("-o", "--output", help="Toggles terminal text output.")
 parser.add_argument("-a", "--all", help="Generate all possible adder types.", action="store_true")
 
 #args = parser.parse_args()
+description = "bk.32.cselect-16"
 
 #if not args.all:
 #    description = args.description
@@ -23,8 +24,9 @@ parser.add_argument("-a", "--all", help="Generate all possible adder types.", ac
 #    draw = True
 
 #if not args.all:
-#    a: verilog.adder = verilog.adder(description)
+a: verilog.adder = verilog.adder(description)
 
+"""
 num_adders_generated:int = 0
 for width_power in range(3, 6):
     adder_width: int = 2 ** width_power
@@ -45,7 +47,7 @@ for width_power in range(3, 6):
                 a: verilog.adder = verilog.adder(description)
                 num_adders_generated += 1
 print(num_adders_generated)
-
+"""
 
 
 #if a.structure == "basic":

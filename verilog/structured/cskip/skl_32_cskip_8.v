@@ -1,4 +1,6 @@
+`ifndef SKL8
 `include "skl8.v"
+`endif
 // number of levels: 4
 // number of nodes: 48
 // NAND count: 48, AND count: 32
