@@ -342,10 +342,10 @@ def generate_structured_adder(a: adder):
                     elif i+1 == k:
                         sum_wires.insert(0, mux0_out)
                     module_definition += "\n\n"
-        module_definition += generate_wires([("sum", a.width+1)])
+        module_definition += generate_wires([("sum", a.width+1 - a.block_size)])
         module_definition += "\tassign sum = {{{sum_wires}}};\n".format(sum_wires=", ".join(sum_wires))
         module_definition += f"\tassign cout = sum[{a.width}];\n"
-        module_definition += f"\tassign s = sum[{a.width-1}:0];\n"
+        module_definition += f"\tassign s[{a.width-1}:{a.block_size}] = sum[{a.width-1-a.block_size}:{0}];\n"
         module_definition += "endmodule\n"
         return module_definition
                     
