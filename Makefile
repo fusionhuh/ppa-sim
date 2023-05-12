@@ -7,4 +7,7 @@ clean:
 	rm -f log.txt
 	rm -f */log.txt
 	rm -f */*.vcd
+	rm -rf verilog/base/
+	rm -rf verilog/structured/
+	rm -f verilog/testbench_out
 	
