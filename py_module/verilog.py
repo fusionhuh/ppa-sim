@@ -1,6 +1,7 @@
 import graph
 from pathlib import Path
 import math
+import os
 
 # {type,hybrid-levels}.width.{basic,ripple-block,cla-block,skip-block,select-block}
 class adder:
@@ -71,9 +72,15 @@ class adder:
 
         if self.structure != "basic":
             self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
-            file = Path("verilog/structured/{structure}/{name}.v".format(structure=self.structure, name=self.verilog_structured_name))
+            self.verilog_file_path = f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v"
+            file = Path(self.verilog_file_path)
             file.parent.mkdir(parents=True, exist_ok=True)
-            file.write_text(generate_structured_adder(self))
+            text = generate_structured_adder(self)
+            file.write_text(text)
+            tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
+            test_adder(self, text, tests)
+        else:
+            self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
 
     def __calculate_gate_counts(self):
         self.and_count: int = 0
@@ -176,7 +183,7 @@ def generate_structured_adder(a: adder):
         return module_definition
 
     def generate_cskip_adder():
-        module_definition: str = generate_include_block([f"{a.type}/"+a.verilog_base_name])
+        module_definition: str = generate_include_block([a.verilog_base_name])
         module_definition += generate_adder_info_block(a)
         module_definition += generate_module_declaration(a.verilog_structured_name, False)
         module_definition += generate_port_declare_block(a.width, False)
@@ -216,7 +223,7 @@ def generate_structured_adder(a: adder):
         # 2) if desired adder is 16 bits, instantiate module and stop here
         # 3) if desired adder is 64 bits, instantiate 4 and chain together with 4 bit cla
         subadder_name = "_16bit_subadd"
-        include_block = generate_include_block([f"{a.type}/"+a.verilog_base_name, "cla4", "block_signals4"])
+        include_block = generate_include_block([a.verilog_base_name, "cla4", "block_signals4"])
 
         module_definition: str = include_block
         subadder_file = open("verilog/logic/" + subadder_name + ".v", "r")
@@ -225,7 +232,7 @@ def generate_structured_adder(a: adder):
         module_definition += subadder_text
         module_definition += generate_module_declaration(a.verilog_structured_name, False)
         module_definition += generate_port_declare_block(a.width, False)
-        subadder_name += a.verilog_base_name
+        subadder_name += f"_{a.verilog_base_name}"
         if a.width == 16:
             module_definition += "\t{subadder_name} adder(.x1(x1), .x2(x2), .s(s), .cin(cin), .cout(cout));\n".format(subadder_name=subadder_name)
             module_definition += "endmodule\n"
@@ -450,3 +457,63 @@ def generate_basic_adder(a: adder):
 
     text = include_block + info_block + module_definition
     return text
+
+
+def test_adder(a: adder, text: str, test_cases: list):
+    if compile_verilog(text) == False:
+        print("Generated code could not compile correctly, exiting...")
+        exit()
+    
+
+    assert len(test_cases) > 0
+    tb_template = open("verilog/testbench_template.txt", "r")
+    tb_template_text = tb_template.read()
+    tb_template.close()
+
+    adder_name: str = a.verilog_base_name if a.structure == "basic" else a.verilog_structured_name
+
+
+    test_cases_text: str = ""
+    count = 1
+    for test in test_cases:
+        assert isinstance(test, dict)
+        x1 = test["x1"]
+        x2 = test["x2"]
+        cin = test["cin"]
+        assert cin == 0 or cin == 1
+        expected_s = x1 + x2 + cin
+        # assuming no overflow currently
+
+        test_cases_text += f"\t\t// test case {count}\n"
+        test_cases_text += f"\t\tx1 = {x1};\n"
+        test_cases_text += f"\t\tx2 = {x2};\n"
+        test_cases_text += f"\t\tcin = {cin};\n"
+        test_cases_text += "\t\t#100;\n\n\n"
+        test_cases_text += f"\t\tif (s != {expected_s}) $finish;\n"
+
+        count += 1
+    tb_text = tb_template_text.format(dependency=a.verilog_file_path.replace("verilog/structured/", ""), width=a.width, adder=adder_name, tests=test_cases_text)
+
+
+    if compile_verilog(tb_text) == False:
+        print("Testbench could not compile correctly, exiting...")
+        exit()
+
+    tb = open("verilog/tb.v", "w+")
+    tb.write(tb_text)
+    tb.close()
+
+    os.system("make run_test")
+    
+
+
+
+
+
+def compile_verilog(text: str) -> bool:
+    test = open("verilog/test.v", "w+")
+    test.write(text)
+    test.close()
+    result = os.system("make compile_test > /dev/null")
+    os.system("make compile_test_clean > /dev/null")
+    return result == 0
