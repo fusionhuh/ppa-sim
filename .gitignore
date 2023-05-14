@@ -7,9 +7,23 @@
 **/.vscode
 verilog/structured/**/*.v
 verilog/base/**/*.v
+verilog/genus/**/*.v
+synthesis/**/*.v
+**/*.tstamp
+verilog/genus/**/*.json
+synthesis/**/*.json
+verilog/genus/**/*.do
+synthesis/**/*.do
+verilog/genus/**/*.do~
+synthesis/**/*.do~
+verilog/genus/**/*.gz
+synthesis/**/*.gz
+**/genus.cmd*
+
 
 /misc
-
+**/genus.cmd
+**/
 
 # ignore ModelSim generated files and directories (temp files and so on)
 [_@]*

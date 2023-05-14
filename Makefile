@@ -16,6 +16,9 @@ run_test:
 	iverilog $(IVERILOG_INCLUDES) -o verilog/tb verilog/tb.v
 	vvp verilog/tb
 
+synthesis_test:
+	source /vol/ece303/genus_tutorial/cadence.env
+
 clean:
 	rm -rf __pycache__
 	rm -f log.txt
