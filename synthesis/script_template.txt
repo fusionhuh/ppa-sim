@@ -1,4 +1,4 @@
-read_hdl {dependencies} {adder_file}
+read_hdl {dependencies}
 set_db library ./NangateOpenCellLibrary_typical.lib
 set_db lef_library ./NangateOpenCellLibrary.lef
 elaborate

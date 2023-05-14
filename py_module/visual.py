@@ -53,4 +53,5 @@ try:
         plt.gca().invert_xaxis()
         plt.show()
 except ModuleNotFoundError as err:
-    pass
+    def draw_node_graph(graph, bit_width: int):
+        print("No support for graph visualization")

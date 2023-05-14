@@ -1,10 +1,12 @@
 import math
 import argparse
 import sys
+
 sys.path.append("py_module/")
 import graph
 import visual
 import verilog
+import synthesis
 
 parser = argparse.ArgumentParser()
 
@@ -22,6 +24,8 @@ if args.graph:
 
 if description != "all":
     a: verilog.adder = verilog.adder(description)
+    synthesis.generate_synthesis_script(a)
+    synthesis.execute_synthesis_script()
 else:
     num_adders_generated:int = 0
     for width_power in range(3, 6):
@@ -51,5 +55,5 @@ else:
 #else:
 #    verilog = verilog.generate_structured_adder(a)
 
-#if draw and not args.all:
-#    visual.draw_node_graph(a.graph, a.width)
+if draw:
+    visual.draw_node_graph(a.graph, a.width)

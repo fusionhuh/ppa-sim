@@ -1,2 +1,2 @@
 #!/bin/bash
-genus -f ./syn_script.tcl
+genus -f ./script.tcl

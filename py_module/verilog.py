@@ -70,17 +70,32 @@ class adder:
         file.parent.mkdir(parents=True, exist_ok=True)
         file.write_text(generate_basic_adder(self))      
 
+        # 7) dependencies, filename, and verification
+        dependency_list: list = ["pos_operator.v", "neg_operator.v", "carry_operator.v"]
         if self.structure != "basic":
+            if self.structure == "cla":
+                dependency_list.append("cla4.v")
+                dependency_list.append("block_signals4.v")
+            self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
             self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
             self.verilog_file_path = f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v"
+            self.dependencies.append(f"verilog/base/{self.base_type}/{self.verilog_base_name}.v")
+            self.dependencies.append(self.verilog_file_path)
             file = Path(self.verilog_file_path)
             file.parent.mkdir(parents=True, exist_ok=True)
             text = generate_structured_adder(self)
             file.write_text(text)
             tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
             test_adder(self, text, tests)
+            dependency_list.append(self.verilog_base_name + ".v")
+            dependency_list.append(self.verilog_structured_name + ".v")
         else:
             self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
+            self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
+            self.dependencies.append(self.verilog_file_path)
+
+
+
 
     def __calculate_gate_counts(self):
         self.and_count: int = 0
