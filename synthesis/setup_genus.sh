@@ -1,2 +1,2 @@
 #!/bin/bash
-genus -f ./script.tcl
+genus -f script.tcl 

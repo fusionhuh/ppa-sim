@@ -31,4 +31,5 @@ clean:
 	rm -f verilog/testbench.v
 	rm -f verilog/tb.v
 	rm -f verilog/tb
+	rm -f genus.*
 	
