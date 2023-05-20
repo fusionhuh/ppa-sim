@@ -23,7 +23,6 @@ synthesis/**/*.gz
 
 /misc
 **/genus.cmd
-**/
 
 # ignore ModelSim generated files and directories (temp files and so on)
 [_@]*
