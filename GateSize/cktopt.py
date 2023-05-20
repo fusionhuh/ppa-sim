@@ -6,6 +6,8 @@ import veriparse
 import cust_ast
 import nets
 import argparse
+import re
+
 
 # Gate Library
 GateLib = {
@@ -14,12 +16,42 @@ GateLib = {
     'NOR' : [('A', 'in'), ('B', 'in'), ('Z', 'out')]
 }
 
-def get_bus_width(line: str) -> int:
-    bracket1 = line.index("[")
-    bracket2 = line.index("]")
-    temp = line[bracket1 + 1 : bracket2]
-    width = int(temp.split(":")[0]) + 1
-    return width
+
+def fix_hanging_newlines(text: str) -> str:
+    lines = text.split(";")
+    length = len(lines)
+    for i in range(0, length):
+        lines[i] = lines[i].replace("\n", "")
+        lines[i] = "\n" + lines[i]
+    new_text = ";".join(lines)
+    mod_start = new_text.find("module")
+    new_text = new_text[mod_start:len(new_text)]
+    #print(new_text)
+    return new_text
+
+def fill_gate_lib(text: str) -> str:
+    module_declare_expr = "\\s\\s(\\w+)\\s\\w+\((.+)\);\n"
+    port_list_expr = "\.(\\w+)\\s\(\\w+\)"
+    
+    module_declares = re.findall(module_declare_expr, text)
+    module_declares.pop(0)
+    for declaration in module_declares:
+        if declaration[0] in GateLib.keys():
+            continue
+        port_list = declaration[1]
+        port_names = re.findall(port_list_expr, port_list)
+        port_function_list = []
+        for port in port_names:
+            function: str
+            if "A" in port or "B" in port:
+                function = "in"
+            elif "Z" in port or port == "CO":
+                function = "out"
+            else:
+                function = "in"
+            port_function_list.append((port, function))
+        GateLib[declaration[0]] = port_function_list
+    print(GateLib.keys())
 
 def fix_bus_references(text: str) -> str:
     lines = text.split("\n")
@@ -28,48 +60,29 @@ def fix_bus_references(text: str) -> str:
         line_num += 1
     file_length = len(lines)
     identifiers = ["wire", "input", "output"]
+    bus_index_expr = "(\\w+)\[(\\d+)\]"
+    net_declare_expr = "(\\w+)\\s\[(\\d+):0\]\\s(.+);"
     while line_num < file_length:
         curr_line = lines[line_num]
         if any([x in curr_line for x in identifiers]) and "[" in curr_line:
-            net_type: str
-            for x in identifiers: 
-                if x in curr_line: net_type = x
-            width = get_bus_width(curr_line)
-            net_list = curr_line.split(" ")
-            net_list = net_list[4 : len(net_list)]
-            net_list = [item[0:len(item)-1] for item in net_list]
+            declaration = re.findall(net_declare_expr, curr_line)
+            net_type = declaration[0][0]
+            width = int(declaration[0][1]) + 1
+            name_list = declaration[0][2].split(", ")
             new_line = f"  {net_type} "
-            for wire in net_list:
+            for name in name_list:
                 for i in range(0, width):
-                    new_wire = f"{wire}_{i}, "
+                    new_wire = f"{name}_{i}, "
                     new_line += new_wire
             for i in range(0, 2): new_line = new_line.rstrip(new_line[-1])
             new_line += ";\n"
             lines[line_num] = new_line
         elif "[" in curr_line:
-            
-            port_list = curr_line.split(".")
-            if port_list[0].find(")") == -1:
-                port_list.pop(0)
-            problematic_port_list: list = []
-            print(port_list)
-            for i in range(0, len(port_list)):
-                print(port_list[i])
-                curr_port = port_list[i]
-                paren1 = curr_port.find("(")
-                paren2 = curr_port.find(")")
-                port_list[i] = curr_port[paren1 + 1: paren2]
-                if "[" in port_list[i]:
-                    problematic_port_list.append(port_list[i])
-            if port_list[-1] == "": port_list.pop()
-            for port in problematic_port_list:
-                bracket1 = port.find("[")
-                bracket2 = port.find("]")
-                port_name = port[0: bracket1]
-                bus_index: int = int(port[bracket1 + 1: bracket2])
-                new_name = f"{port_name}_{bus_index}"
-                curr_line = curr_line.replace(port, new_name)
-            lines[line_num] = curr_line
+            def replace(matchobj):
+                name = matchobj.group(1)
+                index = matchobj.group(2)
+                return f"{name}_{index}"
+            lines[line_num] = re.sub(bus_index_expr, replace, lines[line_num])
         line_num += 1
     return "\n".join(lines)
 
@@ -77,8 +90,10 @@ def fix_bus_references(text: str) -> str:
 def readVerilog(fname, target):
     verilog_src = open(fname)
     text = verilog_src.read()
+    text = fix_hanging_newlines(text)
     text = fix_bus_references(text)
     print(text)
+    fill_gate_lib(text)
     mods = veriparse.parser.parse(text)
     if target:
         match = [m for m in mods if m.name == args.target]
