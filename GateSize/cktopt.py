@@ -31,7 +31,7 @@ def fix_hanging_newlines(text: str) -> str:
 
 def fill_gate_lib(text: str) -> str:
     module_declare_expr = "\\s\\s(\\w+)\\s\\w+\((.+)\);\n"
-    port_list_expr = "\.(\\w+)\\s\(\\w+\)"
+    port_list_expr = "\.(\\w+)\\s+\(\\w+\)"
     
     module_declares = re.findall(module_declare_expr, text)
     module_declares.pop(0)
@@ -45,13 +45,13 @@ def fill_gate_lib(text: str) -> str:
             function: str
             if "A" in port or "B" in port:
                 function = "in"
-            elif "Z" in port or port == "CO":
+            elif "Z" in port or "CO" in port or "S" in port:
                 function = "out"
             else:
                 function = "in"
             port_function_list.append((port, function))
         GateLib[declaration[0]] = port_function_list
-    print(GateLib.keys())
+    print(GateLib)
 
 def fix_bus_references(text: str) -> str:
     lines = text.split("\n")
