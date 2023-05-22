@@ -3,9 +3,16 @@ from pathlib import Path
 import math
 import os
 
+
+BASE_ADDER_DESIGNS = ["bk", "ks", "hybrid", "serial", "skl"]
+SPECIAL_BASE_ADDERS = ["hybrid"]
+STRUCTURED_ADDER_DESIGNS = ["basic", "rc", "cla", "cskip", "cselect"]
+
+test_cases: list = [{"x1" : 10, "x2" : 20, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
+
 # {type,hybrid-levels}.width.{basic,ripple-block,cla-block,skip-block,select-block}
 class adder:
-    def __init__(self, description: str):
+    def __init__(self, description: str, test: bool = False):
         assert description.count(".") == 2
         [adder_type, width, structure] = tuple(description.split("."))
 
@@ -16,7 +23,7 @@ class adder:
         # 2) fill adder type information
         type_info = adder_type.split("-")
         self.base_type: str = type_info[0]
-        assert self.base_type in ["bk", "ks", "hybrid", "serial", "skl"]
+        assert self.base_type in BASE_ADDER_DESIGNS
         if len(type_info) == 2:
             assert self.base_type == "hybrid"
             assert type_info[1].isdigit()
@@ -25,7 +32,7 @@ class adder:
         # 3) fill adder structure information
         structure_info = structure.split("-")
         self.structure: str = structure_info[0]
-        assert self.structure in ["basic", "rc", "cla", "cskip", "cselect"]
+        assert self.structure in STRUCTURED_ADDER_DESIGNS
         if self.structure == "basic":
             assert len(structure_info) == 1
             self.block_size: int = self.width
@@ -65,34 +72,43 @@ class adder:
         if self.base_type == "hybrid":
             self.verilog_base_name += "_" + str(self.hybrid_levels)
 
-        # 6) update verilog files (including dependencies) according to project file structure
+        # 6) test + update basic adder
+
+        # lazily assume desired adder is just base type, could probably refactor to be cleaner later
+        self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
+        self.verilog_text = generate_basic_adder(self)
         file = Path("verilog/base/{type}/{name}.v".format(type=self.base_type, name=self.verilog_base_name))
         file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(generate_basic_adder(self))      
+        file.write_text(self.verilog_text)   
+        if test:
+            # uglyyyyyyy asf
+            old_structure = self.structure
+            self.structure = "basic"
+            test_adder(self, test_cases)
+            self.structure = old_structure
 
-        # 7) dependencies, filename, and verification
+        # 7) dependencies, filename, and structured adder testing
         dependency_list: list = ["pos_operator.v", "neg_operator.v", "carry_operator.v"]
         if self.structure != "basic":
             if self.structure == "cla":
                 dependency_list.append("cla4.v")
                 dependency_list.append("block_signals4.v")
             self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
-            self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
+            self.verilog_structured_name = f"{self.base_type}_{self.width}_{self.structure}_{self.block_size}"
             self.verilog_file_path = f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v"
             self.dependencies.append(f"verilog/base/{self.base_type}/{self.verilog_base_name}.v")
             self.dependencies.append(self.verilog_file_path)
             file = Path(self.verilog_file_path)
             file.parent.mkdir(parents=True, exist_ok=True)
-            text = generate_structured_adder(self)
-            file.write_text(text)
-            tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
-            test_adder(self, text, tests)
-            dependency_list.append(self.verilog_base_name + ".v")
-            dependency_list.append(self.verilog_structured_name + ".v")
+            self.verilog_text = generate_structured_adder(self)
+            file.write_text(self.verilog_text)
+
+            if test:
+                test_adder(self, test_cases)
         else:
-            self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
             self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
             self.dependencies.append(self.verilog_file_path)
+            # no need to test because we already tested before
 
 
 
@@ -474,7 +490,8 @@ def generate_basic_adder(a: adder):
     return text
 
 
-def test_adder(a: adder, text: str, test_cases: list):
+def test_adder(a: adder, test_cases: list):
+    text = a.verilog_text
     if compile_verilog(text) == False:
         print("Generated code could not compile correctly, exiting...")
         exit()
@@ -519,16 +536,11 @@ def test_adder(a: adder, text: str, test_cases: list):
     tb.close()
 
     os.system("make run_test")
-    
-
-
-
-
+    os.system("make compile_test_clean > /dev/null")
 
 def compile_verilog(text: str) -> bool:
     test = open("verilog/test.v", "w+")
     test.write(text)
     test.close()
     result = os.system("make compile_test > /dev/null")
-    os.system("make compile_test_clean > /dev/null")
     return result == 0

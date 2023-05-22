@@ -11,6 +11,11 @@ compile_test_clean:
 	rm -f verilog/test.v
 	rm -f verilog/test
 	rm -f verilog/test_out.txt
+	rm -f */out.vcd	
+	rm -f ./out.vcd
+	rm -f verilog/tb
+	rm -f verilog/tb.v
+
 
 run_test:
 	iverilog $(IVERILOG_INCLUDES) -o verilog/tb verilog/tb.v
@@ -32,4 +37,3 @@ clean:
 	rm -f verilog/tb.v
 	rm -f verilog/tb
 	rm -f genus.*
-	

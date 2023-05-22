@@ -92,7 +92,6 @@ def readVerilog(fname, target):
     text = verilog_src.read()
     text = fix_hanging_newlines(text)
     text = fix_bus_references(text)
-    print(text)
     fill_gate_lib(text)
     mods = veriparse.parser.parse(text)
     if target:
@@ -169,19 +168,19 @@ def optimizeMod(target, maxAreaList):
     return result
 
 
-if __name__ == "__main__":
-    argParser = argparse.ArgumentParser()
-    argParser.add_argument('-t', '--target', action='store', default=None)
-    argParser.add_argument('fname')
+def optimize(fname: str, areaList: list, target):
+    #argParser = argparse.ArgumentParser()
+    #argParser.add_argument('-t', '--target', action='store', default=None)
+    #argParser.add_argument('fname')
 
     # Allow a list of areas...sort them and then loop through
-    argParser.add_argument('areaList', nargs='+')
-    args = argParser.parse_args(sys.argv[1:])
+    #argParser.add_argument('areaList', nargs='+')
+    #args = argParser.parse_args(sys.argv[1:])
 
     # Check arguments
-    targetMod = readVerilog(args.fname, args.target)
-    maxAreaList = map(float,args.areaList)
-    
+    targetMod = readVerilog(fname, target)
+    maxAreaList = map(float,areaList)
+
 
     result = optimizeMod(targetMod, maxAreaList)
 
