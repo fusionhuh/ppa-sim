@@ -179,9 +179,9 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
     for net in pouts:
         F, G, K = addConstraint(F, G, K, [PNom(1, 0, -1, netMap[net], 1)], 1)
 
-    # print F
-    # print G
-    # print K
+    print (F)
+    print (G)
+    print (K)
 
     return F,G,K, gateMap
 

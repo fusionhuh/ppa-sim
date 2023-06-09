@@ -13,7 +13,8 @@ import re
 GateLib = {
     'INV' : [('A', 'in'), ('Z', 'out')],
     'NAND' : [('A', 'in'), ('B', 'in'), ('Z', 'out')],
-    'NOR' : [('A', 'in'), ('B', 'in'), ('Z', 'out')]
+    'NOR' : [('A', 'in'), ('B', 'in'), ('Z', 'out')],
+    'OAI21_X1' : [('A', 'in'), ('B1', 'in'), ('B2', 'in'), ('ZN', 'out')]
 }
 
 
@@ -94,6 +95,7 @@ def readVerilog(fname, target):
     text = fix_bus_references(text)
     print(text)
     fill_gate_lib(text)
+    print(GateLib)
     mods = veriparse.parser.parse(text)
     if target:
         match = [m for m in mods if m.name == args.target]
