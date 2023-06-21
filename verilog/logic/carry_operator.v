@@ -8,13 +8,7 @@ module carry_operator(g1, p1, g0, p0, gp, pp);
 
 	output gp;
 	output pp;
-	// alternate between positive and negative on each level
 
-	// support different amounts for hybrid
-
-	// count nodes/gates
-
-	// implement carry lookahead structure with parallel prefix
    	assign gp = g1 | (p1 & g0);
    	assign pp = p1 & p0;
 endmodule

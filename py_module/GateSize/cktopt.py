@@ -9,6 +9,7 @@ import argparse
 import re
 
 
+
 # Gate Library
 GateLib = {
     'INV' : [('A', 'in'), ('Z', 'out')],
@@ -17,24 +18,12 @@ GateLib = {
     'OAI21_X1' : [('A', 'in'), ('B1', 'in'), ('B2', 'in'), ('ZN', 'out')]
 }
 
-
-def fix_hanging_newlines(text: str) -> str:
-    lines = text.split(";")
-    length = len(lines)
-    for i in range(0, length):
-        lines[i] = lines[i].replace("\n", "")
-        lines[i] = "\n" + lines[i]
-    new_text = ";".join(lines)
-    mod_start = new_text.find("module")
-    new_text = new_text[mod_start:len(new_text)]
-    #print(new_text)
-    return new_text
-
 def fill_gate_lib(text: str) -> str:
-    module_declare_expr = "\\s\\s(\\w+)\\s\\w+\((.+)\);\n"
+    module_declare_expr = "(\\S+)\\s\\S+\\s\(([\\S\\s^\);]+)\);\n"
+    module_declare_expr = "___(\\w+)_[^;];\n"
     port_list_expr = "\.(\\w+)\\s+\(\\w+\)"
-    
     module_declares = re.findall(module_declare_expr, text)
+    print(module_declares)
     module_declares.pop(0)
     for declaration in module_declares:
         if declaration[0] in GateLib.keys():
@@ -91,7 +80,6 @@ def fix_bus_references(text: str) -> str:
 def readVerilog(fname, target):
     verilog_src = open(fname)
     text = verilog_src.read()
-    text = fix_hanging_newlines(text)
     text = fix_bus_references(text)
     print(text)
     fill_gate_lib(text)
@@ -171,24 +159,48 @@ def optimizeMod(target, maxAreaList):
     return result
 
 
-if __name__ == "__main__":
-    argParser = argparse.ArgumentParser()
-    argParser.add_argument('-t', '--target', action='store', default=None)
-    argParser.add_argument('fname')
+def calculate_delay(a):
+    # load cell count from timing file
+    # generate a list of some amount of numbers that are (cell_count+1)*n
+    # provide that list as area_list argument to optimize
+    # read through delay results
+    pass
 
-    # Allow a list of areas...sort them and then loop through
-    argParser.add_argument('areaList', nargs='+')
-    args = argParser.parse_args(sys.argv[1:])
 
-    # Check arguments
-    targetMod = readVerilog(args.fname, args.target)
-    maxAreaList = map(float,args.areaList)
+def optimize(file_path: str, area_list: int) -> int:
+    result = optimizeHelper(fname=file_path, target=None, areaList=area_list)
+    return result
     
 
+
+def optimizeHelper(fname: str, target, areaList: list):
+    targetMod = readVerilog(fname, target)
+    maxAreaList = map(float, areaList)
     result = optimizeMod(targetMod, maxAreaList)
+    return result
+
+
+#if __name__ == "__main__":
+#    argParser = argparse.ArgumentParser()
+#    argParser.add_argument('-t', '--target', action='store', default=None)
+#    argParser.add_argument('fname')
+
+    # Allow a list of areas...sort them and then loop through
+#    argParser.add_argument('areaList', nargs='+')
+#    args = argParser.parse_args(sys.argv[1:])
+
+#    print("THIS IS TARGET")
+#    print(args.target)
+
+    # Check arguments
+#    targetMod = readVerilog(args.fname, args.target)
+#    maxAreaList = map(float,args.areaList)
+    
+
+#    result = optimizeMod(targetMod, maxAreaList)
 
     # What should output be? Delay and sizes? Only useful if we get a columnar output
     # Use json!!!
 
-    print(result)
+#    print(result)
 

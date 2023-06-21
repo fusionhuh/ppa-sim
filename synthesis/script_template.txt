@@ -1,13 +1,18 @@
-read_hdl {dependencies}
-set_db library ./NangateOpenCellLibrary_typical.lib
-set_db lef_library ./NangateOpenCellLibrary.lef
-elaborate
-current_design designs/{adder_name}
-read_sdc ./hardware_info.sdc
-syn_generic
-syn_map
-syn_opt
-write_hdl > synthesized/{syn_file_path}/{adder_name}.v
-report_area > synthesized/{syn_file_path}/{adder_name}_area
-report_timing > synthesized/{syn_file_path}/{adder_name}_timing
-
+yosys -import
+read_verilog {dependencies}
+read_liberty synthesis/NangateOpenCellLibrary_typical.lib
+hierarchy -check -top {design_name}
+synth -top {design_name}
+flatten
+opt
+#techmaps
+techmap
+flatten
+opt -fine
+opt_clean -purge
+#techmap -lib synthesis/NangateOpenCellLibrary_typical.lib
+exec mkdir -p synthesis/{top_module_dir}
+write_blif synthesis/{top_module_dir}/{design_name}.blif
+write_verilog -noattr -noexpr synthesis/{top_module}
+stat
+exit

@@ -10,7 +10,6 @@ def generate_synthesis_script(a: verilog.adder):
     adder_name = a.verilog_base_name if a.structure == "basic" else a.verilog_structured_name
     syn_file_path = syn_file_path.replace(adder_name+".v", "")
     script_text = script_template_text.format(dependencies=" ".join(dependencies), adder_name=adder_name, syn_file_path=syn_file_path)
-
     script = open("synthesis/script.tcl", "w+")
     script.write(script_text)
     script.close()

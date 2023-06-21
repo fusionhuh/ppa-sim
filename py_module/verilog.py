@@ -1,7 +1,11 @@
+import sys
+sys.path.append("GateSize/")
 import graph
 from pathlib import Path
 import math
 import os
+import cktopt
+import re
 
 # {type,hybrid-levels}.width.{basic,ripple-block,cla-block,skip-block,select-block}
 class adder:
@@ -40,7 +44,45 @@ class adder:
             if self.structure == "cselect":
                 assert self.block_count == 2 or self.block_count == 4
 
-        # 4) generate graph
+        # 3.5) name adder
+        self.verilog_base_name = "{type}{width}".format(type=self.base_type, width=self.block_size)
+        if self.base_type == "hybrid":
+            self.verilog_base_name += "_" + str(self.hybrid_levels)
+        if self.structure != "basic":
+            self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
+        self.adder_name = self.verilog_base_name if self.structure == "basic" else self.verilog_structured_name
+
+        # 3.6) generate important file/folder paths for each process (verification/verilog, synthesis, optimization, etc)
+
+        subdir = f"base/{self.base_type}" if self.structure == "basic" else f"structured/{self.structure}"
+
+        # verilog
+
+        self._verilog_folder_path = f"verilog/{subdir}"
+        self._verilog_file_path = f"{self._verilog_folder_path}/{self.adder_name}.v"
+        print(self._verilog_file_path)
+
+        # synthesis
+
+        dependency_list = ["verilog/logic/pos_operator.v", "verilog/logic/neg_operator.v", "verilog/logic/carry_operator.v"]
+        if self.structure != "basic":
+            if self.structure == "cla":
+                dependency_list.extend(["verilog/logic/cla4.v", "verilog/logic/block_signals4.v"])
+            base_file_path = f"verilog/base/{self.base_type}/{self.base_type}{self.block_size}.v"
+            dependency_list.append(base_file_path)
+        self._dependencies = dependency_list
+
+        self._syn_folder_path = f"synthesis/verilog/{subdir}"
+        self._syn_file_path = f"{self._syn_folder_path}/{self.adder_name}.v"
+        self._syn_area_file_path = f"{self._syn_folder_path}/{self.adder_name}_area"
+        print(self._syn_area_file_path)
+
+        # optimization
+        
+        self._opt_data_folder_path = f"optimization/{subdir}"
+        self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
+
+    def generate_verilog(self):
         gen_function_name = "generate_{type}_graph".format(type=self.base_type)
         if self.base_type == "hybrid":
             self.graph: list = graph.get_globals()[gen_function_name](self.block_size, self.hybrid_levels)
@@ -49,93 +91,116 @@ class adder:
         graph.test_graph_completeness(self.block_size, self.graph)
         self.depth = len(self.graph)
         self.node_count = graph.get_node_count(self.graph)
-        self.__calculate_gate_counts()
 
-        # 5) update gate counts if structured adder
-        if self.structure != "basic":
-            self.node_count *= self.block_count
-            self.nand_count *= self.block_count
-            self.and_count *= self.block_count
-            self.nor_count *= self.block_count
-            self.or_count *= self.block_count
-            self.not_count *= self.block_count
-            self.transistor_count *= self.block_count
-
-        self.verilog_base_name = "{type}{width}".format(type=self.base_type, width=self.block_size)
-        if self.base_type == "hybrid":
-            self.verilog_base_name += "_" + str(self.hybrid_levels)
-
-        # 6) update verilog files (including dependencies) according to project file structure
+        # update verilog files (including dependencies) according to project file structure
         file = Path("verilog/base/{type}/{name}.v".format(type=self.base_type, name=self.verilog_base_name))
         file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(generate_basic_adder(self))      
+        file.write_text(generate_basic_adder(self))   
 
-        # 7) dependencies, filename, and verification
-        dependency_list: list = ["pos_operator.v", "neg_operator.v", "carry_operator.v"]
-        if self.structure != "basic":
-            if self.structure == "cla":
-                dependency_list.append("cla4.v")
-                dependency_list.append("block_signals4.v")
-            self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
-            self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
-            self.verilog_file_path = f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v"
-            self.dependencies.append(f"verilog/base/{self.base_type}/{self.verilog_base_name}.v")
-            self.dependencies.append(self.verilog_file_path)
-            file = Path(self.verilog_file_path)
-            file.parent.mkdir(parents=True, exist_ok=True)
-            text = generate_structured_adder(self)
-            file.write_text(text)
-            tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
-            test_adder(self, text, tests)
-            dependency_list.append(self.verilog_base_name + ".v")
-            dependency_list.append(self.verilog_structured_name + ".v")
-        else:
-            self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
-            self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
-            self.dependencies.append(self.verilog_file_path)
+        # dependencies, filename, and verification
+        #dependency_list: list = ["pos_operator.v", "neg_operator.v", "carry_operator.v"]
+        #if self.structure != "basic":
+        #    if self.structure == "cla":
+        #        dependency_list.append("cla4.v")
+        #        dependency_list.append("block_signals4.v")
+        #    self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
+        #    self.dependencies.append(f"verilog/base/{self.base_type}/{self.verilog_base_name}.v")
+        #    self.dependencies.append(self._verilog_file_path)
+        #    file = Path(self.verilog_file_path)
+        #    file.parent.mkdir(parents=True, exist_ok=True)
+        #    text = generate_structured_adder(self)
+        #    file.write_text(text)
+        #    tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
+            #test_adder(self, text, tests)
+        #    dependency_list.append(self.verilog_base_name + ".v")
+        #    dependency_list.append(self.verilog_structured_name + ".v")
+        #else:
+            #self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
+        #    self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
+        #    self.dependencies.append(self._verilog_file_path)
 
+    def test_verilog(self, cases: list) -> bool:
+        pass
 
+    def synthesize(self) -> None:
+        def generate_techmaps() -> str:
+            text: str = ""
+            for dependency in self._dependencies:
+                text += f"techmap -map {dependency}\n"
+            return text
 
+        def rename_gates(text: str) -> str:
+            pass
 
-    def __calculate_gate_counts(self):
-        self.and_count: int = 0
-        self.nand_count: int = 0
-        self.or_count: int = 0
-        self.nor_count: int = 0
-        self.not_count: int = 0
-        self.transistor_count: int = 0
+        def fix_illegal_chars(text: str) -> str:
+            text = text.replace("\\", "_")
+            text = text.replace("$", "_")
+            return text
 
-        for i in range(1, self.depth):
-            row: dict = self.graph[i]
-            operator_list: list = [node for node in row.values() if node.is_operator]
-            num_operators: int = len(operator_list)
-            self.nand_count += num_operators
-            self.nor_count += num_operators
-            if i % 2 == 1: # negative layer
-                self.and_count += num_operators
-            else: # positive layer
-                self.or_count += num_operators
-            
-            for o in operator_list:    
-                pred_up: graph.node = o.pred_up
-                pred_right: graph.node = o.pred_right
-                if (o.level - pred_up.level) % 2 != 1:
-                    self.not_count += 2
-                if (o.level - pred_right.level) % 2 != 1:
-                    self.not_count += 2
-
-        sum_node_list = [graph.get_lowest_node(i, self.graph) for i in range(1, self.block_size)]
-        negative_nodes = [node for node in sum_node_list if node.level % 2 == 1]
-        self.not_count += len(negative_nodes)
-
-        self.transistor_count = 6*self.or_count + 6*self.and_count + 4*self.nor_count + 4*self.nand_count + 2*self.not_count
+        def rename_modules(text: str) -> str:
+            rename_table = {
+                
+            }
+            lines = text.split("\n")
+            mod_start = 0
+            mod_end = 0
+            for i in range(0, len(lines)):
+                if mod_start == 0 and "module" in lines[i]:
+                    mod_start = i
+                if mod_end == 0 and "endmodule" in lines[i]:
+                    mod_end = i
 
 
-def generate_base_adder_declaration(a: adder, name: str, ports: dict) -> str:
-    port_list: list = [f".{pair[0]}({pair[1]})" for pair in ports.items()]
-    port_list = ", ".join(port_list)
-    return f"\t{a.verilog_base_name} {name}({port_list});\n"
-        
+        def fix_hanging_newlines(text: str) -> str:
+            lines = text.split(";")
+            length = len(lines)
+            for i in range(0, length):
+                lines[i] = lines[i].replace("\n", "")
+                lines[i] = "\n" + lines[i]
+            new_text = ";".join(lines)
+            mod_start = new_text.find("module")
+            new_text = new_text[mod_start:len(new_text)]
+            new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
+            return new_text
+
+        script_template = open("synthesis/script_template.txt", "r")
+        script_template_text = script_template.read()
+        techmaps = generate_techmaps()
+        script_text = script_template_text.format(dependencies=" ".join(self._dependencies + [self._verilog_file_path]), design_name=self.adder_name, top_module=self._verilog_file_path, top_module_dir=self._verilog_folder_path)
+        script = open("synthesis/script.tcl", "w+")
+        script.write(script_text)
+        script.close()
+        os.system("sh synthesis/synthesis_setup.sh")
+        # process and clean up synthesized code
+        file = open(self._syn_file_path, "r")
+        text = file.read()
+        text = fix_hanging_newlines(text)
+        text = fix_illegal_chars(text)
+        file.close()
+        file = open(self._syn_file_path, "w")
+        file.write(text)
+        print(text)
+
+    def get_synthesized_cell_count(self) -> int:
+        if hasattr(self, "_syn_cell_count"):
+            return self._syn_cell_count
+        area_file = open(self._syn_area_file_path, "r")
+        text = area_file.read()
+        lines = text.split("\n")
+        last_line = lines[-2]
+        regex = "\\w+\\s+(\\d+)\\s+\\d+\.\\d+"
+        cell_count = int(re.findall(regex, last_line)[0])
+        return cell_count
+
+    def calculate_worst_case_delay(self, area_list):
+        result = cktopt.optimize(self._syn_file_path, area_list)
+        def fun(x):
+            return x["delay"]
+        return list(map(fun, result))
+
+    def calculate_real_delay(self, a: int, b: int, cin: int):
+        pass
+
 def generate_include_block(dependencies: list) -> str:
     text: str = ""
     for dep in dependencies:
@@ -154,9 +219,6 @@ def generate_wires(wires: list) -> str:
 
 def generate_adder_info_block(a: adder) -> str:
     info_block = "// number of levels: {levels}\n// number of nodes: {nodes}\n".format(levels=a.depth, nodes=a.node_count)
-    info_block += "// NAND count: {nand_count}, AND count: {and_count}\n".format(nand_count=a.nand_count, and_count=a.and_count)
-    info_block += "// NOR count: {nor_count}, OR count: {or_count}\n".format(nor_count=a.nor_count, or_count=a.or_count)
-    info_block += "// NOT count: {not_count}, Transistor count: {transistor_count}\n".format(not_count=a.not_count, transistor_count=a.transistor_count)
     return info_block
 
 def generate_port_declare_block(width: int, group_signals: bool = True) -> str:
@@ -279,6 +341,12 @@ def generate_structured_adder(a: adder):
         # 2) place two adders every block except on first block
         # 3) place two muxes on the 2nd level every 2 block except on the first placement
         # 4) place two muxes on the 3rd level every 4 blocks, except on the first placement
+        def generate_base_adder_declaration(a: adder, name: str, ports: dict) -> str:
+            port_list: list = [f".{pair[0]}({pair[1]})" for pair in ports.items()]
+            port_list = ", ".join(port_list)
+            return f"\t{a.verilog_base_name} {name}({port_list});\n"
+
+
         module_definition: str = generate_include_block([a.verilog_base_name])
         module_definition += generate_module_declaration(a.verilog_structured_name, False)
         module_definition += generate_port_declare_block(a.width, False)

@@ -13,7 +13,7 @@
 #set_output_delay -clock clk -min -0.2 [get_ports {addr_out*}]
 
 
-set_max_delay 1.0 -from [all_inputs] -to [all_outputs]
+set_max_delay 15.0 -from [all_inputs] -to [all_outputs]
 
 # Assume 50fF load capacitances everywhere:
 set_load 0.050 [all_outputs]
