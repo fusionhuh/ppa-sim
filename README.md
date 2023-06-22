@@ -6,7 +6,7 @@
 
 # Project Structure
 
-`main.py` - This is the main script; it takes an adder description as an argument and generates the verilog for that adder \+ synthesizes it.
+`main.py` - This is the main script. It takes an adder description as an argument and generates the verilog for that adder \+ synthesizes it.
 
 `py_module/` - Contains helper modules used in pyve.py.
 
