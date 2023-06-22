@@ -55,7 +55,6 @@ class adder:
         # verilog
         self._verilog_folder_path = f"verilog/{subdir}"
         self._verilog_file_path = f"{self._verilog_folder_path}/{self.adder_name}.v"
-        print(self._verilog_file_path)
 
         # synthesis
         dependency_list = ["verilog/logic/pos_operator.v", "verilog/logic/neg_operator.v", "verilog/logic/carry_operator.v"]
@@ -69,13 +68,10 @@ class adder:
         self._syn_folder_path = f"synthesis/verilog/{subdir}"
         self._syn_file_path = f"{self._syn_folder_path}/{self.adder_name}.v"
         self._syn_area_file_path = f"{self._syn_folder_path}/{self.adder_name}_area"
-        print(self._syn_area_file_path)
 
         # optimization
         self._opt_data_folder_path = f"optimization/{subdir}"
         self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
-
-        self.adder_info = {}
 
     # Creates high-level verilog description of circuit
     # Writes description to verilog/
@@ -90,30 +86,43 @@ class adder:
         self.depth = len(self.graph)
         self.node_count = graph.get_node_count(self.graph)
 
-        # update adder info
-        for var in self.__dict__.keys():
-            val = getattr(self, var)
-            if var[0] == "_": var = var[1:]
-            self.adder_info[var] = val
+        # create adder info if nonexistent
+        if not hasattr(self, "adder_info"):
+            self.adder_info = {}
+            for var in self.__dict__.keys():
+                val = getattr(self, var)
+                if var[0] == "_": var = var[1:]
+                self.adder_info[var] = val
 
         # update verilog files (including dependencies) according to project file structure
         file = Path("verilog/base/{type}/{name}.v".format(type=self.base_type, name=self.verilog_base_name))
         file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(generate_basic_adder(self.adder_info)) 
+        base_verilog_text = generate_basic_adder(self.adder_info)
+        file.write_text(base_verilog_text)
 
         # now generate structured verilog if applicable
         if self.structure == "basic":
+            self.verilog_text = base_verilog_text
             return 
 
         file = Path(f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v")
         file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(generate_structured_adder(self.adder_info))
+        structured_verilog_test = generate_structured_adder(self.adder_info)
+        self.verilog_text = structured_verilog_test
+        file.write_text(self.verilog_text)
 
     def get_adder_info(self):
         return self.adder_info
 
     # Runs test cases on the high-level verilog from first phase
-    def test_high_verilog(self, text: str, cases: list) -> bool:
+    def test_high_verilog(self, cases: list) -> bool:
+        return self._test_verilog(self.verilog_text, cases)
+    
+    # Runs test cases on synthesized verilog
+    def test_synth_verilog(self, cases: list) -> bool:
+        return self._test_verilog(self.synthesized_text, cases)
+
+    def _test_verilog(self, text: str, cases: list) -> bool:
         if compile_verilog(text) == False:
             print("Generated code could not compile correctly, exiting...")
             exit()
@@ -122,9 +131,6 @@ class adder:
         tb_template = open("verilog/testbench_template.txt", "r")
         tb_template_text = tb_template.read()
         tb_template.close()
-
-        adder_name: str = self.verilog_base_name if self.structure == "basic" else verilog_structured_name
-
 
         test_cases_text: str = ""
         count = 1
@@ -156,10 +162,6 @@ class adder:
         tb.close()
 
         os.system("make run_test")
-
-    # Runs test cases on the synthesized verilog from second phase
-    def test_synth_verilog(self, text: str, cases: list):
-        pass
 
     # Synthesizes the high-level verilog that represents this adder
     # Writes result to synthesis/verilog
@@ -217,7 +219,7 @@ class adder:
         file.close()
         file = open(self._syn_file_path, "w")
         file.write(text)
-        print(text)
+        self.synthesized_text = text
 
     # Returns the number of modules in synthesized verilog file
     def get_synthesized_cell_count(self) -> int:

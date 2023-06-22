@@ -53,7 +53,7 @@ def generate_structured_adder(adder_info: dict):
 
     def generate_rc_adder():
         module_definition: str = generate_include_block([verilog_base_name])
-        module_definition += generate_adder_info_block(a)
+        module_definition += generate_adder_info_block(adder_info)
         module_definition += generate_module_declaration(verilog_structured_name, False)
         module_definition += generate_port_declare_block(width, False)
         for i in range(0, block_count):
@@ -253,7 +253,6 @@ def generate_structured_adder(adder_info: dict):
     return text
 
 def generate_basic_adder(adder_info: dict):
-    print(adder_info)
     verilog_base_name: str = adder_info["verilog_base_name"]
     block_size: int = adder_info["block_size"]
     base_type: str = adder_info["base_type"]
