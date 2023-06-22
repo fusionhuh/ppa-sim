@@ -40,7 +40,7 @@ blocks. `block_size` must be a power of two that is greater than 2 and less than
 Accepted structure values:
 
 1. basic (Design is just one PPA block, truncate `block_size`)
-2. rcarry (PPA blocks are chained in a ripple carry fashion)
+2. rc (PPA blocks are chained in a ripple carry fashion)
 3. cskip (Carry skip)
 4. cselect (Carry select)
 5. cla (Carry lookahead)
@@ -48,7 +48,7 @@ Accepted structure values:
 **Examples**:
 
 1. ks.16.basic (16-bit Kogge-Stone with just one PPA block)
-2. bk.32.rcarry-8 (32-bit adder with four 8-bit Brent-Kung blocks chained like a ripple carry adder)
+2. bk.32.rc-8 (32-bit adder with four 8-bit Brent-Kung blocks chained like a ripple carry adder)
 3. hybrid-2.64.cselect-16 (64-bit adder with four 16-bit two-level hybrid blocks in a carry select structure)
 
 
