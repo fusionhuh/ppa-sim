@@ -1,10 +1,12 @@
-# Project structure
+# Dependencies
 
-`pyve.py` - Main script. Takes in adder description as an argument and generates the verilog for that adder
-\+ synthesizes it. Adder description is formatted like `{base_type}.{adder_width}.{structure}-{block_width}`.
-`base_type` is the type of PPA used. Available options are bk, skl, ks, hybrid, and serial. `structure` refers to the way
-the PPA blocks will be organized. Likewise, `block_width` refers to the size of each of the PPA blocks. The value must be a power of two and not greater than `adder_width`. 
-For adders with no complex structure, replace `{structure}-{block_width}` with `basic`. Available structures are cskip, cselect, ripple, and cla. 
+**Python modules**: matplotlib, cvxopt, numpy
+
+**Other**: yosys, iverilog, vvp (all must be on PATH)
+
+# Project Structure
+
+`main.py` - This is the main script; it takes an adder description as an argument and generates the verilog for that adder \+ synthesizes it.
 
 `py_module/` - Contains helper modules used in pyve.py.
 
@@ -12,8 +14,44 @@ For adders with no complex structure, replace `{structure}-{block_width}` with `
 
 `verilog/structured/` - Contains the high-level verilog generated for complex adders.
 
-`verilog/logic/` - Contains helper modules used in basic and complex designs.
+`verilog/logic/` - Contains helper verilog modules.
 
 `synthesis/` - Contains various scripts and technology files to facilitate the synthesis process.
 
-`synthesis/verilog/` - Contains the synthesized verilog for adders. 
+`synthesis/verilog/` - Contains the synthesized verilog for adders (same organization as top-level `verilog/` directory). 
+
+# Usage
+
+`main.py` accepts an adder description in the form of `{base_type}.{width}.{structure-block_size}`.
+
+`base_type` refers to the type of PPA used in the design. Accepted values:
+
+1. ks (Kogge-Stone)
+2. bk (Brent-Kung)
+3. skl (Sklansky)
+4. hybrid-`{levels}` (ks and bk hybrid structure with additional `levels` field)
+5. serial (Ordinary ripple carry adder)
+
+`width` is the width of the adder. Acceptable values are any power of two greater than 2.
+
+`structure` refers to the organization of PPA blocks in the design. `block_size` refers to the width of each of those adder
+blocks. `block_size` must be a power of two that is greater than 2 and less than `width`.
+
+Accepted structure values:
+
+1. basic (Design is just one PPA block, truncate `block_size`)
+2. rcarry (PPA blocks are chained in a ripple carry fashion)
+3. cskip (Carry skip)
+4. cselect (Carry select)
+5. cla (Carry lookahead)
+
+**Examples**:
+
+1. ks.16.basic (16-bit Kogge-Stone with just one PPA block)
+2. bk.32.rcarry-8 (32-bit adder with four 8-bit Brent-Kung blocks chained like a ripple carry adder)
+3. hybrid-2.64.cselect-16 (64-bit adder with four 16-bit two-level hybrid blocks in a carry select structure)
+
+
+
+
+
