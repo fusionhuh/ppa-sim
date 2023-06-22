@@ -8,7 +8,7 @@
 
 `main.py` - This is the main script. It takes an adder description as an argument and generates the verilog for that adder \+ synthesizes it.
 
-`py_module/` - Contains helper modules used in pyve.py.
+`py_module/` - Contains helper modules used in the main script.
 
 `verilog/base/` - Contains the high-level verilog generated for basic PPAs (no complex structure).
 
