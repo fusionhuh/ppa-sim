@@ -1,205 +1,7 @@
 import sys
-sys.path.append("GateSize/")
 import graph
-from pathlib import Path
 import math
 import os
-import cktopt
-import re
-
-# {type,hybrid-levels}.width.{basic,ripple-block,cla-block,skip-block,select-block}
-class adder:
-    def __init__(self, description: str):
-        assert description.count(".") == 2
-        [adder_type, width, structure] = tuple(description.split("."))
-
-        # 1) fill width information
-        assert width.isdigit()
-        self.width: int = int(width)
-
-        # 2) fill adder type information
-        type_info = adder_type.split("-")
-        self.base_type: str = type_info[0]
-        assert self.base_type in ["bk", "ks", "hybrid", "serial", "skl"]
-        if len(type_info) == 2:
-            assert self.base_type == "hybrid"
-            assert type_info[1].isdigit()
-            self.hybrid_levels: int = int(type_info[1])
-
-        # 3) fill adder structure information
-        structure_info = structure.split("-")
-        self.structure: str = structure_info[0]
-        assert self.structure in ["basic", "rc", "cla", "cskip", "cselect"]
-        if self.structure == "basic":
-            assert len(structure_info) == 1
-            self.block_size: int = self.width
-            self.block_count: int = 1
-        else:
-            assert len(structure_info) == 2
-            self.block_size: int = int(structure_info[1])
-            self.block_count: int = self.width//self.block_size
-            if self.structure == "cla":
-                assert self.block_size == 4
-                assert self.width == 16 or self.width == 64
-            if self.structure == "cselect":
-                assert self.block_count == 2 or self.block_count == 4
-
-        # 3.5) name adder
-        self.verilog_base_name = "{type}{width}".format(type=self.base_type, width=self.block_size)
-        if self.base_type == "hybrid":
-            self.verilog_base_name += "_" + str(self.hybrid_levels)
-        if self.structure != "basic":
-            self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
-        self.adder_name = self.verilog_base_name if self.structure == "basic" else self.verilog_structured_name
-
-        # 3.6) generate important file/folder paths for each process (verification/verilog, synthesis, optimization, etc)
-
-        subdir = f"base/{self.base_type}" if self.structure == "basic" else f"structured/{self.structure}"
-
-        # verilog
-
-        self._verilog_folder_path = f"verilog/{subdir}"
-        self._verilog_file_path = f"{self._verilog_folder_path}/{self.adder_name}.v"
-        print(self._verilog_file_path)
-
-        # synthesis
-
-        dependency_list = ["verilog/logic/pos_operator.v", "verilog/logic/neg_operator.v", "verilog/logic/carry_operator.v"]
-        if self.structure != "basic":
-            if self.structure == "cla":
-                dependency_list.extend(["verilog/logic/cla4.v", "verilog/logic/block_signals4.v"])
-            base_file_path = f"verilog/base/{self.base_type}/{self.base_type}{self.block_size}.v"
-            dependency_list.append(base_file_path)
-        self._dependencies = dependency_list
-
-        self._syn_folder_path = f"synthesis/verilog/{subdir}"
-        self._syn_file_path = f"{self._syn_folder_path}/{self.adder_name}.v"
-        self._syn_area_file_path = f"{self._syn_folder_path}/{self.adder_name}_area"
-        print(self._syn_area_file_path)
-
-        # optimization
-        
-        self._opt_data_folder_path = f"optimization/{subdir}"
-        self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
-
-    def generate_verilog(self):
-        gen_function_name = "generate_{type}_graph".format(type=self.base_type)
-        if self.base_type == "hybrid":
-            self.graph: list = graph.get_globals()[gen_function_name](self.block_size, self.hybrid_levels)
-        else:
-            self.graph: list = graph.get_globals()[gen_function_name](self.block_size)
-        graph.test_graph_completeness(self.block_size, self.graph)
-        self.depth = len(self.graph)
-        self.node_count = graph.get_node_count(self.graph)
-
-        # update verilog files (including dependencies) according to project file structure
-        file = Path("verilog/base/{type}/{name}.v".format(type=self.base_type, name=self.verilog_base_name))
-        file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(generate_basic_adder(self))   
-
-        # dependencies, filename, and verification
-        #dependency_list: list = ["pos_operator.v", "neg_operator.v", "carry_operator.v"]
-        #if self.structure != "basic":
-        #    if self.structure == "cla":
-        #        dependency_list.append("cla4.v")
-        #        dependency_list.append("block_signals4.v")
-        #    self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
-        #    self.dependencies.append(f"verilog/base/{self.base_type}/{self.verilog_base_name}.v")
-        #    self.dependencies.append(self._verilog_file_path)
-        #    file = Path(self.verilog_file_path)
-        #    file.parent.mkdir(parents=True, exist_ok=True)
-        #    text = generate_structured_adder(self)
-        #    file.write_text(text)
-        #    tests: list = [{"x1" : 100, "x2" : 200, "cin" : 1}, {"x1" : 1, "x2" : -1, "cin" : 0}]
-            #test_adder(self, text, tests)
-        #    dependency_list.append(self.verilog_base_name + ".v")
-        #    dependency_list.append(self.verilog_structured_name + ".v")
-        #else:
-            #self.verilog_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
-        #    self.dependencies: list = ["verilog/logic/" + file for file in dependency_list]
-        #    self.dependencies.append(self._verilog_file_path)
-
-    def test_verilog(self, cases: list) -> bool:
-        pass
-
-    def synthesize(self) -> None:
-        def generate_techmaps() -> str:
-            text: str = ""
-            for dependency in self._dependencies:
-                text += f"techmap -map {dependency}\n"
-            return text
-
-        def rename_gates(text: str) -> str:
-            pass
-
-        def fix_illegal_chars(text: str) -> str:
-            text = text.replace("\\", "_")
-            text = text.replace("$", "_")
-            return text
-
-        def rename_modules(text: str) -> str:
-            rename_table = {
-                
-            }
-            lines = text.split("\n")
-            mod_start = 0
-            mod_end = 0
-            for i in range(0, len(lines)):
-                if mod_start == 0 and "module" in lines[i]:
-                    mod_start = i
-                if mod_end == 0 and "endmodule" in lines[i]:
-                    mod_end = i
-
-
-        def fix_hanging_newlines(text: str) -> str:
-            lines = text.split(";")
-            length = len(lines)
-            for i in range(0, length):
-                lines[i] = lines[i].replace("\n", "")
-                lines[i] = "\n" + lines[i]
-            new_text = ";".join(lines)
-            mod_start = new_text.find("module")
-            new_text = new_text[mod_start:len(new_text)]
-            new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
-            return new_text
-
-        script_template = open("synthesis/script_template.txt", "r")
-        script_template_text = script_template.read()
-        techmaps = generate_techmaps()
-        script_text = script_template_text.format(dependencies=" ".join(self._dependencies + [self._verilog_file_path]), design_name=self.adder_name, top_module=self._verilog_file_path, top_module_dir=self._verilog_folder_path)
-        script = open("synthesis/script.tcl", "w+")
-        script.write(script_text)
-        script.close()
-        os.system("sh synthesis/synthesis_setup.sh")
-        # process and clean up synthesized code
-        file = open(self._syn_file_path, "r")
-        text = file.read()
-        text = fix_hanging_newlines(text)
-        text = fix_illegal_chars(text)
-        file.close()
-        file = open(self._syn_file_path, "w")
-        file.write(text)
-        print(text)
-
-    def get_synthesized_cell_count(self) -> int:
-        if hasattr(self, "_syn_cell_count"):
-            return self._syn_cell_count
-        area_file = open(self._syn_area_file_path, "r")
-        text = area_file.read()
-        lines = text.split("\n")
-        last_line = lines[-2]
-        regex = "\\w+\\s+(\\d+)\\s+\\d+\.\\d+"
-        cell_count = int(re.findall(regex, last_line)[0])
-        return cell_count
-
-    def calculate_worst_case_delay(self, area_list):
-        result = cktopt.optimize(self._syn_file_path, area_list)
-        def fun(x):
-            return x["delay"]
-        return list(map(fun, result))
-
-    def calculate_real_delay(self, a: int, b: int, cin: int):
-        pass
 
 def generate_include_block(dependencies: list) -> str:
     text: str = ""
@@ -217,8 +19,8 @@ def generate_wires(wires: list) -> str:
             text += f"\twire {wire};\n"
     return text
 
-def generate_adder_info_block(a: adder) -> str:
-    info_block = "// number of levels: {levels}\n// number of nodes: {nodes}\n".format(levels=a.depth, nodes=a.node_count)
+def generate_adder_info_block(adder_info: dict) -> str:
+    info_block = "// number of levels: {levels}\n// number of nodes: {nodes}\n".format(levels=adder_info["depth"], nodes=adder_info["node_count"])
     return info_block
 
 def generate_port_declare_block(width: int, group_signals: bool = True) -> str:
@@ -241,31 +43,38 @@ def generate_module_declaration(module_name: str, group_signals: bool = True):
         return f"module {module_name}(x1, x2, s, cin, cout);\n"
 
 
-def generate_structured_adder(a: adder):
+def generate_structured_adder(adder_info: dict):
+    verilog_base_name: str = adder_info["verilog_base_name"]
+    verilog_structured_name: str = adder_info["verilog_structured_name"]
+    width: int = adder_info["width"]
+    block_count: int = adder_info["block_count"]
+    block_size: int = adder_info["block_size"]
+    structure: str = adder_info["structure"]
+
     def generate_rc_adder():
-        module_definition: str = generate_include_block([a.verilog_base_name])
+        module_definition: str = generate_include_block([verilog_base_name])
         module_definition += generate_adder_info_block(a)
-        module_definition += generate_module_declaration(a.verilog_structured_name, False)
-        module_definition += generate_port_declare_block(a.width, False)
-        for i in range(0, a.block_count):
+        module_definition += generate_module_declaration(verilog_structured_name, False)
+        module_definition += generate_port_declare_block(width, False)
+        for i in range(0, block_count):
             block_cout = f"block{i}_cout"
             module_definition += generate_wires([block_cout])
-            bit_slice_range = "[{a}:{b}]".format(a=a.block_size*i + a.block_size-1, b=a.block_size*i)
+            bit_slice_range = "[{a}:{b}]".format(a=block_size*i + block_size-1, b=block_size*i)
             x1x2s = ".x1(x1{bit_slice_range}), .x2(x2{bit_slice_range}), .s(s{bit_slice_range})".format(bit_slice_range=bit_slice_range)
             cin = ".cin(cin)" if i == 0 else ".cin(block{num}_cout)".format(num=i-1)
-            cout = ".cout(cout)" if i == a.block_count-1 else ".cout(block{num}_cout)".format(num=i)
-            block_declaration = "\t{base_name} block{num}({x1x2s}, {cin}, {cout});\n".format(base_name=a.verilog_base_name, num=i, x1x2s=x1x2s, cin=cin, cout=cout)
+            cout = ".cout(cout)" if i == block_count-1 else ".cout(block{num}_cout)".format(num=i)
+            block_declaration = "\t{base_name} block{num}({x1x2s}, {cin}, {cout});\n".format(base_name=verilog_base_name, num=i, x1x2s=x1x2s, cin=cin, cout=cout)
             module_definition += block_declaration
         module_definition += "endmodule\n"
         return module_definition
 
     def generate_cskip_adder():
-        module_definition: str = generate_include_block([a.verilog_base_name])
-        module_definition += generate_adder_info_block(a)
-        module_definition += generate_module_declaration(a.verilog_structured_name, False)
-        module_definition += generate_port_declare_block(a.width, False)
-        module_definition += "\twire[{width}:0]p = x1 ^ x2;\n\n".format(width=a.width-1)   
-        for i in range(0, a.block_count):
+        module_definition: str = generate_include_block([verilog_base_name])
+        module_definition += generate_adder_info_block(adder_info)
+        module_definition += generate_module_declaration(verilog_structured_name, False)
+        module_definition += generate_port_declare_block(width, False)
+        module_definition += "\twire[{width}:0]p = x1 ^ x2;\n\n".format(width=width-1)   
+        for i in range(0, block_count):
             block_cout = "block{num}_cout".format(num=i)
             real_cout = "block{num}_real_cout".format(num=i)
             group_p = "block{num}_group_p".format(num=i)
@@ -275,9 +84,9 @@ def generate_structured_adder(a: adder):
             else:
                 block_cin = "block{num}_real_cout".format(num=i-1)
 
-            bit_slice_range = "[{a}:{b}]".format(a=a.block_size*i + a.block_size-1, b=a.block_size*i)
+            bit_slice_range = "[{a}:{b}]".format(a=block_size*i + block_size-1, b=block_size*i)
             x1x2s = ".x1(x1{bit_slice_range}), .x2(x2{bit_slice_range}), .s(s{bit_slice_range})".format(bit_slice_range=bit_slice_range)
-            block_declaration = "\t{base_name} block{num}({x1x2s}, .cin({cin}), .cout({cout}));\n".format(base_name=a.verilog_base_name, num=i, x1x2s=x1x2s, cin=block_cin, cout=block_cout)
+            block_declaration = "\t{base_name} block{num}({x1x2s}, .cin({cin}), .cout({cout}));\n".format(base_name=verilog_base_name, num=i, x1x2s=x1x2s, cin=block_cin, cout=block_cout)
             p_and_declaration = "\tand gate{num}({group_p}, p{bit_slice_range});\n".format(num=i, group_p=group_p, bit_slice_range=bit_slice_range)
             mux_statement = "\tassign {real_cout} = {group_p} ? {cin} : {block_cout};\n\n".format(real_cout=real_cout, group_p=group_p, cin=block_cin, block_cout=block_cout)
 
@@ -288,7 +97,7 @@ def generate_structured_adder(a: adder):
             module_definition += "\twire {group_p};\n".format(group_p=group_p)
             module_definition += p_and_declaration
             module_definition += mux_statement
-            if i == a.block_count - 1:
+            if i == block_count - 1:
                 module_definition += "\tassign cout = {real_cout};\n".format(real_cout=real_cout)
 
         module_definition += "endmodule\n"
@@ -300,17 +109,17 @@ def generate_structured_adder(a: adder):
         # 2) if desired adder is 16 bits, instantiate module and stop here
         # 3) if desired adder is 64 bits, instantiate 4 and chain together with 4 bit cla
         subadder_name = "_16bit_subadd"
-        include_block = generate_include_block([a.verilog_base_name, "cla4", "block_signals4"])
+        include_block = generate_include_block([verilog_base_name, "cla4", "block_signals4"])
 
         module_definition: str = include_block
         subadder_file = open("verilog/logic/" + subadder_name + ".v", "r")
         subadder_text = subadder_file.read()
-        subadder_text = subadder_text.format(type=a.verilog_base_name)
+        subadder_text = subadder_text.format(type=verilog_base_name)
         module_definition += subadder_text
-        module_definition += generate_module_declaration(a.verilog_structured_name, False)
-        module_definition += generate_port_declare_block(a.width, False)
-        subadder_name += f"_{a.verilog_base_name}"
-        if a.width == 16:
+        module_definition += generate_module_declaration(verilog_structured_name, False)
+        module_definition += generate_port_declare_block(width, False)
+        subadder_name += f"_{verilog_base_name}"
+        if width == 16:
             module_definition += "\t{subadder_name} adder(.x1(x1), .x2(x2), .s(s), .cin(cin), .cout(cout));\n".format(subadder_name=subadder_name)
             module_definition += "endmodule\n"
         else:
@@ -344,17 +153,17 @@ def generate_structured_adder(a: adder):
         def generate_base_adder_declaration(a: adder, name: str, ports: dict) -> str:
             port_list: list = [f".{pair[0]}({pair[1]})" for pair in ports.items()]
             port_list = ", ".join(port_list)
-            return f"\t{a.verilog_base_name} {name}({port_list});\n"
+            return f"\t{verilog_base_name} {name}({port_list});\n"
 
 
-        module_definition: str = generate_include_block([a.verilog_base_name])
-        module_definition += generate_module_declaration(a.verilog_structured_name, False)
-        module_definition += generate_port_declare_block(a.width, False)
-        lowest_depth: int = int(math.log(a.block_count, 2) + 1)
+        module_definition: str = generate_include_block([verilog_base_name])
+        module_definition += generate_module_declaration(verilog_structured_name, False)
+        module_definition += generate_port_declare_block(width, False)
+        lowest_depth: int = int(math.log(block_count, 2) + 1)
 
         sum_wires: list = []
-        for i in range(0, a.block_count):
-            bit_range = [(i+1) * a.block_size - 1, i*a.block_size]
+        for i in range(0, block_count):
+            bit_range = [(i+1) * block_size - 1, i*block_size]
             bit_range_str = f"[{bit_range[0]}:{bit_range[1]}]"
             ports: dict = {
                 "x1" : "x1" + bit_range_str,
@@ -373,7 +182,7 @@ def generate_structured_adder(a: adder):
                     adder_name = f"component_level0_pos{i}_cin{cin}"
                     adder_cout = adder_name + "_cout"
                     adder_out = adder_name + "_out"
-                    module_definition += generate_wires([adder_cout, (adder_out, a.block_size)])
+                    module_definition += generate_wires([adder_cout, (adder_out, block_size)])
                     ports["cin"] = "1'b" + cin
                     ports["cout"] = adder_cout
                     ports["s"] = adder_out
@@ -409,7 +218,7 @@ def generate_structured_adder(a: adder):
                     mux_concat_list0 = [f"component_level{component[0]}_pos{component[1]}_cin{component[2]}_out" for component in mux_in0]
                     mux_concat_list1 = [f"component_level{component[0]}_pos{component[1]}_cin{component[2]}_out" for component in mux_in1]
 
-                    if i+1 == a.block_count and k == 2:
+                    if i+1 == block_count and k == 2:
                         mux_concat_list0.insert(0, f"component_level0_pos{i}_cin0_cout")
                         mux_concat_list1.insert(0, f"component_level0_pos{i}_cin1_cout")
 
@@ -418,7 +227,7 @@ def generate_structured_adder(a: adder):
                     mux0_name = f"component_level{level}_pos{i}_cin0"
                     mux0_control = f"component_level{level-1}_pos{i-mux_span}_cin0_cout" # mux will always take in select bit from first mux on prev level
                     mux0_out = mux0_name + "_out"
-                    width = mux_span * a.block_size if i + 1 != a.block_count else mux_span * a.block_size + 1
+                    width = mux_span * block_size if i + 1 != block_count else mux_span * block_size + 1
                     module_definition += generate_wires([(mux0_out, width)])
                     mux0_statement = f"\tassign {mux0_out} = {mux0_control} ? {mux_in1} : {mux_in0};\n"
                     module_definition += mux0_statement + "\n"
@@ -432,18 +241,26 @@ def generate_structured_adder(a: adder):
                     elif i+1 == k:
                         sum_wires.insert(0, mux0_out)
                     module_definition += "\n\n"
-        module_definition += generate_wires([("sum", a.width+1 - a.block_size)])
+        module_definition += generate_wires([("sum", width+1 - block_size)])
         module_definition += "\tassign sum = {{{sum_wires}}};\n".format(sum_wires=", ".join(sum_wires))
-        module_definition += f"\tassign cout = sum[{a.width}];\n"
-        module_definition += f"\tassign s[{a.width-1}:{a.block_size}] = sum[{a.width-1-a.block_size}:{0}];\n"
+        module_definition += f"\tassign cout = sum[{width}];\n"
+        module_definition += f"\tassign s[{width-1}:{block_size}] = sum[{width-1-block_size}:{0}];\n"
         module_definition += "endmodule\n"
         return module_definition
                     
-    func_name = "generate_{structure}_adder".format(structure=a.structure)
+    func_name = "generate_{structure}_adder".format(structure=structure)
     text = locals()[func_name]()
     return text
 
-def generate_basic_adder(a: adder):
+def generate_basic_adder(adder_info: dict):
+    print(adder_info)
+    verilog_base_name: str = adder_info["verilog_base_name"]
+    block_size: int = adder_info["block_size"]
+    base_type: str = adder_info["base_type"]
+    hybrid_levels = None
+    depth: int = adder_info["depth"]
+    ppa_graph = adder_info["graph"]
+
     def invert(wire: str) -> str:
         return "~" + wire
 
@@ -467,25 +284,26 @@ def generate_basic_adder(a: adder):
         return [p, g]
 
     include_block: str = """`ifndef CARRY_OPERATOR\n`include \"carry_operator.v\"\n`endif\n`ifndef NEG_CARRY_OPERATOR\n`include \"neg_operator.v\"\n`endif\n`ifndef POS_CARRY_OPERATOR\n`include \"pos_operator.v\"\n`endif\n"""
-    include_block += "`define {name}\n".format(name=a.verilog_base_name.upper())
+    include_block += "`define {name}\n".format(name=verilog_base_name.upper())
 
-    info_block = generate_adder_info_block(a)
+    info_block = generate_adder_info_block(adder_info)
 
     module_definition: str = ""
     module_name: str
-    if a.base_type == "hybrid":
-        module_name = "{adder_type}{bit_width}_{hybrid_levels}".format(adder_type=a.base_type, bit_width=a.block_size, hybrid_levels=a.hybrid_levels)
+    if base_type == "hybrid":
+        hybrid_levels = adder_info["hybrid_levels"]
+        module_name = "{adder_type}{bit_width}_{hybrid_levels}".format(adder_type=base_type, bit_width=block_size, hybrid_levels=hybrid_levels)
     else:
-        module_name = "{adder_type}{bit_width}".format(adder_type=a.base_type, bit_width=a.block_size)
-    module_definition += generate_module_declaration(a.verilog_base_name)
-    module_definition += generate_port_declare_block(a.block_size, False)
-    module_definition += "\toutput[{len}:0]p_out;\n\toutput[{len}:0]g_out;\n".format(len=a.block_size-1)
+        module_name = "{adder_type}{bit_width}".format(adder_type=base_type, bit_width=block_size)
+    module_definition += generate_module_declaration(verilog_base_name)
+    module_definition += generate_port_declare_block(block_size, False)
+    module_definition += "\toutput[{len}:0]p_out;\n\toutput[{len}:0]g_out;\n".format(len=block_size-1)
     module_definition += "\tassign p_in = x1 ^ x2;\n\tassign p_out = p_in;\n"
-    module_definition += "\tassign g_in[{len}:1] = x1[{len}:1] & x2[{len}:1];\n".format(len=a.block_size-1)
+    module_definition += "\tassign g_in[{len}:1] = x1[{len}:1] & x2[{len}:1];\n".format(len=block_size-1)
     module_definition += "\tassign g_in[0] = (x1[0] & x2[0]) | (p_in[0] & cin);\n"
     module_definition += "\tassign g_out = g_in;\n"
-    for level in range(1, a.depth):
-        row = a.graph[level]
+    for level in range(1, depth):
+        row = ppa_graph[level]
         for bit_pos, curr in row.items():
             if curr.is_operator == False or curr.level != level: continue
 
@@ -518,10 +336,10 @@ def generate_basic_adder(a: adder):
     
     module_definition += "\n\n\tassign s[0] = p_in[0] ^ cin;\n"
 
-    for bit_pos in range(1, a.block_size):
-        cur_level = a.depth-1
+    for bit_pos in range(1, block_size):
+        cur_level = depth-1
         sum: str = "p_in[{index}]".format(index=bit_pos)
-        carry_node: graph.node = graph.get_lowest_node(bit_pos-1, a.graph)
+        carry_node: ppa_graph.node = graph.get_lowest_node(bit_pos-1, ppa_graph)
         carry: str
         if carry_node.is_operator == False:
             carry = "g_in[{index}]".format(index=bit_pos-1)
@@ -534,64 +352,12 @@ def generate_basic_adder(a: adder):
         output_connection = "\tassign s[{bit_pos}] = {sum} ^ {carry};\n".format(bit_pos=bit_pos, sum=sum, carry=carry)
         module_definition += output_connection
 
-    module_definition += "\tassign cout = (x1[{len}] & x2[{len}]) | (~s[{len}] & (x1[{len}] | x2[{len}]));\n".format(len=a.block_size-1)
+    module_definition += "\tassign cout = (x1[{len}] & x2[{len}]) | (~s[{len}] & (x1[{len}] | x2[{len}]));\n".format(len=block_size-1)
     
     module_definition += "endmodule\n"
 
     text = include_block + info_block + module_definition
     return text
-
-
-def test_adder(a: adder, text: str, test_cases: list):
-    if compile_verilog(text) == False:
-        print("Generated code could not compile correctly, exiting...")
-        exit()
-    
-
-    assert len(test_cases) > 0
-    tb_template = open("verilog/testbench_template.txt", "r")
-    tb_template_text = tb_template.read()
-    tb_template.close()
-
-    adder_name: str = a.verilog_base_name if a.structure == "basic" else a.verilog_structured_name
-
-
-    test_cases_text: str = ""
-    count = 1
-    for test in test_cases:
-        assert isinstance(test, dict)
-        x1 = test["x1"]
-        x2 = test["x2"]
-        cin = test["cin"]
-        assert cin == 0 or cin == 1
-        expected_s = x1 + x2 + cin
-        # assuming no overflow currently
-
-        test_cases_text += f"\t\t// test case {count}\n"
-        test_cases_text += f"\t\tx1 = {x1};\n"
-        test_cases_text += f"\t\tx2 = {x2};\n"
-        test_cases_text += f"\t\tcin = {cin};\n"
-        test_cases_text += "\t\t#100;\n\n\n"
-        test_cases_text += f"\t\tif (s != {expected_s}) $finish;\n"
-
-        count += 1
-    tb_text = tb_template_text.format(dependency=a.verilog_file_path.replace("verilog/structured/", ""), width=a.width, adder=adder_name, tests=test_cases_text)
-
-
-    if compile_verilog(tb_text) == False:
-        print("Testbench could not compile correctly, exiting...")
-        exit()
-
-    tb = open("verilog/tb.v", "w+")
-    tb.write(tb_text)
-    tb.close()
-
-    os.system("make run_test")
-    
-
-
-
-
 
 def compile_verilog(text: str) -> bool:
     test = open("verilog/test.v", "w+")

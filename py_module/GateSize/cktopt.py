@@ -8,8 +8,6 @@ import nets
 import argparse
 import re
 
-
-
 # Gate Library
 GateLib = {
     'INV' : [('A', 'in'), ('Z', 'out')],

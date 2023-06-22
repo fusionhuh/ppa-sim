@@ -8,7 +8,6 @@ class node:
         self.bit_pos = bit_pos
         self.is_operator = is_operator
 
-
 def generate_precalc_layer(bit_width: int):
     node_graph = [{}]
     for i in range(0, bit_width):
@@ -18,8 +17,6 @@ def generate_precalc_layer(bit_width: int):
 def test_graph_completeness(bit_width: int, graph: list):
     for i in range(1, bit_width):
         assert is_sum_bit_complete(i, graph) == True
-
-
 
 def is_sum_bit_complete(bit_pos: int, graph) -> bool:
     def helper(n: node):

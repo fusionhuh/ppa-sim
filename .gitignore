@@ -7,17 +7,8 @@
 **/.vscode
 verilog/structured/**/*.v
 verilog/base/**/*.v
-verilog/genus/**/*.v
 synthesis/**/*.v
-**/*.tstamp
-synthesis/**/*.json
-synthesis/**/*.do
-synthesis/**/*.do~
-synthesis/**/*.gz
-**/genus.cmd*
 /misc
-**/genus.cmd
-synthesis/genus.log*
 
 
 
