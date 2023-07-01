@@ -2,6 +2,7 @@ import sys
 import graph
 import math
 import os
+import re
 
 def generate_include_block(dependencies: list) -> str:
     text: str = ""
@@ -89,7 +90,6 @@ def generate_structured_adder(adder_info: dict):
             block_declaration = "\t{base_name} block{num}({x1x2s}, .cin({cin}), .cout({cout}));\n".format(base_name=verilog_base_name, num=i, x1x2s=x1x2s, cin=block_cin, cout=block_cout)
             p_and_declaration = "\tand gate{num}({group_p}, p{bit_slice_range});\n".format(num=i, group_p=group_p, bit_slice_range=bit_slice_range)
             mux_statement = "\tassign {real_cout} = {group_p} ? {cin} : {block_cout};\n\n".format(real_cout=real_cout, group_p=group_p, cin=block_cin, block_cout=block_cout)
-
             
             module_definition += "\twire {block_cout};\n".format(block_cout=block_cout)
             module_definition += block_declaration
@@ -112,7 +112,7 @@ def generate_structured_adder(adder_info: dict):
         include_block = generate_include_block([verilog_base_name, "cla4", "block_signals4"])
 
         module_definition: str = include_block
-        subadder_file = open("verilog/logic/" + subadder_name + ".v", "r")
+        subadder_file = open("verilog/logic/16bit_subadd.v", "r")
         subadder_text = subadder_file.read()
         subadder_text = subadder_text.format(type=verilog_base_name)
         module_definition += subadder_text
@@ -144,17 +144,18 @@ def generate_structured_adder(adder_info: dict):
             module_definition += "endmodule\n"
         return module_definition
 
+
+    # produces random wire declarations
     def generate_cselect_adder():
         # process:
         # 1) assign a positional index to each adder block
         # 2) place two adders every block except on first block
         # 3) place two muxes on the 2nd level every 2 block except on the first placement
         # 4) place two muxes on the 3rd level every 4 blocks, except on the first placement
-        def generate_base_adder_declaration(a: adder, name: str, ports: dict) -> str:
+        def generate_base_adder_declaration(name: str, ports: dict) -> str:
             port_list: list = [f".{pair[0]}({pair[1]})" for pair in ports.items()]
             port_list = ", ".join(port_list)
             return f"\t{verilog_base_name} {name}({port_list});\n"
-
 
         module_definition: str = generate_include_block([verilog_base_name])
         module_definition += generate_module_declaration(verilog_structured_name, False)
@@ -176,7 +177,7 @@ def generate_structured_adder(adder_info: dict):
                 adder_name = "component_level0_pos0_cin0"
                 module_definition += generate_wires([adder_name + "_cout"])
                 ports["cout"] = adder_name + "_cout"
-                module_definition += generate_base_adder_declaration(a, adder_name, ports)
+                module_definition += generate_base_adder_declaration(adder_name, ports)
             else:
                 for cin in ["0", "1"]:
                     adder_name = f"component_level0_pos{i}_cin{cin}"
@@ -186,7 +187,7 @@ def generate_structured_adder(adder_info: dict):
                     ports["cin"] = "1'b" + cin
                     ports["cout"] = adder_cout
                     ports["s"] = adder_out
-                    module_definition += generate_base_adder_declaration(a, adder_name, ports)
+                    module_definition += generate_base_adder_declaration(adder_name, ports)
 
             for k in [2**j for j in range(1, lowest_depth+1)]:
                 if (i+1) % k == 0 and i != 0:
@@ -227,24 +228,24 @@ def generate_structured_adder(adder_info: dict):
                     mux0_name = f"component_level{level}_pos{i}_cin0"
                     mux0_control = f"component_level{level-1}_pos{i-mux_span}_cin0_cout" # mux will always take in select bit from first mux on prev level
                     mux0_out = mux0_name + "_out"
-                    width = mux_span * block_size if i + 1 != block_count else mux_span * block_size + 1
-                    module_definition += generate_wires([(mux0_out, width)])
+                    temp_width = mux_span * block_size if i + 1 != block_count else mux_span * block_size + 1
+                    module_definition += generate_wires([(mux0_out, temp_width)])
                     mux0_statement = f"\tassign {mux0_out} = {mux0_control} ? {mux_in1} : {mux_in0};\n"
                     module_definition += mux0_statement + "\n"
                     if i+1 > k:
                         mux1_name = f"component_level{level}_pos{i}_cin1"
                         mux1_control = f"component_level{level-1}_pos{i-mux_span}_cin1_cout"
                         mux1_out = mux1_name + "_out"
-                        module_definition += generate_wires([mux1_out, width])
+                        module_definition += generate_wires([mux1_out, temp_width])
                         mux1_statement = f"\tassign {mux1_name} = {mux1_control} ? {mux_in1} : {mux_in0};\n"
                         module_definition += mux1_statement + "\n"
                     elif i+1 == k:
                         sum_wires.insert(0, mux0_out)
                     module_definition += "\n\n"
-        module_definition += generate_wires([("sum", width+1 - block_size)])
+        module_definition += generate_wires([("sum", temp_width+1 - block_size)])
         module_definition += "\tassign sum = {{{sum_wires}}};\n".format(sum_wires=", ".join(sum_wires))
-        module_definition += f"\tassign cout = sum[{width}];\n"
-        module_definition += f"\tassign s[{width-1}:{block_size}] = sum[{width-1-block_size}:{0}];\n"
+        module_definition += f"\tassign cout = sum[{temp_width}];\n"
+        module_definition += f"\tassign s[{temp_width-1}:{block_size}] = sum[{temp_width-1-block_size}:{0}];\n"
         module_definition += "endmodule\n"
         return module_definition
                     
@@ -365,3 +366,28 @@ def compile_verilog(text: str) -> bool:
     result = os.system("make compile_test > /dev/null")
     os.system("make compile_test_clean > /dev/null")
     return result == 0
+
+def get_module_declaration_info(line: str):
+    info = re.findall("^\\s*(\\S+)\\s+(\\S+)\\s+\((.+)\)\\s*;", line)
+    #print(info)
+    gate_type = info[0][0]
+    mod_name = info[0][1]
+    ports = info[0][2].replace(" ", "")
+    ports = re.findall("\.(\\w+)\\s*\(\\s*(.+?)\\s*\)", ports)
+    #print(ports)
+    ports_dict: dict = {}
+    for i in range(0, len(ports)):
+        ports_dict[ports[i][0]] = ports[i][1]
+
+    result: dict = {"type" : gate_type, "name" : mod_name, "ports" : ports_dict }
+    return result
+
+def create_module_declaration(info: dict): 
+    pairs = list(info["ports"].items())
+    port_list_str: str = ""
+    for i in range(0, len(pairs)-1):
+        port_list_str += f".{pairs[i][0]}({pairs[i][1]}), "
+    port_list_str += f".{pairs[-1][0]}({pairs[-1][1]})"
+
+
+    return f" {info['type']} {info['name']}({port_list_str});\n"

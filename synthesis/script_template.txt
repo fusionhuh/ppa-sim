@@ -1,18 +1,13 @@
 yosys -import
 read_verilog {dependencies}
-read_liberty synthesis/NangateOpenCellLibrary_typical.lib
+#read_liberty synthesis/NangateOpenCellLibrary_typical.lib
 hierarchy -check -top {design_name}
 synth -top {design_name}
 flatten
 opt
-#techmaps
-techmap
 flatten
-opt -fine
 opt_clean -purge
-#techmap -lib synthesis/NangateOpenCellLibrary_typical.lib
 exec mkdir -p synthesis/{top_module_dir}
-write_blif synthesis/{top_module_dir}/{design_name}.blif
 write_verilog -noattr -noexpr synthesis/{top_module}
 stat
 exit

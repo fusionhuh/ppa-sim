@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from verilog import generate_basic_adder, generate_structured_adder, compile_verilog
+from verilog import generate_basic_adder, generate_structured_adder, compile_verilog, get_module_declaration_info, create_module_declaration
 import re
 import graph
 import os
@@ -46,7 +46,8 @@ class adder:
         if self.base_type == "hybrid":
             self.verilog_base_name += "_" + str(self.hybrid_levels)
         if self.structure != "basic":
-            self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
+            self.verilog_structured_name = f"{self.verilog_base_name}_{self.width}_{self.structure}"
+            #self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
         self.adder_name = self.verilog_base_name if self.structure == "basic" else self.verilog_structured_name
 
         # generate important file/folder paths for each process (verification/verilog, synthesis, optimization, etc)
@@ -61,7 +62,7 @@ class adder:
         if self.structure != "basic":
             if self.structure == "cla":
                 dependency_list.extend(["verilog/logic/cla4.v", "verilog/logic/block_signals4.v"])
-            base_file_path = f"verilog/base/{self.base_type}/{self.base_type}{self.block_size}.v"
+            base_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
             dependency_list.append(base_file_path)
         self._dependencies = dependency_list
 
@@ -167,10 +168,150 @@ class adder:
     # Writes result to synthesis/verilog
     # Second phase in modeling process
     def synthesize(self) -> None:
-        def generate_techmaps() -> str:
-            text: str = ""
-            for dependency in self._dependencies:
-                text += f"techmap -map {dependency}\n"
+        def clean_text(text: str) -> str:
+            def fix_bad_net_names() -> None:
+                net_list: list = []
+                for i in range(net_start, net_end):
+                    expr = "\\w+\\s+(\\S+)\\s*;" if "[" not in lines[i] else "\\w+\\s+\[.+\]\\s+(\\S+)\\s*;"
+                    name = re.findall(expr, lines[i])
+                    assert len(name) == 1
+                    name = name[0]
+                    if "." in name:
+                        net_list.append(name)
+                for net in net_list:
+                    num_lines = len(lines)
+                    for i in range(0, num_lines):
+                        fixed_net = net.replace(".", "_")
+                        lines[i] = lines[i].replace(net, fixed_net)
+
+            def standardize_gates():
+                type_list: set = set()
+                for i in range(gate_start, gate_end):
+                    #gate = re.findall("^\\s*(\\S+)\\s+(\\S+)\\s+\(.+\)\\s*;", lines[i])
+                    #assert len(gate) == 1
+                    #gate = gate[0][0]
+                    #new_gate = gate.replace("_", "")
+                    #ines[i] = lines[i].replace(gate, new_gate)
+
+                    info = get_module_declaration_info(lines[i])
+                    # standardize name
+                    info["type"] = (info["type"].replace("_", "")).upper()
+                    if "NOT" not in info["type"] or info["type"] == "NOT":
+                        lines[i] = create_module_declaration(info)
+                        continue
+                    base_type = info["type"].replace("NOT", "")
+                    info["type"] = base_type
+                    # create new inverter to invert wire B
+                    wire_b = info["ports"]["B"]
+                    safe_wire_b = wire_b.replace("[", "_").replace("]", "_")  # remove any []
+                    print(safe_wire_b)
+                    wire_b_inv = safe_wire_b + "_inv"
+
+                    new_line = f" wire {wire_b_inv};\n NOT {safe_wire_b}_inverter(.A({wire_b}), .Y({wire_b_inv}));\n"
+                    info["ports"]["B"] = wire_b_inv
+                    new_line += create_module_declaration(info)
+                    lines[i] = new_line
+                    print(lines[i])
+
+            def resolve_assigns() -> list:
+                statement_list: list = []
+
+                for i in range(assign_start, assign_end):
+                    sides = re.findall("^\\s*assign\\s+(.+)\\s*=\\s*(.+)\\s*;", lines[i])
+                    left = sides[0][0].replace(" ", "")
+                    right = sides[0][1].replace(" ", "")
+
+                    def separate_net_list(src: str) -> list:
+                        if "{" not in src:
+                            return [src]
+                        src = src.replace("{", "")
+                        src = src.replace("}", "")
+                        result: list = src.split(",")
+                        return result
+
+                    temp_left_nets: list = separate_net_list(left)
+                    temp_right_nets: list = separate_net_list(right)
+
+                    def expand_temp_nets(nets: list) -> list:
+                        expanded_nets: list = []
+                        for i in range(0, len(nets)):
+                            if ":" in nets[i]:
+                                info = re.findall(",*\\s*(\\S+)\\s*\[(\\d+):(\\d+)\]", nets[i])
+                                name = info[0][0]
+                                low_bit = int(info[0][2])
+                                high_bit = int(info[0][1])
+                                for j in range(low_bit, high_bit+1):
+                                    expanded_nets.append(f"{name}[{j}]")
+                            else:
+                                expanded_nets.append(nets[i])
+                        return expanded_nets
+
+                    left_nets = expand_temp_nets(temp_left_nets)
+                    right_nets = expand_temp_nets(temp_right_nets)
+
+                    print(len(left_nets))
+                    print(len(right_nets))
+
+                    if len(left_nets) != len(right_nets):
+                        exit()
+                    for j in range(0, len(right_nets)):
+                        old_net = right_nets[j]
+                        new_net = left_nets[j]
+
+                        for k in range(net_start, net_end):
+                            if old_net in lines[k]:
+                                lines[k] = ""
+                        for k in range(gate_start, gate_end):
+                            lines[k] = lines[k].replace(old_net, new_net)
+                    lines[i] = "" # delete assign statement
+            
+            text = fix_hanging_newlines(text)
+            text = fix_illegal_chars(text)
+            lines = text.split("\n")
+            num_lines = len(lines)
+            mod_start = 0
+            mod_end = 0
+            net_start = 0
+            net_end = 0
+            gate_start = 0
+            gate_end = 0
+            assign_start = 0
+            assign_end = 0
+            curr = 0
+            while curr < num_lines:
+                if "module " in lines[curr]:
+                    mod_start = curr
+                    curr = curr+1
+                    break
+                curr = curr+1
+            net_start = curr
+            while curr < num_lines:
+                curr_line = lines[curr]
+                is_wire = "input " in curr_line or "wire " in curr_line or "output " in curr_line
+                if not is_wire:
+                    net_end = curr 
+                    break     
+                curr = curr+1
+            gate_start = curr
+            while curr < num_lines:
+                if "assign" in lines[curr]:
+                    gate_end = curr
+                    break
+                curr = curr + 1
+            assign_start = curr
+            while curr < num_lines:
+                if "endmodule" in lines[curr]:
+                    assign_end = curr
+                curr = curr+1
+            mod_end = curr+1
+
+            # replace invalid wire names
+            fix_bad_net_names()
+            # resolve assigns
+            resolve_assigns()
+            # standardize gate types
+            standardize_gates()
+            text = "\n".join(lines)
             return text
 
         def fix_illegal_chars(text: str) -> str:
@@ -178,23 +319,12 @@ class adder:
             text = text.replace("$", "_")
             return text
 
-        def rename_modules(text: str) -> str:
-            rename_table = {
-                
-            }
-            lines = text.split("\n")
-            mod_start = 0
-            mod_end = 0
-            for i in range(0, len(lines)):
-                if mod_start == 0 and "module" in lines[i]:
-                    mod_start = i
-                if mod_end == 0 and "endmodule" in lines[i]:
-                    mod_end = i
-
         def fix_hanging_newlines(text: str) -> str:
             lines = text.split(";")
             length = len(lines)
             for i in range(0, length):
+                if lines[i].isspace():
+                    lines[i] = ""
                 lines[i] = lines[i].replace("\n", "")
                 lines[i] = "\n" + lines[i]
             new_text = ";".join(lines)
@@ -202,20 +332,21 @@ class adder:
             new_text = new_text[mod_start:len(new_text)]
             new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
             return new_text
-
+        
         script_template = open("synthesis/script_template.txt", "r")
         script_template_text = script_template.read()
-        techmaps = generate_techmaps()
         script_text = script_template_text.format(dependencies=" ".join(self._dependencies + [self._verilog_file_path]), design_name=self.adder_name, top_module=self._verilog_file_path, top_module_dir=self._verilog_folder_path)
         script = open("synthesis/script.tcl", "w+")
         script.write(script_text)
         script.close()
-        os.system("sh synthesis/synthesis_setup.sh")
+        if os.system("sh synthesis/synthesis_setup.sh") != 0:
+            print("Error during synthesis, exiting...")
+            exit()
+            
         # process and clean up synthesized code
         file = open(self._syn_file_path, "r")
         text = file.read()
-        text = fix_hanging_newlines(text)
-        text = fix_illegal_chars(text)
+        text = clean_text(text)
         file.close()
         file = open(self._syn_file_path, "w")
         file.write(text)

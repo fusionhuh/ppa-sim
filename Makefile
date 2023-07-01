@@ -20,16 +20,15 @@ synthesis_test:
 	source /vol/ece303/genus_tutorial/cadence.env
 
 clean:
-	rm -rf __pycache__
 	rm -f log.txt
 	rm -f */log.txt
 	rm -f ./*.vcd
 	rm -f */*.vcd
 	rm -rf verilog/base/
 	rm -rf verilog/structured/
+	rm -rf synthesis/verilog/
 	rm -f verilog/testbench
 	rm -f verilog/testbench.v
 	rm -f verilog/tb.v
 	rm -f verilog/tb
-	rm -f genus.*
 	

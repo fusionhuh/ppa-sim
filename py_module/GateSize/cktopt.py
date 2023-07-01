@@ -10,18 +10,20 @@ import re
 
 # Gate Library
 GateLib = {
-    'INV' : [('A', 'in'), ('Z', 'out')],
-    'NAND' : [('A', 'in'), ('B', 'in'), ('Z', 'out')],
-    'NOR' : [('A', 'in'), ('B', 'in'), ('Z', 'out')],
-    'OAI21_X1' : [('A', 'in'), ('B1', 'in'), ('B2', 'in'), ('ZN', 'out')]
+    "NOT" : [("A", "in"), ("Y", "out")],
+    "NAND" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "NOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "XNOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "AND" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "OR" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "XOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "MUX" : [("A", "in"), ("B", "in"), ("S", "in"), ("Y", "out")]
 }
 
 def fill_gate_lib(text: str) -> str:
-    module_declare_expr = "(\\S+)\\s\\S+\\s\(([\\S\\s^\);]+)\);\n"
-    module_declare_expr = "___(\\w+)_[^;];\n"
-    port_list_expr = "\.(\\w+)\\s+\(\\w+\)"
+    module_declare_expr = "(\\S+)\\s+\\S+\\s+\((.*?)\);"
+    port_list_expr = "\.(\\w+)\\s*\(\\s*\\w+\\s*\)"
     module_declares = re.findall(module_declare_expr, text)
-    print(module_declares)
     module_declares.pop(0)
     for declaration in module_declares:
         if declaration[0] in GateLib.keys():
@@ -33,7 +35,7 @@ def fill_gate_lib(text: str) -> str:
             function: str
             if "A" in port or "B" in port:
                 function = "in"
-            elif "Z" in port or "CO" in port or "S" in port:
+            elif "Z" in port or "CO" in port or "S" in port or "Y" in port:
                 function = "out"
             else:
                 function = "in"
@@ -48,16 +50,18 @@ def fix_bus_references(text: str) -> str:
         line_num += 1
     file_length = len(lines)
     identifiers = ["wire", "input", "output"]
-    bus_index_expr = "(\\w+)\[(\\d+)\]"
-    net_declare_expr = "(\\w+)\\s\[(\\d+):0\]\\s(.+);"
+    bus_index_expr = "(\\w+)\\s*\[(\\d+)\]"
+    net_declare_expr = "(\\w+)\\s+\[(\\d+):0\]\\s+(\\S+)\\s*;"
     while line_num < file_length:
         curr_line = lines[line_num]
+        print(curr_line)
         if any([x in curr_line for x in identifiers]) and "[" in curr_line:
             declaration = re.findall(net_declare_expr, curr_line)
+            assert len(declaration) == 1
             net_type = declaration[0][0]
             width = int(declaration[0][1]) + 1
             name_list = declaration[0][2].split(", ")
-            new_line = f"  {net_type} "
+            new_line = f" {net_type} "
             for name in name_list:
                 for i in range(0, width):
                     new_wire = f"{name}_{i}, "
@@ -79,9 +83,7 @@ def readVerilog(fname, target):
     verilog_src = open(fname)
     text = verilog_src.read()
     text = fix_bus_references(text)
-    print(text)
-    fill_gate_lib(text)
-    print(GateLib)
+    #fill_gate_lib(text)
     mods = veriparse.parser.parse(text)
     if target:
         match = [m for m in mods if m.name == args.target]
@@ -130,7 +132,7 @@ def optimizeMod(target, maxAreaList):
 
         gate = nets.Gate(modInst.name, modInst.type, ins, outs)
         gateMap[modInst.name] = gate
-        print(gate.name, gate.ins, gate.outs)
+        #print(gate.name, gate.ins, gate.outs)
 
     # Think seriously about test cases
 
@@ -156,7 +158,6 @@ def optimizeMod(target, maxAreaList):
 
     return result
 
-
 def calculate_delay(a):
     # load cell count from timing file
     # generate a list of some amount of numbers that are (cell_count+1)*n
@@ -164,12 +165,10 @@ def calculate_delay(a):
     # read through delay results
     pass
 
-
 def optimize(file_path: str, area_list: int) -> int:
     result = optimizeHelper(fname=file_path, target=None, areaList=area_list)
+    print(result)
     return result
-    
-
 
 def optimizeHelper(fname: str, target, areaList: list):
     targetMod = readVerilog(fname, target)
