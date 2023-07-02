@@ -392,6 +392,17 @@ def create_module_declaration(info: dict):
 
     return f" {info['type']} {info['name']}({port_list_str});"
 
+def find_gate_boundaries(text: str) -> tuple:
+    lines = text.split("\n")
+    i = 2
+    while "input" in lines[i] or "wire" in lines[i] or "output" in lines[i]:
+        i+=1
+    gate_start = i
+    while lines[i] != "endmodule":
+        i+=1
+    gate_end = i
+    return (gate_start, gate_end)
+
 #def get_drive_template_name(name: str)
 
 

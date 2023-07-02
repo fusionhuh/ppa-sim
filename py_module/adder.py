@@ -9,6 +9,8 @@ sys.path.append("GateSize/")
 import cktopt
 import json
 
+lib_file_path: str = "synthesis/NangateOpenCellLibrary_typical.lib"
+
 class adder:
     def __init__(self, description: str):
         assert description.count(".") == 2
@@ -74,7 +76,6 @@ class adder:
         self._syn_stats_file_path = f"{self._syn_folder_path}/{self.adder_name}_stats.json"
 
         # optimization
-        self._opt_template_file = f"optimization/templates/{subdir}/{self.adder_name}_template.txt"
         self._opt_data_folder_path = f"optimization/size_data/{subdir}"
         self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
         self._opt_verilog_folder_path = f"optimization/verilog/{subdir}"
@@ -196,11 +197,15 @@ class adder:
                     # standardize name
                     info["type"] = (info["type"].replace("_", "")).upper()
                     info["type"] = info["type"].replace("NOT", "INV")
-                    if "INV" not in info["type"] or info["type"] == "INV":
+                    if "INV" not in info["type"]:
+                        info["type"] += "2"
+                        lines[i] = verilog.create_module_declaration(info)
+                        continue
+                    if info["type"] == "INV":
                         lines[i] = verilog.create_module_declaration(info)
                         continue
                     base_type = info["type"].replace("INV", "")
-                    info["type"] = base_type
+                    info["type"] = base_type + "2"
                     # create new inverter to invert wire B
                     wire_b = info["ports"]["B"]
                     safe_wire_b = wire_b.replace("[", "_").replace("]", "_")  # remove any []
@@ -311,8 +316,11 @@ class adder:
             resolve_assigns()
             # standardize gate types
             standardize_gates()
-            text = "\n".join(lines)
-            return fix_hanging_newlines(text)
+
+            text = fix_hanging_newlines("\n".join(lines))
+            print(text)
+
+            return text
 
         def fix_illegal_chars(text: str) -> str:
             text = text.replace("\\", "_")
@@ -332,24 +340,6 @@ class adder:
             new_text = new_text[mod_start:len(new_text)]
             new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
             return new_text
-        
-        def create_opt_template(text: str) -> str:
-            def create_module_with_drive_template(info: dict):
-                new_info = info
-                new_info["type"] += f"_X{info['name'].upper()}_DRIVE"
-                return create_module_declaration(new_info)
-            
-            lines = text.split("\n")
-            num_lines = len(lines)
-            i = 2 # ASSUMING that this starts on a net, may need to be adjusted
-            while "wire " in lines[i] or "output " in lines[i] or "input " in lines[i]:
-                i+=1
-            # i should now be at the start of gate declarations
-            while i < num_lines-1:
-                info = get_module_declaration_info(lines[i])
-                lines[i] = create_module_with_drive_template(info)
-                i+=1
-            return "\n".join(lines)
 
         script_template = open("synthesis/script_template.txt", "r")
         script_template_text = script_template.read()
@@ -371,15 +361,6 @@ class adder:
         self.synthesized_text = text
         file.close()
 
-        # create template file for optimization
-        template_text = create_opt_template(text)
-        print(template_text)
-        file = Path(self._opt_template_file)
-        file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(template_text)
-
-
-
     # Returns the number of modules in synthesized verilog file
     def _get_synthesized_cell_count(self) -> int:
         if hasattr(self, "_syn_cell_count"):
@@ -391,24 +372,75 @@ class adder:
         return self._syn_cell_count
 
     def optimize(self, areas_list: list):
-        def map_opt_size(size: float) -> str:
-            return str(int(size))
+        def parse_lib_file() -> dict:
+            size_dict: dict = {}
+            file = open(lib_file_path)
+            text = file.read()
+            cells = re.findall("cell\\s+\((.+?)\)", text)
+            for cell in cells:
+                components = cell.split("_")
+                gate_type = components[0]
+                drive = int(components[1].replace("X", ""))
+                if gate_type not in size_dict.keys():
+                    size_dict[gate_type] = []
+                if drive not in size_dict[gate_type]:
+                    size_dict[gate_type].append(drive)
+            return size_dict
+        
+        def get_optimization_results(area: int) -> dict:
+            data_file_path = Path(self._opt_data_file_path)
+            if data_file_path.is_file(): # file exists, could be cached
+                json_data: dict
+                with open(self._opt_data_file_path, "r") as fp:
+                    json_data = json.load(fp)                    
+                if str(area) in json_data.keys():
+                    return json_data[str(area)]
+                else:
+                    results = cktopt.optimize(self._syn_file_path, [area])
+                    json_data[area] = results
+                    with open(self._opt_data_file_path, "w") as fp:
+                        json.dump(json_data, fp)     
+                    return results
+            else: # file doesn't exist, results definitely are not cached
+                data_file_path.parent.mkdir(parents=True, exist_ok=True)
+                new_json_data: dict = {}
+                results = cktopt.optimize(self._syn_file_path, [area])
+                new_json_data[area] = results
+                with open(self._opt_data_file_path, "w") as fp:
+                    json.dump(new_json_data, fp)
+                return results
 
-        def fill_template_file(sizes: dict) -> None: # sizes is output of cktopt.optimize()
-            template_file = open(self._opt_template_file)
-            template_text = template_file.read()
-            for gate, size in sizes.items():
-                format_name = gate.upper() + "_DRIVE"
-                template_text = template_text.replace(format_name, map_opt_size(size))
-            print(template_text)
-            
-        min_area = self._get_synthesized_cell_count()*2 + 1
-        result = cktopt.optimize(self._syn_file_path, [min_area])
+        def map_opt_size(sizes: list, size: float) -> str:
+            end = len(sizes)-1
+            while end >= 0:
+                if size > sizes[end]:
+                    return str(sizes[end])
+                end-=1
+            return "-1"
+
+        def size_synthesized_file(results: dict) -> None:
+            lib_dict = parse_lib_file()
+            syn_file = open(self._syn_file_path)
+            syn_text = syn_file.read()
+            lines = syn_text.split("\n")
+            gate_start, gate_end = verilog.find_gate_boundaries(syn_text)
+            for i in range(gate_start, gate_end):
+                info = get_module_declaration_info(lines[i])
+                gate_type = info["type"].split("_")[0]
+                size = results[info["name"]]
+                size = map_opt_size(lib_dict[gate_type], size)
+                info["type"] += f"_X{size}"
+                lines[i] = create_module_declaration(info)
+            syn_text = "\n".join(lines)
+            print(syn_text)
+        
+        min_area = self._get_synthesized_cell_count()+1
+        result = get_optimization_results(min_area)
+        print(result)
         sizes_only: dict = result[0]
         sizes_only.pop("delay")
         sizes_only.pop("maxArea")
-        fill_template_file(sizes_only)
-        print(result)
+        size_synthesized_file(sizes_only)
 
     # Calculates the worst case delay of adder circuit (according to synthesized
     # representation)

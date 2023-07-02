@@ -11,13 +11,13 @@ import re
 # Gate Library
 GateLib = {
     "INV" : [("A", "in"), ("Y", "out")],
-    "NAND" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "NOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "XNOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "AND" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "OR" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "XOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "MUX" : [("A", "in"), ("B", "in"), ("S", "in"), ("Y", "out")]
+    "NAND2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "NOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "XNOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "AND2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "OR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "XOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
+    "MUX2" : [("A", "in"), ("B", "in"), ("S", "in"), ("Y", "out")]
 }
 
 def fill_gate_lib(text: str) -> str:
