@@ -9,5 +9,5 @@ flatten
 opt_clean -purge
 exec mkdir -p synthesis/{top_module_dir}
 write_verilog -noattr -noexpr synthesis/{top_module}
-stat
+tee -o synthesis/{top_module_dir}/{design_name}_stats.json stat -json
 exit

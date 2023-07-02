@@ -1,11 +1,13 @@
 import sys
 from pathlib import Path
 from verilog import generate_basic_adder, generate_structured_adder, compile_verilog, get_module_declaration_info, create_module_declaration
+import verilog
 import re
 import graph
 import os
 sys.path.append("GateSize/")
 import cktopt
+import json
 
 class adder:
     def __init__(self, description: str):
@@ -69,10 +71,13 @@ class adder:
         self._syn_folder_path = f"synthesis/verilog/{subdir}"
         self._syn_file_path = f"{self._syn_folder_path}/{self.adder_name}.v"
         self._syn_area_file_path = f"{self._syn_folder_path}/{self.adder_name}_area"
+        self._syn_stats_file_path = f"{self._syn_folder_path}/{self.adder_name}_stats.json"
 
         # optimization
-        self._opt_data_folder_path = f"optimization/{subdir}"
+        self._opt_template_file = f"optimization/templates/{subdir}/{self.adder_name}_template.txt"
+        self._opt_data_folder_path = f"optimization/size_data/{subdir}"
         self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
+        self._opt_verilog_folder_path = f"optimization/verilog/{subdir}"
 
     # Creates high-level verilog description of circuit
     # Writes description to verilog/
@@ -187,31 +192,27 @@ class adder:
             def standardize_gates():
                 type_list: set = set()
                 for i in range(gate_start, gate_end):
-                    #gate = re.findall("^\\s*(\\S+)\\s+(\\S+)\\s+\(.+\)\\s*;", lines[i])
-                    #assert len(gate) == 1
-                    #gate = gate[0][0]
-                    #new_gate = gate.replace("_", "")
-                    #ines[i] = lines[i].replace(gate, new_gate)
-
                     info = get_module_declaration_info(lines[i])
                     # standardize name
                     info["type"] = (info["type"].replace("_", "")).upper()
-                    if "NOT" not in info["type"] or info["type"] == "NOT":
-                        lines[i] = create_module_declaration(info)
+                    info["type"] = info["type"].replace("NOT", "INV")
+                    if "INV" not in info["type"] or info["type"] == "INV":
+                        lines[i] = verilog.create_module_declaration(info)
                         continue
-                    base_type = info["type"].replace("NOT", "")
+                    base_type = info["type"].replace("INV", "")
                     info["type"] = base_type
                     # create new inverter to invert wire B
                     wire_b = info["ports"]["B"]
                     safe_wire_b = wire_b.replace("[", "_").replace("]", "_")  # remove any []
-                    print(safe_wire_b)
-                    wire_b_inv = safe_wire_b + "_inv"
+                    wire_b_inverted = safe_wire_b + "_inv"
 
-                    new_line = f" wire {wire_b_inv};\n NOT {safe_wire_b}_inverter(.A({wire_b}), .Y({wire_b_inv}));\n"
-                    info["ports"]["B"] = wire_b_inv
-                    new_line += create_module_declaration(info)
+                    inv_info = {"type" : "INV", "name" : safe_wire_b+"_inverter", "ports" : {"A" : wire_b, "Y" : wire_b_inverted}}
+
+                    lines[net_start] += f" wire {wire_b_inverted};\n"
+                    new_line = verilog.create_module_declaration(inv_info)
+                    info["ports"]["B"] = wire_b_inverted
+                    new_line += verilog.create_module_declaration(info)
                     lines[i] = new_line
-                    print(lines[i])
 
             def resolve_assigns() -> list:
                 statement_list: list = []
@@ -249,8 +250,7 @@ class adder:
                     left_nets = expand_temp_nets(temp_left_nets)
                     right_nets = expand_temp_nets(temp_right_nets)
 
-                    print(len(left_nets))
-                    print(len(right_nets))
+                    assert len(right_nets) == len(left_nets)
 
                     if len(left_nets) != len(right_nets):
                         exit()
@@ -312,7 +312,7 @@ class adder:
             # standardize gate types
             standardize_gates()
             text = "\n".join(lines)
-            return text
+            return fix_hanging_newlines(text)
 
         def fix_illegal_chars(text: str) -> str:
             text = text.replace("\\", "_")
@@ -333,6 +333,24 @@ class adder:
             new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
             return new_text
         
+        def create_opt_template(text: str) -> str:
+            def create_module_with_drive_template(info: dict):
+                new_info = info
+                new_info["type"] += f"_X{info['name'].upper()}_DRIVE"
+                return create_module_declaration(new_info)
+            
+            lines = text.split("\n")
+            num_lines = len(lines)
+            i = 2 # ASSUMING that this starts on a net, may need to be adjusted
+            while "wire " in lines[i] or "output " in lines[i] or "input " in lines[i]:
+                i+=1
+            # i should now be at the start of gate declarations
+            while i < num_lines-1:
+                info = get_module_declaration_info(lines[i])
+                lines[i] = create_module_with_drive_template(info)
+                i+=1
+            return "\n".join(lines)
+
         script_template = open("synthesis/script_template.txt", "r")
         script_template_text = script_template.read()
         script_text = script_template_text.format(dependencies=" ".join(self._dependencies + [self._verilog_file_path]), design_name=self.adder_name, top_module=self._verilog_file_path, top_module_dir=self._verilog_folder_path)
@@ -343,7 +361,7 @@ class adder:
             print("Error during synthesis, exiting...")
             exit()
             
-        # process and clean up synthesized code
+        # process and clean up synthesized file
         file = open(self._syn_file_path, "r")
         text = file.read()
         text = clean_text(text)
@@ -351,18 +369,46 @@ class adder:
         file = open(self._syn_file_path, "w")
         file.write(text)
         self.synthesized_text = text
+        file.close()
+
+        # create template file for optimization
+        template_text = create_opt_template(text)
+        print(template_text)
+        file = Path(self._opt_template_file)
+        file.parent.mkdir(parents=True, exist_ok=True)
+        file.write_text(template_text)
+
+
 
     # Returns the number of modules in synthesized verilog file
-    def get_synthesized_cell_count(self) -> int:
+    def _get_synthesized_cell_count(self) -> int:
         if hasattr(self, "_syn_cell_count"):
             return self._syn_cell_count
-        area_file = open(self._syn_area_file_path, "r")
-        text = area_file.read()
-        lines = text.split("\n")
-        last_line = lines[-2]
-        regex = "\\w+\\s+(\\d+)\\s+\\d+\.\\d+"
-        cell_count = int(re.findall(regex, last_line)[0])
-        return cell_count
+        area_file = open(self._syn_stats_file_path)
+        data = json.load(area_file)
+        compound_cell_count = data["design"]["num_cells_by_type"]["$_ANDNOT_"] + data["design"]["num_cells_by_type"]["$_ORNOT_"]
+        self._syn_cell_count = data["design"]["num_cells"] + compound_cell_count
+        return self._syn_cell_count
+
+    def optimize(self, areas_list: list):
+        def map_opt_size(size: float) -> str:
+            return str(int(size))
+
+        def fill_template_file(sizes: dict) -> None: # sizes is output of cktopt.optimize()
+            template_file = open(self._opt_template_file)
+            template_text = template_file.read()
+            for gate, size in sizes.items():
+                format_name = gate.upper() + "_DRIVE"
+                template_text = template_text.replace(format_name, map_opt_size(size))
+            print(template_text)
+            
+        min_area = self._get_synthesized_cell_count()*2 + 1
+        result = cktopt.optimize(self._syn_file_path, [min_area])
+        sizes_only: dict = result[0]
+        sizes_only.pop("delay")
+        sizes_only.pop("maxArea")
+        fill_template_file(sizes_only)
+        print(result)
 
     # Calculates the worst case delay of adder circuit (according to synthesized
     # representation)

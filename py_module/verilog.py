@@ -368,13 +368,12 @@ def compile_verilog(text: str) -> bool:
     return result == 0
 
 def get_module_declaration_info(line: str):
-    info = re.findall("^\\s*(\\S+)\\s+(\\S+)\\s+\((.+)\)\\s*;", line)
-    #print(info)
+    info = re.findall("^\\s*(\\S+)\\s+(\\S+?)\\s*\((.+)\)\\s*;", line)
+    assert len(info) > 0
     gate_type = info[0][0]
     mod_name = info[0][1]
     ports = info[0][2].replace(" ", "")
     ports = re.findall("\.(\\w+)\\s*\(\\s*(.+?)\\s*\)", ports)
-    #print(ports)
     ports_dict: dict = {}
     for i in range(0, len(ports)):
         ports_dict[ports[i][0]] = ports[i][1]
@@ -384,10 +383,15 @@ def get_module_declaration_info(line: str):
 
 def create_module_declaration(info: dict): 
     pairs = list(info["ports"].items())
+    assert len(pairs) > 0
     port_list_str: str = ""
     for i in range(0, len(pairs)-1):
         port_list_str += f".{pairs[i][0]}({pairs[i][1]}), "
     port_list_str += f".{pairs[-1][0]}({pairs[-1][1]})"
 
 
-    return f" {info['type']} {info['name']}({port_list_str});\n"
+    return f" {info['type']} {info['name']}({port_list_str});"
+
+#def get_drive_template_name(name: str)
+
+

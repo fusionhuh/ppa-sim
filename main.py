@@ -32,6 +32,6 @@ if description != "all":
         a.synthesize()
         print("Done synthesizing")
     if args.optimize:
-        delays = a.calculate_worst_case_delay([200000])
+        a.optimize([1])
         print("Done optimizing")
-        print(delays)
+        #print(delays)

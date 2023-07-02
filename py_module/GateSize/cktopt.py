@@ -10,7 +10,7 @@ import re
 
 # Gate Library
 GateLib = {
-    "NOT" : [("A", "in"), ("Y", "out")],
+    "INV" : [("A", "in"), ("Y", "out")],
     "NAND" : [("A", "in"), ("B", "in"), ("Y", "out")],
     "NOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
     "XNOR" : [("A", "in"), ("B", "in"), ("Y", "out")],
