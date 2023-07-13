@@ -1,0 +1,5 @@
+read_liberty synthesis/NangateOpenCellLibrary_typical.lib
+read_verilog {verilog_file}
+link_design {design_name}
+write_sdf {sdf_file}
+exit

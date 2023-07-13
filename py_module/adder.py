@@ -8,8 +8,31 @@ import os
 sys.path.append("GateSize/")
 import cktopt
 import json
+from file_help import write_text, create_file_parents, read_text
 
-lib_file_path: str = "synthesis/NangateOpenCellLibrary_typical.lib"
+LIB_PATH: str = "synthesis/NangateOpenCellLibrary_typical.lib"
+
+SUPPORTED_TYPES: list = ["bk", "ks", "hybrid", "serial", "skl"]
+SUPPORTED_STRUCTURES: list = ["basic", "rc", "cla", "cskip", "cselect"]
+VERI_DIR = "verilog"
+VERI_BASE_DIR = "base"
+VERI_STRUCTURED_DIR = "structured"
+VERI_LOGIC_DIR = "logic"
+
+SYN_DIR = "synthesis"
+SYN_VERILOG_DIR = f"verilog"
+SYN_SCRIPT_TEMPLATE_PATH = f"{SYN_DIR}/script_template.txt"
+SYN_SCRIPT_PATH = f"{SYN_DIR}/script.tcl"
+SYN_LIB_PATH = f"{SYN_DIR}/NangateOpenCellLibrary_typical.lib"
+
+OPT_DIR = "optimization"
+OPT_VERILOG_DIR = f"verilog"
+OPT_SDF_DIR = f"sdf"
+OPT_DATA_DIR = f"size_data"
+
+SIM_DIR = "simulation"
+SIM_TESTBENCH_TEMPLATE_PATH = f"{SIM_DIR}/testbench_template.txt"
+SIM_TESTBENCH_PATH = f"{SIM_DIR}/tb.v"
 
 class adder:
     def __init__(self, description: str):
@@ -21,7 +44,7 @@ class adder:
         self.width: int = int(width)
         type_info = adder_type.split("-")
         self.base_type: str = type_info[0]
-        assert self.base_type in ["bk", "ks", "hybrid", "serial", "skl"]
+        assert self.base_type in SUPPORTED_TYPES
         if len(type_info) == 2:
             assert self.base_type == "hybrid"
             assert type_info[1].isdigit()
@@ -30,7 +53,7 @@ class adder:
         # fill adder structure information
         structure_info = structure.split("-")
         self.structure: str = structure_info[0]
-        assert self.structure in ["basic", "rc", "cla", "cskip", "cselect"]
+        assert self.structure in SUPPORTED_STRUCTURES
         if self.structure == "basic":
             assert len(structure_info) == 1
             self.block_size: int = self.width
@@ -55,30 +78,37 @@ class adder:
         self.adder_name = self.verilog_base_name if self.structure == "basic" else self.verilog_structured_name
 
         # generate important file/folder paths for each process (verification/verilog, synthesis, optimization, etc)
-        subdir = f"base/{self.base_type}" if self.structure == "basic" else f"structured/{self.structure}"
+        subdir = f"{VERI_BASE_DIR}/{self.base_type}" if self.structure == "basic" else f"{VERI_STRUCTURED_DIR}/{self.structure}"
 
         # verilog
         self._verilog_folder_path = f"verilog/{subdir}"
         self._verilog_file_path = f"{self._verilog_folder_path}/{self.adder_name}.v"
 
         # synthesis
-        dependency_list = ["verilog/logic/pos_operator.v", "verilog/logic/neg_operator.v", "verilog/logic/carry_operator.v"]
+        prefix = f"{VERI_DIR}/{VERI_LOGIC_DIR}"
+        dependency_list = [f"{prefix}/pos_operator.v", f"{prefix}/neg_operator.v", f"{prefix}/carry_operator.v"]
         if self.structure != "basic":
             if self.structure == "cla":
-                dependency_list.extend(["verilog/logic/cla4.v", "verilog/logic/block_signals4.v"])
-            base_file_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
+                dependency_list.extend([f"{prefix}/cla4.v", f"{prefix}/block_signals4.v"])
+            base_file_path = f"{VERI_DIR}/{VERI_BASE_DIR}/{self.base_type}/{self.verilog_base_name}.v"
             dependency_list.append(base_file_path)
         self._dependencies = dependency_list
 
-        self._syn_folder_path = f"synthesis/verilog/{subdir}"
+        self._syn_folder_path = f"{SYN_DIR}/{SYN_VERILOG_DIR}/{subdir}"
         self._syn_file_path = f"{self._syn_folder_path}/{self.adder_name}.v"
         self._syn_area_file_path = f"{self._syn_folder_path}/{self.adder_name}_area"
         self._syn_stats_file_path = f"{self._syn_folder_path}/{self.adder_name}_stats.json"
 
         # optimization
-        self._opt_data_folder_path = f"optimization/size_data/{subdir}"
+        self._opt_data_folder_path = f"{OPT_DIR}/{OPT_DATA_DIR}/{subdir}"
         self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
-        self._opt_verilog_folder_path = f"optimization/verilog/{subdir}"
+        self._opt_verilog_folder_path = f"{OPT_DIR}/{OPT_VERILOG_DIR}/{subdir}"
+        self._opt_sdf_folder_path = f"{OPT_DIR}/{OPT_SDF_DIR}/{subdir}"
+
+        # simulation
+#        self._sim_tb_template = "simulation/testbench_template.txt"
+#        self._sim_tb_file_path = "simulation/tb.v"
+
 
     # Creates high-level verilog description of circuit
     # Writes description to verilog/
@@ -102,21 +132,19 @@ class adder:
                 self.adder_info[var] = val
 
         # update verilog files (including dependencies) according to project file structure
-        file = Path("verilog/base/{type}/{name}.v".format(type=self.base_type, name=self.verilog_base_name))
-        file.parent.mkdir(parents=True, exist_ok=True)
+        base_verilog_path = f"verilog/base/{self.base_type}/{self.verilog_base_name}.v"
         base_verilog_text = generate_basic_adder(self.adder_info)
-        file.write_text(base_verilog_text)
+        write_text(base_verilog_path, base_verilog_text)
 
         # now generate structured verilog if applicable
         if self.structure == "basic":
             self.verilog_text = base_verilog_text
             return 
 
-        file = Path(f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v")
-        file.parent.mkdir(parents=True, exist_ok=True)
-        structured_verilog_test = generate_structured_adder(self.adder_info)
-        self.verilog_text = structured_verilog_test
-        file.write_text(self.verilog_text)
+        structured_verilog_path = f"verilog/structured/{self.structure}/{self.verilog_structured_name}.v"
+        structured_verilog_text = generate_structured_adder(self.adder_info)
+        write_text(structured_verilog_path, structured_verilog_text)
+        self.verilog_text = structured_verilog_text
 
     def get_adder_info(self):
         return self.adder_info
@@ -135,9 +163,7 @@ class adder:
             exit()
 
         assert len(cases) > 0
-        tb_template = open("verilog/testbench_template.txt", "r")
-        tb_template_text = tb_template.read()
-        tb_template.close()
+        tb_template_text = read_text("verilog/testbench_template.txt")
 
         test_cases_text: str = ""
         count = 1
@@ -164,9 +190,7 @@ class adder:
             print("Testbench could not compile correctly, exiting...")
             exit()
 
-        tb = open("verilog/tb.v", "w+")
-        tb.write(tb_text)
-        tb.close()
+        write_text("verilog/tb.v", tb_text)
 
         os.system("make run_test")
 
@@ -197,6 +221,15 @@ class adder:
                     # standardize name
                     info["type"] = (info["type"].replace("_", "")).upper()
                     info["type"] = info["type"].replace("NOT", "INV")
+                    new_out_pin = "ZN" if info["type"] != "MUX" and info["type"] != "XOR" else "Z"
+                    info["ports"][new_out_pin] = info["ports"].pop("Y", None)
+                    
+                    second_port: str = "B"
+                    if "X" not in info["type"] and info["type"] != "MUX" and info["type"] != "INV": # very shaky condition
+                        info["ports"]["A1"] = info["ports"].pop("A", None)
+                        info["ports"]["A2"] = info["ports"].pop("B", None)
+                        second_port = "A2" 
+
                     if "INV" not in info["type"]:
                         info["type"] += "2"
                         lines[i] = verilog.create_module_declaration(info)
@@ -207,15 +240,15 @@ class adder:
                     base_type = info["type"].replace("INV", "")
                     info["type"] = base_type + "2"
                     # create new inverter to invert wire B
-                    wire_b = info["ports"]["B"]
+                    wire_b = info["ports"][second_port]
                     safe_wire_b = wire_b.replace("[", "_").replace("]", "_")  # remove any []
                     wire_b_inverted = safe_wire_b + "_inv"
 
-                    inv_info = {"type" : "INV", "name" : safe_wire_b+"_inverter", "ports" : {"A" : wire_b, "Y" : wire_b_inverted}}
+                    inv_info = {"type" : "INV", "name" : safe_wire_b+"_inverter", "ports" : {"A" : wire_b, "ZN" : wire_b_inverted}}
 
                     lines[net_start] += f" wire {wire_b_inverted};\n"
                     new_line = verilog.create_module_declaration(inv_info)
-                    info["ports"]["B"] = wire_b_inverted
+                    info["ports"][second_port] = wire_b_inverted
                     new_line += verilog.create_module_declaration(info)
                     lines[i] = new_line
 
@@ -341,25 +374,21 @@ class adder:
             new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
             return new_text
 
-        script_template = open("synthesis/script_template.txt", "r")
-        script_template_text = script_template.read()
+        script_template_text = read_text("synthesis/script_template.txt")
         script_text = script_template_text.format(dependencies=" ".join(self._dependencies + [self._verilog_file_path]), design_name=self.adder_name, top_module=self._verilog_file_path, top_module_dir=self._verilog_folder_path)
-        script = open("synthesis/script.tcl", "w+")
-        script.write(script_text)
-        script.close()
+        write_text("synthesis/script.tcl", script_text)
         if os.system("sh synthesis/synthesis_setup.sh") != 0:
             print("Error during synthesis, exiting...")
             exit()
             
         # process and clean up synthesized file
-        file = open(self._syn_file_path, "r")
-        text = file.read()
-        text = clean_text(text)
-        file.close()
-        file = open(self._syn_file_path, "w")
-        file.write(text)
-        self.synthesized_text = text
-        file.close()
+        syn_text = read_text(self._syn_file_path)
+        cleaned_text = clean_text(syn_text)
+        write_text(self._syn_file_path, cleaned_text)
+        self.synthesized_text = cleaned_text
+
+    def _create_sized_file_path(self, area: int) -> str:
+        return f"{self._opt_verilog_folder_path}/{self.adder_name}_MAX_AREA_{area}.v"
 
     # Returns the number of modules in synthesized verilog file
     def _get_synthesized_cell_count(self) -> int:
@@ -367,16 +396,19 @@ class adder:
             return self._syn_cell_count
         area_file = open(self._syn_stats_file_path)
         data = json.load(area_file)
-        compound_cell_count = data["design"]["num_cells_by_type"]["$_ANDNOT_"] + data["design"]["num_cells_by_type"]["$_ORNOT_"]
+        compound_cell_count: int = 0
+        if "$_ORNOT_" in data["design"]["num_cells_by_type"].keys():
+            compound_cell_count += data["design"]["num_cells_by_type"]["$_ORNOT_"]
+        if "$_ANDNOT_" in data["design"]["num_cells_by_type"].keys():
+            compound_cell_count += data["design"]["num_cells_by_type"]["$_ANDNOT_"]
         self._syn_cell_count = data["design"]["num_cells"] + compound_cell_count
         return self._syn_cell_count
 
     def optimize(self, areas_list: list):
         def parse_lib_file() -> dict:
             size_dict: dict = {}
-            file = open(lib_file_path)
-            text = file.read()
-            cells = re.findall("cell\\s+\((.+?)\)", text)
+            lib_text = read_text(LIB_PATH)
+            cells = re.findall("cell\\s+\((.+?)\)", lib_text)
             for cell in cells:
                 components = cell.split("_")
                 gate_type = components[0]
@@ -413,15 +445,14 @@ class adder:
         def map_opt_size(sizes: list, size: float) -> str:
             end = len(sizes)-1
             while end >= 0:
-                if size > sizes[end]:
+                if size >= sizes[end]:
                     return str(sizes[end])
                 end-=1
             return "-1"
 
-        def size_synthesized_file(results: dict) -> None:
+        def size_synthesized_file(results: dict) -> str:
             lib_dict = parse_lib_file()
-            syn_file = open(self._syn_file_path)
-            syn_text = syn_file.read()
+            syn_text = read_text(self._syn_file_path)
             lines = syn_text.split("\n")
             gate_start, gate_end = verilog.find_gate_boundaries(syn_text)
             for i in range(gate_start, gate_end):
@@ -432,15 +463,46 @@ class adder:
                 info["type"] += f"_X{size}"
                 lines[i] = create_module_declaration(info)
             syn_text = "\n".join(lines)
-            print(syn_text)
+            return syn_text
         
+        def create_script(verilog_path: str, area: int) -> None:
+            sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+            create_file_parents(sdf_file_path)
+            template_text = read_text("optimization/script_template.txt")
+            script_text = template_text.format(verilog_file=verilog_path, design_name=self.adder_name, sdf_file=sdf_file_path)
+            write_text("optimization/script.tcl", script_text)
+
         min_area = self._get_synthesized_cell_count()+1
         result = get_optimization_results(min_area)
-        print(result)
         sizes_only: dict = result[0]
         sizes_only.pop("delay")
         sizes_only.pop("maxArea")
-        size_synthesized_file(sizes_only)
+        sized_file_text: str = size_synthesized_file(sizes_only)
+        print(sized_file_text)
+        sized_file_path = self._create_sized_file_path(min_area)
+        write_text(sized_file_path, sized_file_text)
+        create_script(sized_file_path, min_area)
+        if os.system("sta optimization/script.tcl") != 0:
+            print("Error during sdf generation, exiting...")
+            exit()
+
+    def simulate(self, area: int):
+        real_area = self._get_synthesized_cell_count() + 1
+        def create_testbench():
+            tb_template_text = read_text(SIM_TESTBENCH_TEMPLATE_PATH)
+            tb_text = tb_template_text.format(width=self.width, adder_name=self.adder_name, sdf_file=self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{real_area}.sdf", verilog_file=self._create_sized_file_path(real_area))
+            write_text(SIM_TESTBENCH_PATH, tb_text)
+            if verilog.compile_verilog(tb_text) == False:
+                print("TESTBENCH ERROR")
+                exit()
+
+        #def run_testbench():
+
+
+        create_testbench()
+
+            
+    
 
     # Calculates the worst case delay of adder circuit (according to synthesized
     # representation)

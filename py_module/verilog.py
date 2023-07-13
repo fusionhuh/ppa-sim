@@ -360,7 +360,7 @@ def generate_basic_adder(adder_info: dict):
     return text
 
 def compile_verilog(text: str) -> bool:
-    test = open("verilog/test.v", "w+")
+    test = open("test.v", "w+")
     test.write(text)
     test.close()
     result = os.system("make compile_test > /dev/null")

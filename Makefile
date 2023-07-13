@@ -1,16 +1,16 @@
-IVERILOG_INCLUDES=-Iverilog/logic/ -Iverilog/base/ -Iverilog/structured/ -Iverilog/base/bk -Iverilog/base/ks -Iverilog/base/hybrid -Iverilog/base/serial -Iverilog/base/skl
+IVERILOG_INCLUDES=-Isimulation/ -Ioptimization/verilog/base/ -Iverilog/-Iverilog/logic/ -Iverilog/base/ -Iverilog/structured/ -Iverilog/base/bk -Iverilog/base/ks -Iverilog/base/hybrid -Iverilog/base/serial -Iverilog/base/skl
 
 testbench: verilog/testbench.v
 	iverilog $(IVERILOG_INCLUDES) -o verilog/testbench verilog/testbench.v > testbench_test.txt
 	vvp verilog/testbench
 
 compile_test:
-	iverilog $(IVERILOG_INCLUDES) -o verilog/test verilog/test.v > verilog/test_out.txt
+	iverilog -g specify $(IVERILOG_INCLUDES) -o test test.v > test_out.txt
 
 compile_test_clean:
-	rm -f verilog/test.v
-	rm -f verilog/test
-	rm -f verilog/test_out.txt
+	rm -f test.v
+	rm -f test
+	rm -f test_out.txt
 
 run_test:
 	iverilog $(IVERILOG_INCLUDES) -o verilog/tb verilog/tb.v
@@ -19,16 +19,23 @@ run_test:
 synthesis_test:
 	source /vol/ece303/genus_tutorial/cadence.env
 
-clean:
+clean_general:
 	rm -f log.txt
 	rm -f */log.txt
-	rm -f ./*.vcd
-	rm -f */*.vcd
+
+clean_verilog:
 	rm -rf verilog/base/
 	rm -rf verilog/structured/
+	rm -rf verilog/tb*
+
+clean_synthesis:
 	rm -rf synthesis/verilog/
-	rm -f verilog/testbench
-	rm -f verilog/testbench.v
-	rm -f verilog/tb.v
-	rm -f verilog/tb
+
+clean_optimize:
+	rm -rf optimization/size_data/
+	rm -rf optimization/verilog/
+	rm -rf optimization/sdf/
+
+clean_all: clean_general clean_verilog clean_synthesis clean_optimize
+	
 	

@@ -9,6 +9,9 @@ verilog/structured/**/*.v
 verilog/base/**/*.v
 synthesis/**/*.v
 /misc
+optimization/verilog/*
+optimization/sdf/*
+optimization/size_data/*
 
 
 

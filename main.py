@@ -15,6 +15,7 @@ parser.add_argument("-v", "--verilog", help="Regenerates high-level verilog for 
 parser.add_argument("-s", "--synthesize", help="Synthesizes high-level verilog of the specified design into a structural design consisting of basic gates.", action="store_true")
 parser.add_argument("-o", "--optimize", help="TBD", action="store_true")
 parser.add_argument("-t", "--test", help="Tests high-level verilog for the specified design with a suite of test cases.", action="store_true")
+parser.add_argument("-r", "--run", help="TBD", action="store_true")
 
 args = parser.parse_args()
 description = args.description
@@ -35,3 +36,5 @@ if description != "all":
         a.optimize([1])
         print("Done optimizing")
         #print(delays)
+    if args.run:
+        a.simulate(1)

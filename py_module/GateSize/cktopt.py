@@ -10,14 +10,14 @@ import re
 
 # Gate Library
 GateLib = {
-    "INV" : [("A", "in"), ("Y", "out")],
-    "NAND2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "NOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "XNOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "AND2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "OR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "XOR2" : [("A", "in"), ("B", "in"), ("Y", "out")],
-    "MUX2" : [("A", "in"), ("B", "in"), ("S", "in"), ("Y", "out")]
+    "INV" : [("A", "in"), ("ZN", "out")],
+    "NAND2" : [("A1", "in"), ("A2", "in"), ("ZN", "out")],
+    "NOR2" : [("A1", "in"), ("A2", "in"), ("ZN", "out")],
+    "XNOR2" : [("A", "in"), ("B", "in"), ("ZN", "out")],
+    "AND2" : [("A1", "in"), ("A2", "in"), ("ZN", "out")],
+    "OR2" : [("A1", "in"), ("A2", "in"), ("ZN", "out")],
+    "XOR2" : [("A", "in"), ("B", "in"), ("Z", "out")],
+    "MUX2" : [("A", "in"), ("B", "in"), ("S", "in"), ("Z", "out")]
 }
 
 def fill_gate_lib(text: str) -> str:
@@ -35,7 +35,7 @@ def fill_gate_lib(text: str) -> str:
             function: str
             if "A" in port or "B" in port:
                 function = "in"
-            elif "Z" in port or "CO" in port or "S" in port or "Y" in port:
+            elif "Z" in port or "Y" in port:
                 function = "out"
             else:
                 function = "in"
