@@ -11,6 +11,7 @@ import json
 from file_help import write_text, create_file_parents, read_text
 
 LIB_PATH: str = "synthesis/NangateOpenCellLibrary_typical.lib"
+NANGATE_LIB_FILE: str = "NangateOpenCellLibrary_typical_conditional.v"
 
 SUPPORTED_TYPES: list = ["bk", "ks", "hybrid", "serial", "skl"]
 SUPPORTED_STRUCTURES: list = ["basic", "rc", "cla", "cskip", "cselect"]
@@ -29,10 +30,13 @@ OPT_DIR = "optimization"
 OPT_VERILOG_DIR = f"verilog"
 OPT_SDF_DIR = f"sdf"
 OPT_DATA_DIR = f"size_data"
+OPT_SCRIPT_TEMPLATE_PATH = f"{OPT_DIR}/script_template.txt"
+OPT_SCRIPT_PATH = f"{OPT_DIR}/script.tcl"
 
 SIM_DIR = "simulation"
 SIM_TESTBENCH_TEMPLATE_PATH = f"{SIM_DIR}/testbench_template.txt"
 SIM_TESTBENCH_PATH = f"{SIM_DIR}/tb.v"
+SIM_OUTPUT_PATH = f"{SIM_DIR}/tb_out"
 
 class adder:
     def __init__(self, description: str):
@@ -450,9 +454,10 @@ class adder:
                 end-=1
             return "-1"
 
-        def size_synthesized_file(results: dict) -> str:
+        def size_synthesized_file(results: dict, area: int) -> str:
             lib_dict = parse_lib_file()
             syn_text = read_text(self._syn_file_path)
+            syn_text = syn_text.replace(f"module {self.adder_name}", f"module {self.adder_name}"+f"_{area}")
             lines = syn_text.split("\n")
             gate_start, gate_end = verilog.find_gate_boundaries(syn_text)
             for i in range(gate_start, gate_end):
@@ -468,41 +473,115 @@ class adder:
         def create_script(verilog_path: str, area: int) -> None:
             sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
             create_file_parents(sdf_file_path)
-            template_text = read_text("optimization/script_template.txt")
-            script_text = template_text.format(verilog_file=verilog_path, design_name=self.adder_name, sdf_file=sdf_file_path)
-            write_text("optimization/script.tcl", script_text)
+            template_text = read_text(OPT_SCRIPT_TEMPLATE_PATH)
+            script_text = template_text.format(verilog_file=verilog_path, design_name=self.adder_name+f"_{area}", sdf_file=sdf_file_path)
+            write_text(OPT_SCRIPT_PATH, script_text)
 
-        min_area = self._get_synthesized_cell_count()+1
-        result = get_optimization_results(min_area)
-        sizes_only: dict = result[0]
-        sizes_only.pop("delay")
-        sizes_only.pop("maxArea")
-        sized_file_text: str = size_synthesized_file(sizes_only)
-        print(sized_file_text)
-        sized_file_path = self._create_sized_file_path(min_area)
-        write_text(sized_file_path, sized_file_text)
-        create_script(sized_file_path, min_area)
-        if os.system("sta optimization/script.tcl") != 0:
-            print("Error during sdf generation, exiting...")
-            exit()
+        def fix_sdf_file(area: int):
+            sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+            sdf_file_text = read_text(sdf_file_path)
+            def replace(match):
+                match = re.findall("\((\\S+)::(\\S+)\)", match.group())
+                num1 = float(match[0][0])
+                num2 = float(match[0][1])
+                return f"({num1}:{(num1+num2)/2}:{num2})"
+            sdf_file_text = re.sub("\((\\S+?)\:\:(\\S+?)\)", replace, sdf_file_text)
+            write_text(sdf_file_path, sdf_file_text)
+        for i in range(0, len(areas_list)):
+            min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
+            result = get_optimization_results(min_area)
+            sizes_only: dict = result[0]
+            sizes_only.pop("delay")
+            sizes_only.pop("maxArea")
+            sized_file_text: str = size_synthesized_file(sizes_only, min_area)
+            # add library include
+            #sized_file_text = f'`include "{NANGATE_LIB_FILE}"\n' + sized_file_text
+            print(sized_file_text)
+            sized_file_path = self._create_sized_file_path(min_area)
+            write_text(sized_file_path, sized_file_text)
+            create_script(sized_file_path, min_area)
+            if os.system(f"sta {OPT_SCRIPT_PATH}") != 0:
+                print("Error during sdf generation, exiting...")
+                exit()
+            fix_sdf_file(min_area)
 
-    def simulate(self, area: int):
-        real_area = self._get_synthesized_cell_count() + 1
-        def create_testbench():
+    def simulate(self, areas: list, cases: list) -> float:
+        #if case["a"] + case["b"] + case["cin"] >= 2**self.width:
+        #    print("WARNING: Overflow detected")
+        def format_testbench(areas: list):
+            includes_text: str = ""
+            wires_text: str = ""
+            modules_text: str = ""
+            cases_text: str = ""
+            for i in range(0, len(areas)):
+                area = areas[i]
+                includes_text += f"`include \"{self._create_sized_file_path(area)}\"\n"
+
+                wires_text += f"\treg [`WIDTH-1:0]a{i};\n"
+                wires_text += f"\treg [`WIDTH-1:0]b{i};\n"
+                wires_text += f"\twire [`WIDTH-1:0]s{i};\n"
+                wires_text += f"\treg cin{i};\n"
+                wires_text += f"\twire cout{i};\n"
+
+                modules_text += f"\t{self.adder_name}_{areas[i]} test{i}(.x1(a{i}), .x2(b{i}), .s(s{i}), .cin(cin{i}), .cout(cout{i}));\n"
+
+                sdf_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+                cases_text += f'\t\t$sdf_annotate("{sdf_path}", tb.test{i});\n'
+                cases_text += f'\t\t$monitor($realtime,,"a: %d, b: %d, s: %d", a{i}, b{i}, s{i}, cout{i});\n'
+                cases_text += convert_cases_to_text(cases,i)
+
+
+
+            #cases_text = convert_cases_to_text(cases)
             tb_template_text = read_text(SIM_TESTBENCH_TEMPLATE_PATH)
-            tb_text = tb_template_text.format(width=self.width, adder_name=self.adder_name, sdf_file=self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{real_area}.sdf", verilog_file=self._create_sized_file_path(real_area))
+            tb_text = tb_template_text.format(includes=includes_text, wire_declares=wires_text, module_declares=modules_text, cases=cases_text, width=self.width)
             write_text(SIM_TESTBENCH_PATH, tb_text)
             if verilog.compile_verilog(tb_text) == False:
                 print("TESTBENCH ERROR")
                 exit()
 
-        #def run_testbench():
+        def run_testbench():
+            if os.system("cvc64 +exe -pipe simulation/tb.v") != 0:
+                print("TESTBENCH ERROR")
+                exit()
 
+            os.system(f"./cvcsim > {SIM_OUTPUT_PATH}")
+            os.system("rm ./cvcsim")
 
-        create_testbench()
+        def retrieve_timing_results(cases) -> list:
+            num_cases = len(cases)
+            out_text = read_text(SIM_OUTPUT_PATH)
+            out_lines = out_text.split("\n")
+            line_index = 0
+            timing_results: list = []
+            num_lines = len(out_lines)
+            for i in range(0, len(areas)):
+                timing_results.append([])
+                for j in range(1, num_cases+1):
+                    section_start: str = f"MODULE{i}_CASE{j}"
+                    section_end: str = section_start+"_END"
+                    while out_lines[line_index] != section_start:
+                        line_index+=1
+                    line_index+=1
+                    start_time = float(re.findall("^(\\S+)\\s", out_lines[line_index])[0])
+                    while out_lines[line_index] != section_end:
+                        line_index+=1
+                    line_index-=1
+                    end_time = float(re.findall("^(\\S+)\\s", out_lines[line_index])[0])
+                    timing_results[i].append(end_time-start_time)
+            return timing_results
+ 
+        def get_testbench_output() -> float:
+            out_text = read_text(SIM_OUTPUT_PATH)
+            out_lines = out_text.split("\n")
+            last_time_line = out_lines[-3]
+            time = float(re.findall("^(\\S+)\\s", last_time_line)[0])
+            return time
 
-            
-    
+        real_areas = [int(area * (self._get_synthesized_cell_count()+1)) for area in areas]
+        format_testbench(real_areas)
+        run_testbench()
+        return retrieve_timing_results(cases)
 
     # Calculates the worst case delay of adder circuit (according to synthesized
     # representation)
@@ -512,5 +591,19 @@ class adder:
             return x["delay"]
         return list(map(fun, result))
 
-    def calculate_real_delay(self, a: int, b: int, cin: int):
-        pass
+def convert_cases_to_text(cases: list, ind=-1):
+    ind = "" if ind == -1 else int(ind)
+    text: str = ""
+    for i in range(0, len(cases)):
+        case = cases[i]
+        print(case)
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}_CLEAR");\n'
+        text += f"\t\ta{ind}=0;\n\t\tb{ind}=0;\n\t\tcin{ind}=0;\n\t\t#1;\n"
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}");\n'
+        text += f'\t\ta{ind}={case["a"]};\n'
+        text += f'\t\tb{ind}={case["b"]};\n'
+        text += f'\t\tcin{ind}={case["cin"]};\n'
+        text += "\t\t#1;\n"
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}_END");\n'
+
+    return text
