@@ -484,7 +484,7 @@ class adder:
                 match = re.findall("\((\\S+)::(\\S+)\)", match.group())
                 num1 = float(match[0][0])
                 num2 = float(match[0][1])
-                return f"({num1}:{(num1+num2)/2}:{num2})"
+                return f"({num1}:{(num1+num1)/2}:{num2})"
             sdf_file_text = re.sub("\((\\S+?)\:\:(\\S+?)\)", replace, sdf_file_text)
             write_text(sdf_file_path, sdf_file_text)
         for i in range(0, len(areas_list)):
