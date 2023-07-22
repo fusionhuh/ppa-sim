@@ -9,6 +9,7 @@ sys.path.append("GateSize/")
 import cktopt
 import json
 from file_help import write_text, create_file_parents, read_text
+from threading import Thread
 
 LIB_PATH: str = "synthesis/NangateOpenCellLibrary_typical.lib"
 NANGATE_LIB_FILE: str = "NangateOpenCellLibrary_typical_conditional.v"
@@ -408,7 +409,51 @@ class adder:
         self._syn_cell_count = data["design"]["num_cells"] + compound_cell_count
         return self._syn_cell_count
 
-    def optimize(self, areas_list: list):
+    def optimize(self, areas_list: list, multithreading=True):
+        class OptThread(Thread):
+            def __init__(self, src, area: int):
+                Thread.__init__(self)
+                self.value = -1
+                self.src = src
+                self.area = area
+
+            def run(self):
+                self.value = cktopt.optimize(self.src, self.area)
+
+        def fix_bus_references(text: str) -> str:
+            lines = text.split("\n")
+            line_num = 0
+            while "module" not in lines[line_num]:
+                line_num += 1
+            file_length = len(lines)
+            identifiers = ["wire", "input", "output"]
+            bus_index_expr = "(\\w+)\\s*\[(\\d+)\]"
+            net_declare_expr = "(\\w+)\\s+\[(\\d+):0\]\\s+(\\S+)\\s*;"
+            while line_num < file_length:
+                curr_line = lines[line_num]
+                if any([x in curr_line for x in identifiers]) and "[" in curr_line:
+                    declaration = re.findall(net_declare_expr, curr_line)
+                    assert len(declaration) == 1
+                    net_type = declaration[0][0]
+                    width = int(declaration[0][1]) + 1
+                    name_list = declaration[0][2].split(", ")
+                    new_line = f" {net_type} "
+                    for name in name_list:
+                        for i in range(0, width):
+                            new_wire = f"{name}_{i}, "
+                            new_line += new_wire
+                    for i in range(0, 2): new_line = new_line.rstrip(new_line[-1])
+                    new_line += ";\n"
+                    lines[line_num] = new_line
+                elif "[" in curr_line:
+                    def replace(matchobj):
+                        name = matchobj.group(1)
+                        index = matchobj.group(2)
+                        return f"{name}_{index}"
+                    lines[line_num] = re.sub(bus_index_expr, replace, lines[line_num])
+                line_num += 1
+            return "\n".join(lines)
+
         def parse_lib_file() -> dict:
             size_dict: dict = {}
             lib_text = read_text(LIB_PATH)
@@ -423,20 +468,35 @@ class adder:
                     size_dict[gate_type].append(drive)
             return size_dict
         
-        def get_optimization_results(area: int) -> dict:
+        def get_optimization_results(area_list: list) -> dict:
+            thread_list: list = [None] * len(area_list)
+            core_count: int = os.cpu_count()
+            result_list: list = [[None]*1] * len(area_list)
+            cached_indices: list = [False] * len(area_list)
             data_file_path = Path(self._opt_data_file_path)
-            if data_file_path.is_file(): # file exists, could be cached
-                json_data: dict
-                with open(self._opt_data_file_path, "r") as fp:
-                    json_data = json.load(fp)                    
-                if str(area) in json_data.keys():
-                    return json_data[str(area)]
+            #if data_file_path.is_file(): # file exists, could be cached
+                #json_data: dict
+                #with open(self._opt_data_file_path, "r") as fp:
+                #    json_data = json.load(fp)    
+            src = read_text(self._syn_file_path)
+            src = fix_bus_references(src)
+            for i in range(0, len(area_list)):
+                area = int(area_list[i] * (self._get_synthesized_cell_count()+1))
+                    #if str(area) in json_data.keys():
+                    #    result_list[i] = json_data[str(area)]
+                    #    cached_indices[i] = True
+                #else:
+                if multithreading:
+                    thread_list[i] = OptThread(src, area)
+                    thread_list[i].start()
                 else:
-                    results = cktopt.optimize(self._syn_file_path, [area])
-                    json_data[area] = results
-                    with open(self._opt_data_file_path, "w") as fp:
-                        json.dump(json_data, fp)     
-                    return results
+                    result_list[i] = cktopt.optimize(src, area)[0]
+                #cktopt.optimize(self._syn_file_path, [area], result_list[i])
+                        #json_data[area] = results
+                        #with open(self._opt_data_file_path, "w") as fp:
+                        #    json.dump(json_data, fp)     
+                        #return results
+            '''
             else: # file doesn't exist, results definitely are not cached
                 data_file_path.parent.mkdir(parents=True, exist_ok=True)
                 new_json_data: dict = {}
@@ -445,6 +505,17 @@ class adder:
                 with open(self._opt_data_file_path, "w") as fp:
                     json.dump(new_json_data, fp)
                 return results
+            '''
+            if multithreading:
+                #for i in range(0, len(thread_list)):
+                #    thread_list[i].start()
+                for i in range(0, len(thread_list)):
+                    thread_list[i].join()
+                    result_list[i] = thread_list[i].value
+                
+            print(result_list)
+         
+            return result_list
 
         def map_opt_size(sizes: list, size: float) -> str:
             end = len(sizes)-1
@@ -487,9 +558,12 @@ class adder:
                 return f"({num1}:{(num1+num1)/2}:{num2})"
             sdf_file_text = re.sub("\((\\S+?)\:\:(\\S+?)\)", replace, sdf_file_text)
             write_text(sdf_file_path, sdf_file_text)
+
+        results = get_optimization_results(areas_list)
+        exit()
         for i in range(0, len(areas_list)):
             min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
-            result = get_optimization_results(min_area)
+            result = get_optimization_results([min_area])
             sizes_only: dict = result[0]
             sizes_only.pop("delay")
             sizes_only.pop("maxArea")
@@ -568,7 +642,7 @@ class adder:
                         line_index+=1
                     line_index-=1
                     end_time = float(re.findall("^(\\S+)\\s", out_lines[line_index])[0])
-                    timing_results[i].append(end_time-start_time)
+                    timing_results[i].append(round(end_time-start_time,4))
             return timing_results
  
         def get_testbench_output() -> float:
@@ -576,7 +650,7 @@ class adder:
             out_lines = out_text.split("\n")
             last_time_line = out_lines[-3]
             time = float(re.findall("^(\\S+)\\s", last_time_line)[0])
-            return time
+            return round(time,4)
 
         real_areas = [int(area * (self._get_synthesized_cell_count()+1)) for area in areas]
         format_testbench(real_areas)

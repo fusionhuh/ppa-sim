@@ -7,6 +7,9 @@ import cust_ast
 import nets
 import argparse
 import re
+from threading import Lock
+
+thread_lock = Lock()
 
 # Gate Library
 GateLib = {
@@ -41,7 +44,6 @@ def fill_gate_lib(text: str) -> str:
                 function = "in"
             port_function_list.append((port, function))
         GateLib[declaration[0]] = port_function_list
-    print(GateLib)
 
 def fix_bus_references(text: str) -> str:
     lines = text.split("\n")
@@ -54,7 +56,6 @@ def fix_bus_references(text: str) -> str:
     net_declare_expr = "(\\w+)\\s+\[(\\d+):0\]\\s+(\\S+)\\s*;"
     while line_num < file_length:
         curr_line = lines[line_num]
-        print(curr_line)
         if any([x in curr_line for x in identifiers]) and "[" in curr_line:
             declaration = re.findall(net_declare_expr, curr_line)
             assert len(declaration) == 1
@@ -79,22 +80,28 @@ def fix_bus_references(text: str) -> str:
     return "\n".join(lines)
 
 # Read Verilog file and return selected module
-def readVerilog(fname, target):
-    verilog_src = open(fname)
-    text = verilog_src.read()
-    text = fix_bus_references(text)
+def readVerilog(verilog_src, target):
+    #verilog_src = open(fname)
+    text = verilog_src
+    #text = fix_bus_references(text)
     #fill_gate_lib(text)
-    mods = veriparse.parser.parse(text)
-    if target:
-        match = [m for m in mods if m.name == args.target]
-        result = match[0]
-    else:
-        result = mods[-1]
+    thread_lock.acquire()
+    try:
+        mods = veriparse.parser.parse(text)
+        if target:
+            match = [m for m in mods if m.name == args.target]
+            result = match[0]
+        else:
+            result = mods[-1]
+    finally:
+        thread_lock.release()
     return result
 
-def optimizeMod(target, maxAreaList):
+def optimizeMod(target_prev, maxAreaList_prev):
     # All this ast stuff should be factored
-
+    target=target_prev
+    maxAreaList=maxAreaList_prev
+    print(maxAreaList)
     # Better to do this iteratively and check for duplicates???
     netList = [n for n in target.env if isinstance(n, cust_ast.NetDef)]
     netMap = {n.name : nets.Net(n.name, n.type) for n in netList}
@@ -158,21 +165,12 @@ def optimizeMod(target, maxAreaList):
 
     return result
 
-def calculate_delay(a):
-    # load cell count from timing file
-    # generate a list of some amount of numbers that are (cell_count+1)*n
-    # provide that list as area_list argument to optimize
-    # read through delay results
-    pass
+def optimize(src: str, area: int) -> list:
+    return optimizeHelper(src_verilog=src, target=None, areaList=[area])
 
-def optimize(file_path: str, area_list: int) -> int:
-    result = optimizeHelper(fname=file_path, target=None, areaList=area_list)
-    print(result)
-    return result
-
-def optimizeHelper(fname: str, target, areaList: list):
-    targetMod = readVerilog(fname, target)
-    maxAreaList = map(float, areaList)
+def optimizeHelper(src_verilog: str, target, areaList: list) -> list:
+    targetMod = readVerilog(src_verilog, target)
+    maxAreaList = list(map(float, areaList))
     result = optimizeMod(targetMod, maxAreaList)
     return result
 

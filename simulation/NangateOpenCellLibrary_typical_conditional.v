@@ -850,22 +850,7 @@ module CLKGATETST_X1 (CK, E, SE, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATETST_X2 (CK, E, SE, GCK);
 
@@ -898,22 +883,7 @@ module CLKGATETST_X2 (CK, E, SE, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATETST_X4 (CK, E, SE, GCK);
 
@@ -946,22 +916,7 @@ module CLKGATETST_X4 (CK, E, SE, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATETST_X8 (CK, E, SE, GCK);
 
@@ -994,22 +949,7 @@ module CLKGATETST_X8 (CK, E, SE, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATE_X1 (CK, E, GCK);
 
@@ -1037,22 +977,7 @@ module CLKGATE_X1 (CK, E, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATE_X2 (CK, E, GCK);
 
@@ -1080,22 +1005,7 @@ module CLKGATE_X2 (CK, E, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATE_X4 (CK, E, GCK);
 
@@ -1123,22 +1033,7 @@ module CLKGATE_X4 (CK, E, GCK);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module CLKGATE_X8 (CK, E, GCK);
 
@@ -1166,165 +1061,22 @@ module CLKGATE_X8 (CK, E, GCK);
 
 endmodule
 
-primitive seq3 (IQ, SN, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           ?           0           r           ?       : ? :           0;
-           ?           1           1           r           ?       : ? :           1;
-           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           1           ?           ?           ?       : ? :           1; // SN activated
-           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           0           ?           ?           ?       : ? :           0; // RN activated
-           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 
 
-primitive seq3 (IQ, SN, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           ?           0           r           ?       : ? :           0;
-           ?           1           1           r           ?       : ? :           1;
-           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           1           ?           ?           ?       : ? :           1; // SN activated
-           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           0           ?           ?           ?       : ? :           0; // RN activated
-           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 
-primitive seq3 (IQ, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           ?           0           r           ?       : ? :           0;
-           1           1           r           ?       : ? :           1;
-           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           0; // RN activated
-           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
-primitive seq3 (IQ, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           ?           0           r           ?       : ? :           0;
-           1           1           r           ?       : ? :           1;
-           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           0; // RN activated
-           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
-primitive seq3 (IQ, SN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           0           r           ?       : ? :           0;
-           ?           1           r           ?       : ? :           1;
-           1           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           1; // SN activated
-           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
-primitive seq3 (IQ, SN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           0           r           ?       : ? :           0;
-           ?           1           r           ?       : ? :           1;
-           1           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           1; // SN activated
-           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           r           ?       : ? :           0;
-           1           r           ?       : ? :           1;
-           0           *           ?       : 0 :           0; // reduce pessimism
-           1           *           ?       : 1 :           1; // reduce pessimism
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
+
+
 
 module DFF_X1 (CK, D, Q, QN);
 
@@ -1355,24 +1107,7 @@ module DFF_X1 (CK, D, Q, QN);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           r           ?       : ? :           0;
-           1           r           ?       : ? :           1;
-           0           *           ?       : 0 :           0; // reduce pessimism
-           1           *           ?       : 1 :           1; // reduce pessimism
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module DFF_X2 (CK, D, Q, QN);
 
@@ -1403,22 +1138,7 @@ module DFF_X2 (CK, D, Q, QN);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, G, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input G;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate           G    NOTIFIER     : @IQ :          IQ
-           0           1           ?       : ? :           0;
-           1           1           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module DLH_X1 (D, G, Q);
 
@@ -1447,22 +1167,7 @@ module DLH_X1 (D, G, Q);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, G, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input G;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate           G    NOTIFIER     : @IQ :          IQ
-           0           1           ?       : ? :           0;
-           1           1           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module DLH_X2 (D, G, Q);
 
@@ -1491,22 +1196,7 @@ module DLH_X2 (D, G, Q);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, GN, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input GN;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          GN    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module DLL_X1 (D, GN, Q);
 
@@ -1535,22 +1225,7 @@ module DLL_X1 (D, GN, Q);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, GN, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input GN;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          GN    NOTIFIER     : @IQ :          IQ
-           0           0           ?       : ? :           0;
-           1           0           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module DLL_X2 (D, GN, Q);
 
@@ -2842,165 +2517,22 @@ module OR4_X4 (A1, A2, A3, A4, ZN);
 
 endmodule
 
-primitive seq3 (IQ, SN, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           ?           0           r           ?       : ? :           0;
-           ?           1           1           r           ?       : ? :           1;
-           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           1           ?           ?           ?       : ? :           1; // SN activated
-           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           0           ?           ?           ?       : ? :           0; // RN activated
-           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
-
-primitive seq3 (IQ, SN, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           ?           0           r           ?       : ? :           0;
-           ?           1           1           r           ?       : ? :           1;
-           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           1           ?           ?           ?       : ? :           1; // SN activated
-           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           0           ?           ?           ?       : ? :           0; // RN activated
-           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
-
-primitive seq3 (IQ, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           ?           0           r           ?       : ? :           0;
-           1           1           r           ?       : ? :           1;
-           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           0; // RN activated
-           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
-
-primitive seq3 (IQ, RN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input RN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           ?           0           r           ?       : ? :           0;
-           1           1           r           ?       : ? :           1;
-           ?           0           *           ?       : 0 :           0; // reduce pessimism
-           1           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           0; // RN activated
-           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 
-primitive seq3 (IQ, SN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           0           r           ?       : ? :           0;
-           ?           1           r           ?       : ? :           1;
-           1           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           1; // SN activated
-           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 
-primitive seq3 (IQ, SN, nextstate, CK, NOTIFIER);
-  output IQ;
-  input SN;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
-
-  table
-       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
-           1           0           r           ?       : ? :           0;
-           ?           1           r           ?       : ? :           1;
-           1           0           *           ?       : 0 :           0; // reduce pessimism
-           ?           1           *           ?       : 1 :           1; // reduce pessimism
-           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           0           ?           ?           ?       : ? :           1; // SN activated
-           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
-           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           r           ?       : ? :           0;
-           1           r           ?       : ? :           1;
-           0           *           ?       : 0 :           0; // reduce pessimism
-           1           *           ?       : 1 :           1; // reduce pessimism
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
+
+
+
+
+
+
+
+
+
 
 module SDFF_X1 (CK, D, SE, SI, Q, QN);
 
@@ -3044,24 +2576,7 @@ module SDFF_X1 (CK, D, SE, SI, Q, QN);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input CK;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate          CK    NOTIFIER     : @IQ :          IQ
-           0           r           ?       : ? :           0;
-           1           r           ?       : ? :           1;
-           0           *           ?       : 0 :           0; // reduce pessimism
-           1           *           ?       : 1 :           1; // reduce pessimism
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module SDFF_X2 (CK, D, SE, SI, Q, QN);
 
@@ -3207,22 +2722,7 @@ module TINV_X1 (EN, I, ZN);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, G, NOTIFIER);
-  output IQ;
-  input nextstate;
-  input G;
-  input NOTIFIER;
-  reg IQ;
 
-  table
-// nextstate           G    NOTIFIER     : @IQ :          IQ
-           0           1           ?       : ? :           0;
-           1           1           ?       : ? :           1;
-           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
-           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
-           ?           ?           *       : ? :           x; // Any NOTIFIER change
-  endtable
-endprimitive
 
 module TLAT_X1 (D, G, OE, Q);
 

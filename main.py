@@ -2,6 +2,7 @@ import math
 import argparse
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 
 sys.path.append("py_module/")
 sys.path.append("py_module/GateSize/")
@@ -19,6 +20,7 @@ parser.add_argument("-t", "--test", help="Tests high-level verilog for the speci
 parser.add_argument("-r", "--run", help="TBD", action="store_true")
 parser.add_argument("-a", "--area_list", help="TBD", action="store")
 parser.add_argument("-c", "--case", help="TBD", action="store")
+parser.add_argument("-m", "--no_multithreading", help="TBD", action="store_true")
 
 args = parser.parse_args()
 description = args.description
@@ -38,12 +40,17 @@ if description != "all":
     if args.area_list == None:
         exit()
     area_list = list(eval("np.arange("+args.area_list+")"))
-
+    #area_list = [1,50,50.1]
     if args.optimize:
-        a.optimize(area_list)
+        multithreading_enable = True if not args.no_multithreading else False
+        a.optimize(area_list, multithreading=multithreading_enable)
         print("Done optimizing")
     if args.run:
-        worst_case: dict = {"a": -1, "b":0, "cin":1}
-        results: list = []
-        results.append(a.simulate(area_list, [worst_case]))
-        print(results)
+        worst_case: dict = {"a": -1, "b":1, "cin":0}
+        results = (a.simulate(area_list, [worst_case]))
+        result_vec = [result[0] for result in results]
+        #print(result_vec)       
+        fig, ax = plt.subplots()
+        ax.plot(area_list, result_vec)
+        plt.show()
+

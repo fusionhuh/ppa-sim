@@ -185,37 +185,6 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
 
     return F,G,K, gateMap
 
-if __name__ == "__main__":
-    Ain = Net('Ain')
-    Bin = Net('Bin')
-    Cin = Net('Cin')
-
-    n1 = Net('n1')
-    n2 = Net('n2')
-    Zout = Net('Zout')
-    Wout = Net('Wout')
-
-    AND1 = Gate('AND1', ins = {'a' : Ain, 'b' : Bin}, outs = {'z' : n1})
-    OR1 = Gate('OR1', ins = {'a' : n1, 'b' : Cin}, outs = {'z': Zout})
-    NOT1 = Gate('NOT1', ins = {'a' : Cin}, outs = {'z' : n2})
-    AND2 = Gate('AND2', ins = {'a' : Zout, 'b' : n2}, outs = {'z' : Wout})
-
-    # Should eventually use a topsort to find all of these (or port list)
-    PrimeIns = [Ain, Bin, Cin]
-    PrimeOuts = [Zout, Wout]
-
-    totalArea = 4
-
-    gatelist = [AND1, OR1, NOT1, AND2]
-    netlist = [Ain, Bin, Cin, n1, n2, Zout, Wout]
-    
-    F,G,K = buildMatrix(gatelist, netlist, PrimeIns, PrimeOuts, totalArea)
-    
-    Glog = log(matrix(G))
-    
-    result = exp( solvers.gp(K.tolist(), matrix(F.transpose()), Glog)['x'] )
-    print(result)
-
 # Gate lookup
 # Real constants
 

@@ -135,10 +135,6 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-if __name__ == "__main__":
-    verilog_src = open(sys.argv[1])
-    mods = parser.parse(verilog_src.read())
-    target = mods[0]
     
             
     
