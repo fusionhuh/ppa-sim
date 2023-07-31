@@ -12,7 +12,8 @@ synthesis/**/*.v
 optimization/verilog/*
 optimization/sdf/*
 optimization/size_data/*
-
+simulation/tb*
+report_out
 
 
 

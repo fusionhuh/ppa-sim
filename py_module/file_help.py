@@ -13,3 +13,7 @@ def write_text(path: str, text: str):
 def read_text(path: str):
     file = Path(path)
     return file.read_text()
+
+def file_exists(path: str) -> bool:
+    file = Path(path)
+    return file.is_file()

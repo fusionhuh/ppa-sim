@@ -5,10 +5,9 @@ import verilog
 import re
 import graph
 import os
-sys.path.append("GateSize/")
-import cktopt
+from GateSize import cktopt
 import json
-from file_help import write_text, create_file_parents, read_text
+from file_help import write_text, create_file_parents, read_text, file_exists
 
 LIB_PATH: str = "synthesis/NangateOpenCellLibrary_typical.lib"
 NANGATE_LIB_FILE: str = "NangateOpenCellLibrary_typical_conditional.v"
@@ -32,6 +31,7 @@ OPT_SDF_DIR = f"sdf"
 OPT_DATA_DIR = f"size_data"
 OPT_SCRIPT_TEMPLATE_PATH = f"{OPT_DIR}/script_template.txt"
 OPT_SCRIPT_PATH = f"{OPT_DIR}/script.tcl"
+OPT_REPORT_PATH = "report_out"
 
 SIM_DIR = "simulation"
 SIM_TESTBENCH_TEMPLATE_PATH = f"{SIM_DIR}/testbench_template.txt"
@@ -107,12 +107,50 @@ class adder:
         self._opt_data_folder_path = f"{OPT_DIR}/{OPT_DATA_DIR}/{subdir}"
         self._opt_data_file_path = f"{self._opt_data_folder_path}/{self.adder_name}_sizes.json"
         self._opt_verilog_folder_path = f"{OPT_DIR}/{OPT_VERILOG_DIR}/{subdir}"
+        self._opt_verilog_template_path = f"{self._opt_verilog_folder_path}/{self.adder_name}_template"
         self._opt_sdf_folder_path = f"{OPT_DIR}/{OPT_SDF_DIR}/{subdir}"
+        self._opt_sdf_template_path = f"{self._opt_sdf_folder_path}/{self.adder_name}_template"
+        self._opt_sdf_data_path = f"{self._opt_sdf_folder_path}/{self.adder_name}_data.json"
 
         # simulation
 #        self._sim_tb_template = "simulation/testbench_template.txt"
 #        self._sim_tb_file_path = "simulation/tb.v"
 
+    def get_verbose_name(self) -> str:
+        name: str
+        width = f"{self.width}-bit"
+        base_descriptor: str
+        if self.base_type == "ks":
+            base_descriptor = "Kogge-Stone"
+        elif self.base_type == "bk":
+            base_descriptor = "Brent-Kung"
+        elif self.base_type == "skl":
+            base_descriptor = "Sklansky"
+        elif self.base_type == "hybrid":
+            base_descriptor = "Hybrid"
+        elif self.base_type == "serial":
+            base_descriptor = "Serial"
+
+        if self.structure != "basic":
+            structure_descriptor: str = ""
+            if self.structure == "rc":
+                structure_descriptor = "Ripple-Carry"
+            elif self.structure == "cskip":
+                structure_descriptor = "Carry-Skip"
+            elif self.structure == "cselect":
+                structure_descriptor = "Carry-Select"
+            elif self.structure == "cla":
+                structure_descriptor = "Carry-Lookahead"
+            end = f"with {self.block_size}-bit {base_descriptor} blocks"
+            return f"{width} {structure_descriptor} {end}"
+        else:
+            return f"{width} {base_descriptor}"
+        
+    def get_real_cell_counts(self, areas: list) -> list:
+        cell_list: list = []
+        for area in areas:
+            cell_list.append(int(area * (self._get_synthesized_cell_count()+1)))
+        return cell_list
 
     # Creates high-level verilog description of circuit
     # Writes description to verilog/
@@ -311,14 +349,10 @@ class adder:
             text = fix_illegal_chars(text)
             lines = text.split("\n")
             num_lines = len(lines)
-            mod_start = 0
-            mod_end = 0
-            net_start = 0
-            net_end = 0
-            gate_start = 0
-            gate_end = 0
-            assign_start = 0
-            assign_end = 0
+            mod_start, mod_end = 0, 0
+            net_start, net_end = 0, 0
+            gate_start, gate_end = 0, 0
+            assign_start, assign_end = 0, 0
             curr = 0
             while curr < num_lines:
                 if "module " in lines[curr]:
@@ -355,7 +389,6 @@ class adder:
             standardize_gates()
 
             text = fix_hanging_newlines("\n".join(lines))
-            print(text)
 
             return text
 
@@ -477,6 +510,105 @@ class adder:
             script_text = template_text.format(verilog_file=verilog_path, design_name=self.adder_name+f"_{area}", sdf_file=sdf_file_path)
             write_text(OPT_SCRIPT_PATH, script_text)
 
+        def strip_sdf_file(area: int):
+            template_exists = file_exists(self._opt_sdf_template_path)
+            sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+            if not file_exists(sdf_file_path):
+                print("ERROR: Tried stripping sdf file when it doesn't exist")
+                exit()
+            sdf_text = read_text(sdf_file_path)
+            design = f'{self.adder_name}_{area}'
+            print(design)
+            sdf_text = sdf_text.replace(design, "design")
+            data: dict = {}
+            data["celltypes"] = []
+            #data["instances"] = []
+            data["drives"] = []
+            data["delays"] = {}
+            sdf_lines = sdf_text.split("\n")
+            curr_line = 0
+            while "INTERCONNECT" not in sdf_lines[curr_line]:
+                curr_line += 1
+            while "INTERCONNECT" in sdf_lines[curr_line]:
+                curr_line += 1
+            celltype: str
+            instance: str
+            instance_num: int = -1
+            delay_num: int = 0
+            num_lines = len(sdf_lines)
+
+            while curr_line < num_lines:
+                if "CELLTYPE" in sdf_lines[curr_line]:
+                    delay_num=0
+                    instance_num += 1
+                    celltype = re.findall('\(CELLTYPE "(.+?)"\)', sdf_lines[curr_line])[0]
+                    base_type = celltype.split("_")[0]
+                    new_celltype = base_type + f"_DRIVE_{instance_num}"
+                    data["celltypes"].append(base_type)
+                    data["drives"].append(celltype.split("_X")[1])
+                    
+                    if not template_exists:
+                        sdf_lines[curr_line] = sdf_lines[curr_line].replace(celltype, new_celltype)
+                    curr_line += 1
+                    instance = re.findall('\(INSTANCE (.+?)\)', sdf_lines[curr_line])[0]
+                    #data["instances"].append(instance)
+
+                    #if not template_exists:
+                    #    sdf_lines[curr_line] = sdf_lines[curr_line].replace(instance, f"{{INSTANCE_{instance_num}}}")
+                if "IOPATH" in sdf_lines[curr_line]:
+                    matches = re.findall(r"\(IOPATH.+?\((.+?)\) \((.+?)\)", sdf_lines[curr_line])
+                    if not template_exists:
+                        sdf_lines[curr_line] = sdf_lines[curr_line].replace(matches[0][0], f"INSTANCE_{instance_num}_DELAY_{delay_num}")
+                        sdf_lines[curr_line] = sdf_lines[curr_line].replace(matches[0][1], f"INSTANCE_{instance_num}_DELAY_{delay_num+1}")
+                    if instance_num not in data["delays"].keys():
+                        data["delays"][instance_num] = []
+                    data["delays"][instance_num] += [matches[0][0], matches[0][1]]
+                    delay_num += 2
+                curr_line += 1 
+            data["num_instances"] = instance_num+1
+            if not template_exists:
+                write_text(self._opt_sdf_template_path, "\n".join(sdf_lines))
+            if not file_exists(self._opt_sdf_data_path):
+                create_file_parents(self._opt_sdf_data_path)
+                root: dict = {}
+                root[area] = data
+                with open(self._opt_sdf_data_path, "w") as fp:
+                    json.dump(root, fp)
+            else:
+                json_data: dict = {}
+                with open(self._opt_sdf_data_path, "r") as fp:
+                    json_data = json.load(fp)
+                json_data[area] = data
+                with open(self._opt_sdf_data_path, "w") as fp:
+                    json.dump(json_data, fp)
+
+        def get_sdf_path(area: int):
+            return self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+
+        def get_verilog_path(area: int):
+            return self._opt_verilog_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.v"
+
+        def construct_sdf_file(area: int):
+            path = get_sdf_path(area)
+            sdf_text = read_text(self._opt_sdf_template_path)
+            design = f"{self.adder_name}_{area}"
+            sdf_text = sdf_text.replace("design", design)
+            data: dict
+            with open(self._opt_sdf_data_path, "r") as fp:
+                data = json.load(fp)[f"{area}"]
+            drives = data["drives"]
+            delays = data["delays"]
+            num_instances = data["num_instances"]
+            for i in range(0, num_instances):
+                curr_drive_key = f"DRIVE_{i}"
+                sdf_text = sdf_text.replace(curr_drive_key, f"X{drives[i]}", 1)
+                instance_delays = delays[f"{i}"]
+                for j in range(0, len(instance_delays)):
+                    delay_key = f"INSTANCE_{i}_DELAY_{j}"
+                    delay = instance_delays[j]
+                    sdf_text = sdf_text.replace(delay_key, delay)
+            write_text(get_sdf_path(area), sdf_text)
+
         def fix_sdf_file(area: int):
             sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
             sdf_file_text = read_text(sdf_file_path)
@@ -487,6 +619,7 @@ class adder:
                 return f"({num1}:{(num1+num1)/2}:{num2})"
             sdf_file_text = re.sub("\((\\S+?)\:\:(\\S+?)\)", replace, sdf_file_text)
             write_text(sdf_file_path, sdf_file_text)
+
         for i in range(0, len(areas_list)):
             min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
             result = get_optimization_results(min_area)
@@ -494,16 +627,27 @@ class adder:
             sizes_only.pop("delay")
             sizes_only.pop("maxArea")
             sized_file_text: str = size_synthesized_file(sizes_only, min_area)
-            # add library include
-            #sized_file_text = f'`include "{NANGATE_LIB_FILE}"\n' + sized_file_text
-            print(sized_file_text)
-            sized_file_path = self._create_sized_file_path(min_area)
+            sized_file_path = get_verilog_path(min_area)
             write_text(sized_file_path, sized_file_text)
             create_script(sized_file_path, min_area)
             if os.system(f"sta {OPT_SCRIPT_PATH}") != 0:
                 print("Error during sdf generation, exiting...")
                 exit()
             fix_sdf_file(min_area)
+            original_sdf_text = read_text(get_sdf_path(min_area))
+            strip_sdf_file(min_area)
+            construct_sdf_file(min_area)
+            new_sdf_text = read_text(get_sdf_path(min_area))
+            os.remove(get_sdf_path(min_area))
+
+            report_text = read_text(OPT_REPORT_PATH)
+            delay = float(re.findall("(\\S+?)\\s+data arrival time", report_text)[0])
+            opt_data: dict
+            with open(self._opt_data_file_path, "r") as fp:
+                opt_data = json.load(fp)
+            opt_data[f"{min_area}"][0]["worst"] = delay
+            with open(self._opt_data_file_path, "w") as fp:
+                json.dump(opt_data, fp)
 
     def simulate(self, areas: list, cases: list) -> float:
         #if case["a"] + case["b"] + case["cin"] >= 2**self.width:
@@ -529,8 +673,6 @@ class adder:
                 cases_text += f'\t\t$sdf_annotate("{sdf_path}", tb.test{i});\n'
                 cases_text += f'\t\t$monitor($realtime,,"a: %d, b: %d, s: %d", a{i}, b{i}, s{i}, cout{i});\n'
                 cases_text += convert_cases_to_text(cases,i)
-
-
 
             #cases_text = convert_cases_to_text(cases)
             tb_template_text = read_text(SIM_TESTBENCH_TEMPLATE_PATH)
@@ -583,13 +725,25 @@ class adder:
         run_testbench()
         return retrieve_timing_results(cases)
 
-    # Calculates the worst case delay of adder circuit (according to synthesized
-    # representation)
-    def calculate_worst_case_delay(self, area_list):
-        result = cktopt.optimize(self._syn_file_path, area_list)
-        def fun(x):
-            return x["delay"]
-        return list(map(fun, result))
+    def get_worst_case_delays(self, areas: list) -> list:
+        delay_list: list = []
+        data: dict
+        with open(self._opt_data_file_path, "r") as fp:
+            data = json.load(fp)
+        for i in range(0, len(areas)):
+            real_area = int((self._get_synthesized_cell_count()+1)*areas[i])
+            delay_list.append(data[f"{real_area}"][0]["worst"])
+        return delay_list
+    
+    def get_optimizer_delays(self, areas: list) -> list:
+        delay_list: list = []
+        data: dict
+        with open(self._opt_data_file_path, "r") as fp:
+            data = json.load(fp)
+        for i in range(0, len(areas)):
+            real_area = int((self._get_synthesized_cell_count()+1)*areas[i])
+            delay_list.append(data[f"{real_area}"][0]["delay"])
+        return delay_list
 
 def convert_cases_to_text(cases: list, ind=-1):
     ind = "" if ind == -1 else int(ind)
