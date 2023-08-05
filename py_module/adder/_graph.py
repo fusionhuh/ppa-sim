@@ -195,5 +195,8 @@ def generate_skl_graph(bit_width: int) -> list:
         node_graph.append(new_row)
     return node_graph
 
-def get_globals():
-    return globals()
+def generate_graph(function_name: str, block_size: int, hybrid_levels=-1):
+    if hybrid_levels == -1:
+        return globals()[function_name](block_size)
+    else:
+        return globals()[function_name](block_size, hybrid_levels)

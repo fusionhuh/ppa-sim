@@ -8,13 +8,14 @@
 verilog/structured/**/*.v
 verilog/base/**/*.v
 synthesis/**/*.v
+synthesis/verilog/*
 /misc
 optimization/verilog/*
 optimization/sdf/*
 optimization/size_data/*
 simulation/tb*
 report_out
-
+**/script.tcl
 
 
 # ignore ModelSim generated files and directories (temp files and so on)

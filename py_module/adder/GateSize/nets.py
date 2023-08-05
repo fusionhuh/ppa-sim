@@ -1,5 +1,5 @@
 
-
+import random
 #
 import numpy as np
 from cvxopt import matrix, log, exp, solvers
@@ -22,10 +22,16 @@ class Net:
 
 # dont subclass: pass type and either ordered params or keywords...
 class Gate:
-    def __init__(self, name, type, ins, outs):
+    def __init__(self, name, type, ins, outs, in_caps, int_cap=0.2, area=0.5, min=1, max=16, resistance=1.0):
         self.name = name
+        self.min = min
+        self.max = max
         self.ins = ins
         self.outs = outs
+        self.in_caps = in_caps
+        self.int_cap = int_cap
+        self.resistance = resistance
+        self.area = area
         for portname,net in self.ins.items():
             net.addPort(self, portname)
         for portname,net in self.outs.items():
@@ -35,19 +41,24 @@ class Gate:
     def isLoad(self,name):
         return name in self.ins
     def getInputCap(self, portname):
-        return 1.0
+        #return random.randint(1,10)/8
+        return self.in_caps[portname]
+        # return 1.0
     def getIntrCap(self, portname):
-        return 1.0
+        #return random.randint(1,10)/8
+        return 0.1
+        #return 1.0
     def getResist(self,portname):
-        return 1.0
+        return self.resistance
     def getMin(self):
-        return 1.0
+        return self.min
     def getMax(self):
-        return 16.0
+        return self.max
     def getAreaScaleFactor(self):
-        return 1.0
+       return self.area
+       #return 1.0
 
-RinDefault = 1
+RinDefault = 1.0
 
 class PNom:
     def __init__(self, const, *factors):
@@ -85,7 +96,7 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
     K = np.array([1])
 
     tconst = 0.69
-
+    print(gatelist)
     # build gatemap gate -> matrix variable index
     gateMap = {}
     for i,g in enumerate(gatelist,1):

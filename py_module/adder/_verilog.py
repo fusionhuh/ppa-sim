@@ -1,5 +1,5 @@
 import sys
-import graph
+import py_module.adder._graph as _graph
 import math
 import os
 import re
@@ -264,7 +264,7 @@ def generate_basic_adder(adder_info: dict):
     def invert(wire: str) -> str:
         return "~" + wire
 
-    def generate_input_ports(pred: graph.node, curr: graph.node) -> tuple: # returns [p, g]
+    def generate_input_ports(pred: _graph.node, curr: _graph.node) -> tuple: # returns [p, g]
         g: str
         p: str
 
@@ -339,7 +339,7 @@ def generate_basic_adder(adder_info: dict):
     for bit_pos in range(1, block_size):
         cur_level = depth-1
         sum: str = "p_in[{index}]".format(index=bit_pos)
-        carry_node: ppa_graph.node = graph.get_lowest_node(bit_pos-1, ppa_graph)
+        carry_node: ppa_graph.node = _graph.get_lowest_node(bit_pos-1, ppa_graph)
         carry: str
         if carry_node.is_operator == False:
             carry = "g_in[{index}]".format(index=bit_pos-1)
@@ -403,6 +403,35 @@ def find_gate_boundaries(text: str) -> tuple:
     gate_end = i
     return (gate_start, gate_end)
 
-#def get_drive_template_name(name: str)
+def convert_cases_to_text(cases: list, ind=-1):
+    ind = "" if ind == -1 else int(ind)
+    text: str = ""
+    for i in range(0, len(cases)):
+        case = cases[i]
+        print(case)
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}_CLEAR");\n'
+        text += f"\t\ta{ind}=0;\n\t\tb{ind}=0;\n\t\tcin{ind}=0;\n\t\t#1;\n"
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}");\n'
+        text += f'\t\ta{ind}={case["a"]};\n'
+        text += f'\t\tb{ind}={case["b"]};\n'
+        text += f'\t\tcin{ind}={case["cin"]};\n'
+        text += "\t\t#1;\n"
+        text += f'\t\t$display("MODULE{ind}_CASE{i+1}_END");\n'
+
+    return text
+
+def get_module_declaration_info(line: str):
+    info = re.findall("^\\s*(\\S+)\\s+(\\S+?)\\s*\((.+)\)\\s*;", line)
+    assert len(info) > 0
+    gate_type = info[0][0]
+    mod_name = info[0][1]
+    ports = info[0][2].replace(" ", "")
+    ports = re.findall("\.(\\w+)\\s*\(\\s*(.+?)\\s*\)", ports)
+    ports_dict: dict = {}
+    for i in range(0, len(ports)):
+        ports_dict[ports[i][0]] = ports[i][1]
+
+    result: dict = {"type" : gate_type, "name" : mod_name, "ports" : ports_dict }
+    return result
 
 

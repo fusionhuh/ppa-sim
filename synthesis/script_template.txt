@@ -1,6 +1,6 @@
 yosys -import
 read_verilog {dependencies}
-#read_liberty synthesis/NangateOpenCellLibrary_typical.lib
+#read_liberty hardware/NangateOpenCellLibrary_typical.lib
 hierarchy -check -top {design_name}
 synth -top {design_name}
 flatten

@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-`include "simulation/NangateOpenCellLibrary_typical_conditional.v"
+`include "hardware/NangateOpenCellLibrary_typical_conditional.v"
 {includes}
 
 

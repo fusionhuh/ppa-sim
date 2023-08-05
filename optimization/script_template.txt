@@ -1,7 +1,7 @@
-read_liberty synthesis/NangateOpenCellLibrary_typical.lib
+read_liberty hardware/NangateOpenCellLibrary_typical.lib
 read_verilog {verilog_file}
 link_design {design_name}
-read_sdc optimization/hardware_info.sdc
+read_sdc hardware/hardware_info.sdc
 write_sdf {sdf_file}
 report_checks
 report_checks > report_out

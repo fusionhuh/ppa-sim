@@ -4,9 +4,9 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 sys.path.append("py_module/")
-sys.path.append("py_module/GateSize/")
+sys.path.append("py_module/adder/GateSize/")
 
-from adder import adder
+from py_module.adder import Adder
 
 parser = argparse.ArgumentParser()
 
@@ -45,7 +45,7 @@ print(adder_list)
 fig, ax = plt.subplots()
 
 for i in range(0, len(adder_list)):
-    a: adder = adder(adder_list[i])
+    a: Adder = Adder(adder_list[i])
     if args.verilog:
         a.generate_verilog()
         print("Done generating verilog")
@@ -61,14 +61,15 @@ for i in range(0, len(adder_list)):
         print("Done optimizing")
     if args.run and (mode == "compare" or mode == "single"):
         worst_case: dict = {"a": -1, "b":0, "cin":1}
-        #results: list = []
-        #results.append(a.simulate(area_list, [worst_case]))
+        results: list = []
+        results.append(a.simulate(area_list, [worst_case]))
+        results = [result for result in results[0]]
         opt_results = a.get_optimizer_delays(area_list)
         worst_results = a.get_worst_case_delays(area_list)
         ratio = worst_results[0]/opt_results[0]
-        #opt_results = [result*ratio for result in opt_results]
-        #ax.plot(area_list, opt_results)
-        ax.plot(a.get_real_cell_counts(area_list), opt_results, label=a.get_verbose_name())
+        opt_results = [result*ratio for result in opt_results]
+        ax.plot(a.get_real_cell_counts(area_list), results)
+        ax.plot(a.get_real_cell_counts(area_list), worst_results, label=a.get_verbose_name())
         ax.set(xlabel='area', ylabel='time')
 
         #print(results)
