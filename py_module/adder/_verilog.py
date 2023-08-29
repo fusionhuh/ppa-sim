@@ -1,5 +1,5 @@
 import sys
-import py_module.adder._graph as _graph
+from ._graph import node, get_lowest_node
 import math
 import os
 import re
@@ -264,7 +264,7 @@ def generate_basic_adder(adder_info: dict):
     def invert(wire: str) -> str:
         return "~" + wire
 
-    def generate_input_ports(pred: _graph.node, curr: _graph.node) -> tuple: # returns [p, g]
+    def generate_input_ports(pred: node, curr: node) -> tuple: # returns [p, g]
         g: str
         p: str
 
@@ -339,7 +339,7 @@ def generate_basic_adder(adder_info: dict):
     for bit_pos in range(1, block_size):
         cur_level = depth-1
         sum: str = "p_in[{index}]".format(index=bit_pos)
-        carry_node: ppa_graph.node = _graph.get_lowest_node(bit_pos-1, ppa_graph)
+        carry_node: ppa_graph.node = get_lowest_node(bit_pos-1, ppa_graph)
         carry: str
         if carry_node.is_operator == False:
             carry = "g_in[{index}]".format(index=bit_pos-1)
@@ -389,7 +389,6 @@ def create_module_declaration(info: dict):
         port_list_str += f".{pairs[i][0]}({pairs[i][1]}), "
     port_list_str += f".{pairs[-1][0]}({pairs[-1][1]})"
 
-
     return f" {info['type']} {info['name']}({port_list_str});"
 
 def find_gate_boundaries(text: str) -> tuple:
@@ -403,21 +402,20 @@ def find_gate_boundaries(text: str) -> tuple:
     gate_end = i
     return (gate_start, gate_end)
 
-def convert_cases_to_text(cases: list, ind=-1):
+def convert_cases_to_text(cases: list, ind=-1, clear=False):
     ind = "" if ind == -1 else int(ind)
     text: str = ""
     for i in range(0, len(cases)):
         case = cases[i]
-        print(case)
-        text += f'\t\t$display("MODULE{ind}_CASE{i+1}_CLEAR");\n'
-        text += f"\t\ta{ind}=0;\n\t\tb{ind}=0;\n\t\tcin{ind}=0;\n\t\t#1;\n"
+        if clear == True:
+            text += f'\t\t$display("MODULE{ind}_CASE{i+1}_CLEAR");\n'
+            text += f"\t\ta{ind}=0;\n\t\tb{ind}=0;\n\t\tcin{ind}=0;\n\t\t#1;\n"
         text += f'\t\t$display("MODULE{ind}_CASE{i+1}");\n'
         text += f'\t\ta{ind}={case["a"]};\n'
         text += f'\t\tb{ind}={case["b"]};\n'
         text += f'\t\tcin{ind}={case["cin"]};\n'
         text += "\t\t#1;\n"
         text += f'\t\t$display("MODULE{ind}_CASE{i+1}_END");\n'
-
     return text
 
 def get_module_declaration_info(line: str):

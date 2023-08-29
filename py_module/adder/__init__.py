@@ -1,5 +1,6 @@
-from ._file_structure import *
+from file_structure import *
 from ._file import *
+import liberty
 import json
 
 class Adder(object):
@@ -42,7 +43,7 @@ class Adder(object):
             self.verilog_base_name += "_" + str(self.hybrid_levels)
         if self.structure != "basic":
             self.verilog_structured_name = f"{self.verilog_base_name}_{self.width}_{self.structure}"
-            #self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)   
+            #self.verilog_structured_name = "{type}_{width}_{structure}_{block_size}".format(type=self.base_type, width=self.width, structure=self.structure, block_size=self.block_size)
         self.adder_name = self.verilog_base_name if self.structure == "basic" else self.verilog_structured_name
 
         # generate important file/folder paths for each process (verification/verilog, synthesis, optimization, etc)
@@ -75,6 +76,9 @@ class Adder(object):
         self._opt_sdf_folder_path = f"{OPT_DIR}/{OPT_SDF_DIR}/{subdir}"
         self._opt_sdf_template_path = f"{self._opt_sdf_folder_path}/{self.adder_name}_template"
         self._opt_sdf_data_path = f"{self._opt_sdf_folder_path}/{self.adder_name}_data.json"
+
+
+
 
 
 
@@ -113,15 +117,30 @@ class Adder(object):
         if hasattr(self, "_syn_cell_count"):
             return self._syn_cell_count
         area_file = open(self._syn_stats_file_path)
-        data = json.load(area_file)
+        data = json.load(area_file)["modules"][f"\\{self.adder_name}"]
         compound_cell_count: int = 0
-        if "$_ORNOT_" in data["design"]["num_cells_by_type"].keys():
+        if "$_ORNOT_" in data["num_cells_by_type"].keys():
             compound_cell_count += data["design"]["num_cells_by_type"]["$_ORNOT_"]
-        if "$_ANDNOT_" in data["design"]["num_cells_by_type"].keys():
-            compound_cell_count += data["design"]["num_cells_by_type"]["$_ANDNOT_"]
-        self._syn_cell_count = data["design"]["num_cells"] + compound_cell_count
+        if "$_ANDNOT_" in data["num_cells_by_type"].keys():
+            compound_cell_count += data["num_cells_by_type"]["$_ANDNOT_"]
+        self._syn_cell_count = data["num_cells"] + compound_cell_count
         return self._syn_cell_count
-    
+
+    def _get_unoptimized_areas(self, areas: list) -> list:
+        if not file_exists(self._opt_data_file_path):
+            return areas
+        unoptimized_areas: list = []
+        data: dict
+        with open(self._opt_data_file_path, "r") as fp:
+            data = json.load(fp)
+        optimized_areas = data.keys()
+        for area in areas:
+            if f"{area}" not in optimized_areas:
+                unoptimized_areas.append(area)
+        return unoptimized_areas
+
+# ---------------------------- PUBLIC -----------------------------------------
+
     def get_worst_case_delays(self, areas: list) -> list:
         delay_list: list = []
         data: dict
@@ -131,8 +150,23 @@ class Adder(object):
             real_area = int((self._get_synthesized_cell_count()+1)*areas[i])
             delay_list.append(data[f"{areas[i]}"][0]["worst"])
         return delay_list
-    
-# ---------------------------- PUBLIC -----------------------------------------
+
+
+    def get_min_area(self) -> float:
+        if not self.is_synthesized:
+            print("Error: Can only get minimum area on a synthesized design")
+            exit()
+        if hasattr(self, "min_area"):
+            return self.min_area
+        lib_info = liberty.get_gate_info()
+        design_info: dict
+        with open(self._syn_stats_file_path, "r") as fp:
+            design_info = json.load(fp)["modules"][f"\\{self.adder_name}"]["num_cells_by_type"]
+        total_area = 0
+        for gate, count in design_info.items():
+            total_area += lib_info[gate]["area"]*count
+        self.min_area = total_area
+        return self.min_area
 
     def get_optimizer_delays(self, areas: list) -> list:
         delay_list: list = []
@@ -149,7 +183,22 @@ class Adder(object):
         for area in areas:
             cell_list.append(int(area * (self._get_synthesized_cell_count()+1)))
         return cell_list
-    
+
+    def is_generated(self):
+        return file_exists(self._verilog_file_path)
+
+    def is_synthesized(self):
+        return file_exists(self._syn_file_path)
+
+    def is_optimized(self, areas):
+        return (len(self._get_unoptimized_areas(areas)) == 0)
+
+    def get_design_status(self, areas: list):
+        generated: bool = file_exists(self._verilog_file_path)
+        synthesized: bool = file_exists(self._syn_file_path)
+        optimized: bool = (len(self._get_unoptimized_areas(areas)) == 0)
+        return {"optimized" : optimized, "synthesized" : synthesized, "generated" : generated}
+
     def get_verbose_name(self) -> str:
         name: str
         width = f"{self.width}-bit"
@@ -165,6 +214,15 @@ class Adder(object):
         elif self.base_type == "serial":
             base_descriptor = "Serial"
 
+        hybrid_levels: str
+        if self.base_type != "hybrid":
+            hybrid_levels = ""
+        else:
+            if self.hybrid_levels == 1:
+                hybrid_levels = " (1 level)"
+            else:
+                hybrid_levels = f" ({self.hybrid_levels} levels)"
+
         if self.structure != "basic":
             structure_descriptor: str = ""
             if self.structure == "rc":
@@ -176,9 +234,9 @@ class Adder(object):
             elif self.structure == "cla":
                 structure_descriptor = "Carry-Lookahead"
             end = f"with {self.block_size}-bit {base_descriptor} blocks"
-            return f"{width} {structure_descriptor} {end}"
+            return f"{width} {structure_descriptor} {end}{hybrid_levels}"
         else:
-            return f"{width} {base_descriptor}"
+            return f"{width} {base_descriptor}{hybrid_levels}"
 
     from ._generate import generate_verilog
     from ._synthesize import synthesize

@@ -1,8 +1,35 @@
 
 import random
-#
 import numpy as np
 from cvxopt import matrix, log, exp, solvers
+
+
+
+GateInfo = {
+    "INV" : {"cap" : 0.01, "area" : 0.532, "port_caps" : {"A" : 1.7002}, "min" : 1.0, "max" : 16.0, "resistance" : 0.39},
+    "NAND2" : {"cap" : 1.664, "area" : 0.798, "port_caps" : {"A1" : 1.599, "A2" : 1.6642}, "min" : 1.0, "max" : 4.0, "resistance" : 0.459},
+    "AND2" : {"cap" : 0.9746, "area" : 1.064, "port_caps" : {"A1" : 0.9181, "A2" : 0.9746}, "min" : 1.0, "max" : 4.0, "resistance" : 0.333},
+    "NOR2" : {"cap" : 1.7145, "area" : 0.798, "port_caps" : {"A1" : 1.7145, "A2" : 1.6513}, "min" : 1.0, "max" : 4.0, "resistance" : 0.347},
+    "OR2" : {"cap" : 0.9468, "area" : 1.064, "port_caps" : {"A1" : 0.9468, "A2" : 0.9419}, "min" : 1.0, "max" : 4.0, "resistance" : 0.342},
+    "XNOR2" : {"cap" : 2.5736, "area" : 2.66, "port_caps" : {"A" : 2.2328, "B" : 2.5736}, "min" : 1.0, "max" : 2.0, "resistance" : 1.415},
+    "XOR2" : {"cap" : 2.4115, "area" : 2.394, "port_caps" : {"A" : 2.2321, "B" : 2.4115}, "min" : 1.0, "max" : 2.0, "resistance" : 0.352},
+    "MUX2" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A" : 0.9464, "B" : 0.9448, "S" : 1.9199}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "AOI21" : {"cap" : 1.9199, "area" : 1.064, "port_caps" : {"B1" : 1.6621, "B2" : 1.5719, "A" : 1.6707, "ZN" : 1.9199}, "min" : 1.0, "max" : 4.0, "resistance" : 0.348},
+    "OAI21" : {"cap" : 1.9199, "area" : 1.064, "port_caps" : {"B1" : 1.6621, "B2" : 1.5719, "A" : 1.6707, "ZN" : 1.9199}, "min" : 1.0, "max" : 4.0, "resistance" : 0.348},
+    "AOI211" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"C1" : 0.9464, "C2" : 0.9448, "A" : 0.9464, "B" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "OAI211" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"C1" : 0.9464, "C2" : 0.9448, "A" : 0.9464, "B" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "NOR3" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "A3" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "OR3" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "A3" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "AND3" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "A3" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "NAND3" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "A3" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "AOI211" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"C1" : 0.9464, "C2" : 0.9448, "A" : 0.9464, "B" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "OAI22" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "B1" : 0.9464, "B2" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "AOI22" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "B1" : 0.9464, "B2" : 1.9199, "ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "OAI221" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"B1" : 0.9464, "B2" : 0.9448, "C1" : 0.9464, "C2" : 1.9199, "ZN" : 1.0, "A" : 0.5}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "AOI221" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"B1" : 0.9464, "B2" : 0.9448, "C1" : 0.9464, "C2" : 1.9199, "ZN" : 1.0, "A" : 0.5}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+    "NOR4" : {"cap" : 1.9199, "area" : 1.862, "port_caps" : {"A1" : 0.9464, "A2" : 0.9448, "A3" : 1.9199, "A4":1.0,"ZN" : 1.0}, "min" : 1.0, "max" : 2.0, "resistance" : 0.348},
+}
+
 
 
 class PortRef:
@@ -18,20 +45,17 @@ class Net:
     def addPort(self, gate, portname):
         self.ports.append(PortRef(gate, portname))
 
-
-
-# dont subclass: pass type and either ordered params or keywords...
 class Gate:
-    def __init__(self, name, type, ins, outs, in_caps, int_cap=0.2, area=0.5, min=1, max=16, resistance=1.0):
+    def __init__(self, name: str, type: str, ins, outs):
         self.name = name
-        self.min = min
-        self.max = max
+        self.min = GateInfo[type]["min"]
+        self.max = GateInfo[type]["max"]
         self.ins = ins
         self.outs = outs
-        self.in_caps = in_caps
-        self.int_cap = int_cap
-        self.resistance = resistance
-        self.area = area
+        self.in_caps = GateInfo[type]["port_caps"]
+        self.area = GateInfo[type]["area"]
+        self.int_cap = 0.5
+        self.resistance =  0.5/self.area
         for portname,net in self.ins.items():
             net.addPort(self, portname)
         for portname,net in self.outs.items():
@@ -41,13 +65,9 @@ class Gate:
     def isLoad(self,name):
         return name in self.ins
     def getInputCap(self, portname):
-        #return random.randint(1,10)/8
         return self.in_caps[portname]
-        # return 1.0
     def getIntrCap(self, portname):
-        #return random.randint(1,10)/8
-        return 0.1
-        #return 1.0
+        return self.int_cap
     def getResist(self,portname):
         return self.resistance
     def getMin(self):
@@ -56,7 +76,6 @@ class Gate:
         return self.max
     def getAreaScaleFactor(self):
        return self.area
-       #return 1.0
 
 RinDefault = 1.0
 
@@ -96,7 +115,6 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
     K = np.array([1])
 
     tconst = 0.69
-    print(gatelist)
     # build gatemap gate -> matrix variable index
     gateMap = {}
     for i,g in enumerate(gatelist,1):
@@ -130,7 +148,7 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
         for ld in loads:
             Cscale = ld.gate.getInputCap(ld.portname)
             Cvar = gateMap[ld.gate]
-            CapTerms.append(PNom(Cscale, Cvar, 1))
+            CapTerms.append(PNom(Cscale, Cvar, 0.9))
 
         if not drivers:
             # this must be a prime input
@@ -147,7 +165,7 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
             Rvar = gateMap[drv.gate]
             Cintr = drv.gate.getIntrCap(drv.portname)
 
-            Rdrv = PNom(tconst * Rscale, Rvar, -1)
+            Rdrv = PNom(tconst * Rscale, Rvar, -0.9)
             RCintr = PNom(tconst * Rscale * Cintr, Rvar, -1)
 
             RCTerms = [c * Rdrv for c in CapTerms]
@@ -181,7 +199,7 @@ def buildMatrix(gatelist, netlist, pins, pouts, maxArea):
         F, G, K = addConstraint(F, G, K, [PNom(1,gateVar,-1)], 1.0/minSize)
 
     # add gate area constratints
-    areaConstraints = [PNom(gate.getAreaScaleFactor(), gateVar, 1) for gate,gateVar in gateMap.items()]
+    areaConstraints = [PNom(gate.getAreaScaleFactor(), gateVar, 0.6) for gate,gateVar in gateMap.items()]
     F, G, K = addConstraint(F, G, K, areaConstraints, maxArea)
 
     # add final delay

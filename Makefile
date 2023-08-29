@@ -37,5 +37,9 @@ clean_optimize:
 	rm -rf optimization/sdf/
 
 clean_all: clean_general clean_verilog clean_synthesis clean_optimize
+
+clean_log:
+	rm -r *.log
+	rm -r log.txt
 	
 	

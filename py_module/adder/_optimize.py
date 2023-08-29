@@ -1,7 +1,7 @@
 import json
 from ._file import *
 from ._verilog import *
-from ._file_structure import *
+from file_structure import *
 from .GateSize import cktopt
 
 def optimize(self, areas_list: list):
@@ -79,11 +79,10 @@ def optimize(self, areas_list: list):
         template_exists = file_exists(self._opt_sdf_template_path)
         sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
         if not file_exists(sdf_file_path):
-            print("ERROR: Tried stripping sdf file when it doesn't exist")
+            print("optimize.strip_sdf_file(): Tried stripping sdf file when it doesn't exist (error)")
             exit()
         sdf_text = read_text(sdf_file_path)
         design = f'{self.adder_name}_{area}'
-        print(design)
         sdf_text = sdf_text.replace(design, "design")
         data: dict = {}
         data["celltypes"] = []
@@ -161,8 +160,11 @@ def optimize(self, areas_list: list):
         sdf_file_text = re.sub("\((\\S+?)\:\:(\\S+?)\)", replace, sdf_file_text)
         write_text(sdf_file_path, sdf_file_text)
 
+    areas_list = self._get_unoptimized_areas(areas_list)
+
     for i in range(0, len(areas_list)):
-        min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
+        #min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
+        min_area = int(self.get_min_area()*areas_list[i]+1)
         result = get_optimization_results(areas_list[i])
         sizes_only: dict = result[0]
         sizes_only.pop("delay")
@@ -172,7 +174,7 @@ def optimize(self, areas_list: list):
         write_text(sized_file_path, sized_file_text)
         create_script(sized_file_path, min_area)
         if os.system(f"sta {OPT_SCRIPT_PATH}") != 0:
-            print("Error during sdf generation, exiting...")
+            print("optimize.optimize(): Could not generate sdf file (error)")
             exit()
         fix_sdf_file(min_area)
         original_sdf_text = read_text(self._get_sdf_path(min_area))

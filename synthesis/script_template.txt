@@ -1,12 +1,15 @@
 yosys -import
 read_verilog {dependencies}
-#read_liberty hardware/NangateOpenCellLibrary_typical.lib
+
+blackbox pos_operator
+blackbox neg_operator
 hierarchy -check -top {design_name}
 synth -top {design_name}
 flatten
-opt
-flatten
+abc -liberty hardware/NangateOpenCellLibrary_typical.lib
+techmap
 opt_clean -purge
+
 exec mkdir -p synthesis/{top_module_dir}
 write_verilog -noattr -noexpr synthesis/{top_module}
 tee -o synthesis/{top_module_dir}/{design_name}_stats.json stat -json
