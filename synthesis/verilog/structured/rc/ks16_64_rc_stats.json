@@ -1,0 +1,31 @@
+{
+   "creator": "Yosys 0.30 (git sha1 f7a8284c7b0, gcc 9.4.0-1ubuntu1~20.04.1 -fPIC -Os)",
+   "invocation": "stat -json ",
+   "modules": {
+      "\\ks16_64_rc": {
+         "num_wires":         436,
+         "num_wire_bits":     745,
+         "num_pub_wires":     436,
+         "num_pub_wire_bits": 745,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         608,
+         "num_cells_by_type": {
+            "AND2": 63,
+            "AOI21": 100,
+            "AOI22": 1,
+            "INV": 36,
+            "NAND2": 107,
+            "NOR2": 92,
+            "NOR3": 6,
+            "OAI21": 80,
+            "OAI22": 3,
+            "XNOR2": 38,
+            "XOR2": 82
+         }
+      }
+   }
+
+}
+

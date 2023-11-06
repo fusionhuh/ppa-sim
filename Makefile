@@ -39,7 +39,17 @@ clean_optimize:
 clean_all: clean_general clean_verilog clean_synthesis clean_optimize
 
 clean_log:
-	rm -r *.log
-	rm -r log.txt
+	find . -type f -name "log.txt" -exec rm {} +
+	find . -type f -name "*.log" -exec rm {} +
+
+clean_script:
+	rm -f synthesis/script.tcl
+	rm -f optimization/script.tcl
+
+clean_out:
+	find . -type f -name "out.vcd" -exec rm {} +
+	rm -f simulation/tb_out
+	rm -f simulation/tb.v
+	rm -f report_out
 	
 	

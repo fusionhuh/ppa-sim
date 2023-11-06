@@ -2,9 +2,14 @@ import json
 from file_structure import *
 from ._verilog import *
 from ._file import *
+import threading
+import math
+from multiprocessing.pool import ThreadPool
 
-def simulate(self, areas: list, cases: list, clear=False, target="individual") -> float:
-    def format_testbench(areas: list):
+SIM_CHUNK_SIZE = 1000
+
+def simulate(self, areas: list, cases: list, clear=False, target="individual", skip_accidentals=True) -> float:
+    def format_testbench(areas: list, cases: list, thread_num: int = 0):
         includes_text: str = ""
         wires_text: str = ""
         modules_text: str = ""
@@ -28,22 +33,19 @@ def simulate(self, areas: list, cases: list, clear=False, target="individual") -
 
         tb_template_text = read_text(SIM_TESTBENCH_TEMPLATE_PATH)
         tb_text = tb_template_text.format(includes=includes_text, wire_declares=wires_text, module_declares=modules_text, cases=cases_text, width=self.width)
-        write_text(SIM_TESTBENCH_PATH, tb_text)
-        if compile_verilog(tb_text) == False:
-            print("simulate.format_testbench(): Testbench could not compile (error)")
-            exit()
-
-    def run_testbench():
-        if os.system("cvc64 +exe +suppress_warns+3106+679+ +-pipe simulation/tb.v") != 0:
+        write_text(SIM_TESTBENCH_PATH+str(thread_num), tb_text)
+        #if compile_verilog(tb_text) == False:
+        #    print("simulate.format_testbench(): Testbench could not compile (error)")
+        #    exit()
+        
+    def run_testbench(thread_num: int = 0):
+        if os.system(f"cvc64 +2state +interp +suppress_warns+3106+679+ +-pipe simulation/tb.v{thread_num} > {SIM_OUTPUT_PATH}{thread_num}") != 0:
             print("simulate.run_testbench(): Could not run testbench (error)")
             exit()
 
-        os.system(f"./cvcsim > {SIM_OUTPUT_PATH}")
-        os.system("rm ./cvcsim")
-
-    def retrieve_timing_results(cases) -> list:
+    def retrieve_timing_results(cases, thread_num: int = 0) -> list:
         num_cases = len(cases)
-        out_text = read_text(SIM_OUTPUT_PATH)
+        out_text = read_text(SIM_OUTPUT_PATH+str(thread_num))
         out_lines = out_text.split("\n")
         line_index = 0
         timing_results: list = []
@@ -66,6 +68,9 @@ def simulate(self, areas: list, cases: list, clear=False, target="individual") -
                 line_index-=1
                 end_time = float(re.findall("^(\\S+)\\s", out_lines[line_index])[0])
                 timing_results[i][j-1] = end_time-start_time
+            if skip_accidentals:
+                new_results = [timing_results[i][j] for j in range(0, num_cases) if j % 2 == 1]
+                timing_results[i] = new_results
         if target=="individual":
             return timing_results
         else:
@@ -82,12 +87,55 @@ def simulate(self, areas: list, cases: list, clear=False, target="individual") -
         real_area = int(self.get_min_area()*area_scale+1)
         self._construct_sdf_file(real_area)
     real_areas = [int(area_scale*self.get_min_area()+1) for area_scale in areas]
-    format_testbench(real_areas)
-    run_testbench()
+
+    old_cases = cases
+    num_cases = len(old_cases)
+    results = None
+
+    iter_amount = SIM_CHUNK_SIZE
+    curr = 0
+
+    def sim_helper(cases, thread_num) -> list:
+        results = None
+        nonlocal real_areas
+        format_testbench(real_areas, cases, thread_num)
+        run_testbench(thread_num)
+        if results == None:
+            results = retrieve_timing_results(cases, thread_num)
+        else:
+            curr_results = retrieve_timing_results(cases, thread_num)
+            for i in range(0, len(results)):
+                results[i] += curr_results[i]
+        return results
+
+    while curr < num_cases:
+        available_threads = min(12, math.ceil((num_cases - curr)/SIM_CHUNK_SIZE)) # replace min threads with constant
+
+        pool = ThreadPool(available_threads)
+        thread_list = [None] * available_threads
+
+        for thread_num in range(0, available_threads):
+            print(curr)
+            if (curr + iter_amount > num_cases): iter_amount = num_cases - curr
+            cases = old_cases[curr:(curr+iter_amount)]
+            thread_list[thread_num] = pool.apply_async(sim_helper, (cases,thread_num))
+            #sim_helper(cases, thread_num)
+            curr+=iter_amount
+        pool.close()
+        pool.join()
+        for thread_num in range(0, available_threads):  
+            thread_results = thread_list[thread_num].get()
+            if results == None:
+                results = thread_results
+            else:
+                for i in range(0, len(results)):
+                    results[i] += thread_results[i]
+
     for area_scale in areas:
         real_area = int(self.get_min_area()*area_scale+1)
         os.remove(self._get_sdf_path(real_area))
-    return retrieve_timing_results(cases)
+    print(len(results[0]))
+    return results
 
 def get_worst_case_delays(self, areas: list) -> list:
     delay_list: list = []

@@ -26,5 +26,15 @@ SIM_TESTBENCH_TEMPLATE_PATH = f"{SIM_DIR}/testbench_template.txt"
 SIM_TESTBENCH_PATH = f"{SIM_DIR}/tb.v"
 SIM_OUTPUT_PATH = f"{SIM_DIR}/tb_out"
 
-PIN_RESULTS_PATH = "simulation/pintool/operands_output.txt"
+PIN_OPERANDS_FILENAME = "extracted_operands.txt"
+PIN_OPERANDS_PATH = f"simulation/pintool/{PIN_OPERANDS_FILENAME}"
+
+PIN_CONTEXT_FILENAME = "context.txt"
+PIN_CONTEXT_PATH = f"simulation/pintool/{PIN_CONTEXT_FILENAME}"
+
 SIM_BIN_DIR = "simulation/bin/"
+
+HLS_DIR = "substitution"
+HLS_OUTPUT_DIR = f"{HLS_DIR}/hlsynthesis/out"
+HLS_SYN_SCRIPT_PATH = f"{HLS_DIR}/hlsynthesis/syn_script_template.tcl"
+HLS_STA_SCRIPT_PATH = f"{HLS_DIR}/hlsynthesis/sta_script_template.tcl"

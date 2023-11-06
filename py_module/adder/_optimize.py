@@ -147,10 +147,10 @@ def optimize(self, areas_list: list):
                 json.dump(json_data, fp)
 
     def get_verilog_path(area: int):
-        return self._opt_verilog_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.v"
+        return self._opt_verilog_folder_path + f"/{self.get_filename_with_area(area)}"
 
     def fix_sdf_file(area: int):
-        sdf_file_path = self._opt_sdf_folder_path + f"/{self.adder_name}_MAX_AREA_{area}.sdf"
+        sdf_file_path = self._opt_sdf_folder_path + f"/{self.get_filename_with_area(area, extension='.sdf')}"
         sdf_file_text = read_text(sdf_file_path)
         def replace(match):
             match = re.findall("\((\\S+)::(\\S+)\)", match.group())
@@ -163,7 +163,6 @@ def optimize(self, areas_list: list):
     areas_list = self._get_unoptimized_areas(areas_list)
 
     for i in range(0, len(areas_list)):
-        #min_area = int((self._get_synthesized_cell_count()+1)*areas_list[i])
         min_area = int(self.get_min_area()*areas_list[i]+1)
         result = get_optimization_results(areas_list[i])
         sizes_only: dict = result[0]
@@ -191,3 +190,6 @@ def optimize(self, areas_list: list):
         opt_data[f"{areas_list[i]}"][0]["worst"] = delay
         with open(self._opt_data_file_path, "w") as fp:
             json.dump(opt_data, fp)
+    if (os.system("make clean_script") != 0):
+        print("optimize.optimize(): Could not clean script file (Makefile error)")
+        exit()

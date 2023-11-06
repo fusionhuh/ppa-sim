@@ -1,0 +1,12 @@
+yosys -import
+read_verilog {in_path}; 
+
+blackbox ui_plus_expr_FU
+blackbox plus_expr_FU
+synth
+flatten
+abc -liberty hardware/NangateOpenCellLibrary_ccs_all.lib;  
+techmap
+#opt_clean -purge
+
+write_verilog {out_path}

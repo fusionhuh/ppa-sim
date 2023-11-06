@@ -1,5 +1,6 @@
 from file_structure import *
 from ._file import *
+from ._verilog import create_module_declaration
 import liberty
 import json
 
@@ -237,6 +238,23 @@ class Adder(object):
             return f"{width} {structure_descriptor} {end}{hybrid_levels}"
         else:
             return f"{width} {base_descriptor}{hybrid_levels}"
+        
+    def get_filename_with_area(self, area, extension=".v"):
+        return f"{self.adder_name}_MAX_AREA_{area}{extension}"
+
+    def get_module_name_with_area(self, area: int, type="scalar", name=None):
+        if name == None: name = self.adder_name
+        if type == "scalar":
+            return f"{name}_{int(self.get_min_area()*int(area)+1)}"
+        elif type == "real":
+            return f"{name}_{area}"
+        else:
+            raise Exception("get_module_name_with_area (Error): Invalid format type specified")
+
+    @staticmethod
+    def create_module_declaration(self, type: str, area, name: str, ports: dict):
+        name = self.get_module_name_with_area()
+
 
     from ._generate import generate_verilog
     from ._synthesize import synthesize
