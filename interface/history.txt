@@ -10150,3 +10150,3123 @@
 
 # 2023-11-06 02:13:31.485042
 +quit()
+
+# 2023-11-07 19:37:13.684853
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-07 19:38:53.926148
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-07 19:38:59.732390
++quit()
+
+# 2023-11-07 20:08:57.571849
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-07 20:10:41.354528
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-07 20:10:46.781432
++quit()
+
+# 2023-11-07 20:13:38.969501
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-07 20:13:50.798935
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-07 20:13:54.961011
++quit()
+
+# 2023-11-07 20:28:19.578125
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-07 20:31:00.625543
++quit()
+
+# 2023-11-07 20:31:05.353102
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-07 20:40:52.843372
++quit()
+
+# 2023-11-12 16:57:05.119348
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-12 17:00:01.963459
++quit()
+
+# 2023-11-12 17:08:39.193189
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-12 17:14:05.534409
++quit()
+
+# 2023-11-12 21:53:36.910468
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-12 21:56:16.850688
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-12 21:56:41.980386
++quit()
+
+# 2023-11-12 21:56:50.182028
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-12 21:56:52.320518
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-12 21:56:57.812979
++quit()
+
+# 2023-11-12 22:10:41.787711
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-12 22:10:43.247964
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-12 22:10:48.429387
++quit()
+
+# 2023-11-13 01:09:45.172879
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/mips/mips.c", "main", override_cache=False)
+
+# 2023-11-13 01:09:50.541123
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/mips/mips.c", "main", override_cache=True)
+
+# 2023-11-13 01:11:53.441639
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-13 01:12:14.579715
++quit()
+
+# 2023-11-13 01:27:30.226738
++quit()
+
+# 2023-11-13 01:33:32.663432
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/mips/mips.c", "main", override_cache=True)
+
+# 2023-11-13 01:34:55.575396
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-13 01:35:05.780291
++quit()
+
+# 2023-11-14 11:48:48.807329
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/mips/mips.c", "main", override_cache=False)
+
+# 2023-11-14 11:49:04.808211
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-14 11:49:08.034146
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-14 11:49:11.886729
++quit()
+
+# 2023-11-14 11:51:55.767861
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 11:54:45.671661
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-14 11:54:49.150002
++quit()
+
+# 2023-11-14 14:07:50.584960
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-14 14:07:57.136515
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 14:10:05.186130
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-14 14:10:20.360931
++quit()
+
+# 2023-11-14 14:13:48.862613
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 14:16:26.350356
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-14 14:16:42.783155
++quit()
+
+# 2023-11-14 14:19:34.699128
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 14:22:01.315896
++quit()
+
+# 2023-11-14 14:25:15.821098
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 14:31:30.851031
++quit()
+
+# 2023-11-14 14:32:10.460388
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-14 15:58:24.192218
++quit()
+
+# 2023-11-18 15:23:16.937861
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-18 15:42:01.092264
++quit()
+
+# 2023-11-18 17:02:28.564308
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-18 17:04:13.369144
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-18 17:04:25.524095
++quit()
+
+# 2023-11-18 17:37:34.908143
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-18 17:39:03.227644
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-18 17:39:07.330142
++quit()
+
+# 2023-11-18 18:28:13.061942
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-18 18:29:37.356107
++hlsynthesizer.get_worst_case_delay()
+
+# 2023-11-18 18:29:46.451179
++quit()
+
+# 2023-11-19 01:22:48.913250
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-19 01:36:34.790455
++quit()
+
+# 2023-11-19 01:46:57.950438
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-19 01:48:26.854024
++ls
+
+# 2023-11-19 01:48:28.379538
++quit()
+
+# 2023-11-19 01:50:56.363514
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-19 01:53:44.988189
++ls
+
+# 2023-11-19 01:54:32.815254
++quit()
+
+# 2023-11-19 02:59:28.572016
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-19 03:07:51.655815
++quit()
+
+# 2023-11-19 03:08:13.451888
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:09:05.166573
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:09:32.845830
++add_adder("ks.64.basic")
+
+# 2023-11-19 03:09:36.127392
++set_area_list(1,2)
+
+# 2023-11-19 03:09:42.003668
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:09:46.009012
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:10:27.675280
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:10:32.991754
++add_adder("ks.64.basic")
+
+# 2023-11-19 03:10:43.778903
++set_area_list(1,2)
+
+# 2023-11-19 03:10:47.200758
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:10:54.395328
++quit()
+
+# 2023-11-19 03:11:54.409999
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:11:57.708989
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:12:01.030450
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:12:27.518772
++quit()
+
+# 2023-11-19 03:12:33.255884
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:12:35.135639
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:12:37.159822
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:12:53.034613
++quit()
+
+# 2023-11-19 03:12:58.758265
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:13:01.438154
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:13:03.295467
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:13:48.955119
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:13:50.338875
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:13:52.033775
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:14:34.779454
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:14:36.453934
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:14:38.138721
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:15:08.878903
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:15:11.493267
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:15:14.026618
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:16:26.863381
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:16:28.351768
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:16:30.276009
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:16:38.971718
++quit()
+
+# 2023-11-19 03:17:42.990053
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:17:45.036617
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:17:47.304563
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:18:03.607945
++quit()
+
+# 2023-11-19 03:18:11.854093
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:18:15.650916
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:18:17.603822
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:19:42.295703
++quit()
+
+# 2023-11-19 03:19:46.506777
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:19:48.353979
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:19:49.583857
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:21:13.886981
++quit()
+
+# 2023-11-19 03:21:17.887419
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:21:20.560275
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:21:22.066454
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:25:03.115311
++quit()
+
+# 2023-11-19 03:29:35.411968
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:29:37.208862
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:29:39.703032
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:34:47.515860
++quit()
+
+# 2023-11-19 03:34:54.664745
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:34:57.159538
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:36:08.312676
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:36:12.942427
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:38:07.165424
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:38:08.640294
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:38:24.189997
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:38:26.442223
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:39:47.798152
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:39:49.751879
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:40:05.656347
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:40:12.340269
++quit()
+
+# 2023-11-19 03:43:54.657694
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:43:58.903241
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:44:44.507028
++add_adder("ks.64.basic");set_area_list(1,2)
+
+# 2023-11-19 03:44:47.115401
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 03:44:49.801410
++hlsynthesizer.substitute_adders(da.adder_list, da.area_list)
+
+# 2023-11-19 03:44:52.349138
++quit()
+
+# 2023-11-19 16:51:54.680090
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 16:52:09.029952
++hlsynthesizer.print_adder_info()
+
+# 2023-11-19 16:52:39.583667
++quit()
+
+# 2023-11-19 16:52:45.294034
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 16:53:16.202253
++quit()
+
+# 2023-11-19 16:53:25.396294
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-19 16:55:40.464504
++hlsynthesizer.print_adder_info()
+
+# 2023-11-19 16:56:11.004926
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 16:56:12.857611
++hlsynthesizer.print_adder_info()
+
+# 2023-11-19 17:07:16.585889
++quit()
+
+# 2023-11-19 17:47:08.017823
++hlsynthesizer.print_adder_info()
+
+# 2023-11-19 17:47:14.384186
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 17:47:37.692289
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 17:47:50.559547
++quit()
+
+# 2023-11-19 17:47:58.192891
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 17:48:00.085746
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 17:48:16.812756
++quit()
+
+# 2023-11-19 17:48:32.237080
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 17:48:34.860874
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 17:48:36.566784
++quit()
+
+# 2023-11-19 17:58:22.342210
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 17:58:24.223407
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 17:58:45.952753
++quit()
+
+# 2023-11-19 18:13:24.147350
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:13:27.594772
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:14:06.345724
++quit()
+
+# 2023-11-19 18:17:16.108346
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:17:18.496222
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:17:55.239909
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:17:57.281022
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:17:59.611168
++quit()
+
+# 2023-11-19 18:26:36.242764
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:26:38.537713
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:26:47.284688
++quit()
+
+# 2023-11-19 18:32:20.051756
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:32:22.053933
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:32:29.868760
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:32:39.895486
++quit()
+
+# 2023-11-19 18:32:44.107693
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:32:45.747228
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:32:47.723033
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:33:32.671118
++quit()
+
+# 2023-11-19 18:33:36.977312
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:33:38.657749
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:33:39.788589
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:34:16.994548
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:34:22.208736
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:34:23.890664
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:35:12.460693
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:35:14.354485
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:35:16.563726
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:35:37.017899
++quit()
+
+# 2023-11-19 18:36:20.669224
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-19 18:36:25.505265
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:36:29.010770
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:36:31.044145
++hlsynthesizer.simulate()
+
+# 2023-11-19 18:37:13.569871
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-19 18:37:21.502966
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 20:07:36.656094
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 20:11:08.463618
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 20:52:18.104787
++quit()
+
+# 2023-11-19 20:52:26.385606
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 20:53:30.050439
++quit()
+
+# 2023-11-19 20:53:34.278290
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 20:55:12.045401
++quit()
+
+# 2023-11-19 21:04:52.284035
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 21:06:18.726645
++quit()
+
+# 2023-11-19 21:15:59.698193
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-19 22:29:41.161849
++quit()
+
+# 2023-11-20 22:46:58.263021
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");
+
+# 2023-11-20 22:47:13.733850
++quit()
+
+# 2023-11-20 22:49:41.026992
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");
+
+# 2023-11-20 22:50:42.381251
++quit()
+
+# 2023-11-20 22:51:20.232257
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");
+
+# 2023-11-20 22:52:44.618036
++quit()
+
+# 2023-11-20 22:53:11.102006
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");
+
+# 2023-11-20 22:54:51.356288
++quit()
+
+# 2023-11-20 22:59:16.640556
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");
+
+# 2023-11-20 23:06:37.297957
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-20 23:07:57.815594
++quit()
+
+# 2023-11-20 23:10:40.635935
++hlsynthesizer.simulate()
+
+# 2023-11-20 23:11:45.802368
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:11:58.866987
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-20 23:13:22.954661
++quit()
+
+# 2023-11-20 23:22:21.979675
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:25:44.371288
++quit()
+
+# 2023-11-20 23:27:39.602197
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:28:36.747907
++quit()
+
+# 2023-11-20 23:28:40.363594
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:30:47.676112
++quit()
+
+# 2023-11-20 23:39:22.610050
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:39:34.874206
++exit
+
+# 2023-11-20 23:39:36.357286
++quit()
+
+# 2023-11-20 23:42:59.646554
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:47:42.340051
++quit()
+
+# 2023-11-20 23:55:40.838697
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:57:27.426131
++quit()
+
+# 2023-11-20 23:59:02.508465
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-20 23:59:17.315040
++quit()
+
+# 2023-11-20 23:59:48.567989
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:00:30.618288
++quit()
+
+# 2023-11-21 00:05:47.725070
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:06:31.132581
++quit()
+
+# 2023-11-21 00:16:32.152101
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:17:11.667026
++quit()
+
+# 2023-11-21 00:18:12.733431
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:18:14.844027
++quit()
+
+# 2023-11-21 00:19:16.158670
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:19:23.919113
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:19:26.282712
++quit()
+
+# 2023-11-21 00:19:44.025024
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:19:45.765529
++quit()
+
+# 2023-11-21 00:19:57.813457
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:20:32.860461
++quit()
+
+# 2023-11-21 00:20:36.566301
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:20:48.321801
++quit()
+
+# 2023-11-21 00:21:02.183731
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:21:05.485573
++quit()
+
+# 2023-11-21 00:21:27.272082
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:21:30.826086
++quit()
+
+# 2023-11-21 00:22:31.408757
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:23:10.003882
++quit()
+
+# 2023-11-21 00:25:09.208135
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:33:53.508910
++ls
+
+# 2023-11-21 00:33:54.680146
++quit()
+
+# 2023-11-21 00:43:13.872432
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks")
+
+# 2023-11-21 00:43:19.376761
++hlsynthesizer.simulate()
+
+# 2023-11-21 00:45:01.801473
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-23 20:48:25.641913
++quit()
+
+# 2023-11-23 20:58:42.543689
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-23 21:37:36.626863
++quit()
+
+# 2023-11-23 21:38:14.485064
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.simulate()
+
+# 2023-11-23 21:40:11.012162
++quit()
+
+# 2023-11-23 21:40:26.279702
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.simulate()
+
+# 2023-11-23 21:41:20.703775
++quit()
+
+# 2023-11-23 21:43:56.935940
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");hlsynthesizer.simulate()
+
+# 2023-11-23 21:44:47.859684
++quit()
+
+# 2023-11-26 12:25:54.148513
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");hlsynthesizer.simulate()
+
+# 2023-11-26 12:28:31.173097
++quit()
+
+# 2023-11-26 13:06:44.905139
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:15:42.459643
++ls
+
+# 2023-11-26 13:15:44.185418
++quit()
+
+# 2023-11-26 13:15:50.200458
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:16:12.026692
++quit()
+
+# 2023-11-26 13:16:15.806049
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:16:24.530088
++quit()
+
+# 2023-11-26 13:16:33.707377
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:17:42.103337
++python3 main
+
+# 2023-11-26 13:17:45.577217
++quit()
+
+# 2023-11-26 13:17:50.940156
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:19:59.961214
++quit()
+
+# 2023-11-26 13:20:19.947249
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:21:11.311004
++quit()
+
+# 2023-11-26 13:21:16.376218
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:22:50.999429
++quit()
+
+# 2023-11-26 13:22:54.628404
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:25:01.721819
++ls
+
+# 2023-11-26 13:25:03.175252
++quit()
+
+# 2023-11-26 13:26:33.659869
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:29:41.288515
++quit()
+
+# 2023-11-26 13:29:46.043513
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:30:20.733084
++hlsynthesizer.simulate()
+
+# 2023-11-26 13:32:32.368121
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:32:47.317667
++hlsynthesizer.simulate()
+
+# 2023-11-26 13:33:26.512110
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:33:38.848220
++hlsynthesizer.simulate()
+
+# 2023-11-26 13:35:48.489116
++quit()
+
+# 2023-11-26 13:35:53.990240
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:36:35.407055
++hlsynthesizer.simulate()
+
+# 2023-11-26 13:39:59.287223
++quit()
+
+# 2023-11-26 13:41:13.754302
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:41:55.230019
++quit()
+
+# 2023-11-26 13:43:31.372751
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:44:57.973526
++quit()
+
+# 2023-11-26 13:45:39.621794
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 13:46:25.121654
++hlsynthesizer.simulate()
+
+# 2023-11-26 14:03:34.170930
++quit()
+
+# 2023-11-26 14:03:41.155490
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:03:50.490378
++quit()
+
+# 2023-11-26 14:08:59.243534
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:09:42.951151
++quit()
+
+# 2023-11-26 14:09:48.051817
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:11:58.978922
++quit()
+
+# 2023-11-26 14:12:05.816870
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:12:42.897355
++quit()
+
+# 2023-11-26 14:12:46.823721
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:14:23.483798
++quit()
+
+# 2023-11-26 14:14:30.577271
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:24:15.705655
++quit()
+
+# 2023-11-26 14:24:21.245074
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:25:12.982308
++quit()
+
+# 2023-11-26 14:25:19.824251
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:26:27.341473
++hlsynthesizer.simulate()
+
+# 2023-11-26 14:42:49.453256
++quit()
+
+# 2023-11-26 14:42:55.869298
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 14:42:58.526154
++quit()
+
+# 2023-11-26 15:03:25.297305
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 15:05:23.401353
++quit()
+
+# 2023-11-26 15:11:55.383744
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 15:13:52.400434
++hlsynthesizer.simulate()
+
+# 2023-11-26 15:15:20.525272
++quit()
+
+# 2023-11-26 15:35:42.911467
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 15:38:03.044597
++hlsynthesizer.simulate()
+
+# 2023-11-26 15:52:52.073197
++quit()
+
+# 2023-11-26 15:58:03.020850
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 15:58:06.544122
++quit()
+
+# 2023-11-26 15:59:03.208012
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:00:59.617830
++quit()
+
+# 2023-11-26 16:02:00.070866
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:02:09.011053
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:05:07.915062
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:05:09.679358
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:11:24.439817
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:12:08.224966
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:13:24.448973
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:13:43.637349
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:14:23.311644
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:15:36.045093
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:16:49.668269
++quit()
+
+# 2023-11-26 16:18:09.095380
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:19:57.434095
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:24:27.800876
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:25:27.757792
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:25:32.103741
++quit()
+
+# 2023-11-26 16:27:28.649207
++quit()
+
+# 2023-11-26 16:39:18.839699
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:43:02.032314
++ls
+
+# 2023-11-26 16:43:03.425692
++quit()
+
+# 2023-11-26 16:43:46.029475
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:44:47.326494
++quit()
+
+# 2023-11-26 16:47:10.330768
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:51:02.225778
++quit()
+
+# 2023-11-26 16:51:20.366416
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 16:52:55.507500
++hlsynthesizer.simulate()
+
+# 2023-11-26 16:52:58.822423
++quit()
+
+# 2023-11-26 17:01:12.986861
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 17:02:31.780079
++quit()
+
+# 2023-11-26 17:07:54.883219
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 17:10:26.147826
++hlsynthesizer.simulate()
+
+# 2023-11-26 17:14:07.998676
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");
+
+# 2023-11-26 17:14:17.194732
++quit()
+
+# 2023-11-26 17:15:11.508693
++hlsynthesizer.simulate()
+
+# 2023-11-26 17:18:36.245710
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);
+
+# 2023-11-26 17:19:56.387765
++quit()
+
+# 2023-11-26 17:20:03.288454
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);
+
+# 2023-11-26 17:20:33.522347
++quit()
+
+# 2023-11-26 17:20:40.581319
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);
+
+# 2023-11-26 17:22:34.518323
++quit()
+
+# 2023-11-26 17:22:40.193340
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);
+
+# 2023-11-26 17:24:48.363220
++hlsynthesizer.simulate()
+
+# 2023-11-26 17:25:21.393717
++quit()
+
+# 2023-11-26 17:31:20.630309
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-26 17:31:25.959536
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-26 17:33:59.130872
++quit()
+
+# 2023-11-26 17:48:17.960670
++quit()
+
+# 2023-11-26 17:56:51.394792
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True)
+
+# 2023-11-26 18:11:59.407984
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False)
+
+# 2023-11-26 18:32:03.323591
++hlsynthesizer.synthesize_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk")
+
+# 2023-11-26 18:32:13.513491
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk")
+
+# 2023-11-26 18:35:47.584990
++quit()
+
+# 2023-11-26 18:51:27.380995
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk")
+
+# 2023-11-26 18:51:35.591003
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design()
+
+# 2023-11-26 18:53:36.710446
++quit()
+
+# 2023-11-26 18:55:35.442607
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design()
+
+# 2023-11-26 18:57:46.904725
++quit()
+
+# 2023-11-26 18:57:58.806919
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=True)
+
+# 2023-11-26 18:58:23.838922
++quit()
+
+# 2023-11-26 18:58:32.768342
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");
+
+# 2023-11-26 18:58:40.185449
++hlsynthesizer.simulate()
+
+# 2023-11-26 18:59:14.397304
++quit()
+
+# 2023-11-26 18:59:20.685672
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");
+
+# 2023-11-26 18:59:25.451521
++hlsynthesizer.simulate()
+
+# 2023-11-26 19:00:12.641266
++quit()
+
+# 2023-11-26 19:01:05.197644
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.simulate()
+
+# 2023-11-26 19:02:53.344645
++quit()
+
+# 2023-11-26 19:05:04.617939
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.simulate()
+
+# 2023-11-26 19:05:32.031548
++quit()
+
+# 2023-11-26 19:06:07.436912
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:08:11.194876
++quit()
+
+# 2023-11-26 19:09:00.631541
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:09:19.395543
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:13:55.909509
++quit()
+
+# 2023-11-26 19:14:39.722550
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:17:05.201752
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:19:44.253806
++quit()
+
+# 2023-11-26 19:21:10.298484
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:23:10.384990
++quit()
+
+# 2023-11-26 19:23:43.495992
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:27:17.132487
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:30:29.891655
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 19:37:38.941603
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:04:12.685323
++quit()
+
+# 2023-11-26 20:04:21.320140
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:04:36.752096
++quit()
+
+# 2023-11-26 20:24:01.477826
++quit()
+
+# 2023-11-26 20:27:39.970182
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:29:01.346043
++quit()
+
+# 2023-11-26 20:29:07.742871
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:31:36.336305
++quit()
+
+# 2023-11-26 20:31:57.337407
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:34:39.439373
++quit()
+
+# 2023-11-26 20:34:49.283312
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:40:55.941396
++quit()
+
+# 2023-11-26 20:41:32.467980
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-26 20:45:31.558490
++quit()
+
+# 2023-11-26 20:45:37.590097
++quit()
+
+# 2023-11-26 20:45:40.964771
++quit()
+
+# 2023-11-26 20:45:53.360581
++quit()
+
+# 2023-11-28 12:07:12.790435
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-28 12:12:48.288515
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design();hlsynthesizer.simulate()
+
+# 2023-11-28 12:25:10.070630
++quit()
+
+# 2023-11-28 12:25:12.228078
++quit()
+
+# 2023-12-03 23:24:58.018307
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:25:00.734004
++set_area_list(1,2)
+
+# 2023-12-03 23:33:25.272331
++set_program("crc32/crc32")
+
+# 2023-12-03 23:33:28.917080
++simulate()
+
+# 2023-12-03 23:33:36.348995
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:33:38.414390
++set_area_list(1,2)
+
+# 2023-12-03 23:33:40.310448
++set_program("crc32/crc32")
+
+# 2023-12-03 23:34:43.324156
++simulate("program", "test")
+
+# 2023-12-03 23:35:06.977778
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:35:08.528612
++set_area_list(1,2)
+
+# 2023-12-03 23:35:10.439959
++set_program("crc32/crc32")
+
+# 2023-12-03 23:35:16.335824
++simulate("program", "test")
+
+# 2023-12-03 23:49:56.244221
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:49:57.879164
++set_area_list(1,2)
+
+# 2023-12-03 23:49:59.233403
++set_program("crc32/crc32")
+
+# 2023-12-03 23:50:04.503406
++simulate("program", "test")
+
+# 2023-12-03 23:51:28.691693
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:51:30.002840
++set_area_list(1,2)
+
+# 2023-12-03 23:51:31.209671
++set_program("crc32/crc32")
+
+# 2023-12-03 23:51:40.707961
++simulate("program", "test", exp_sub=True)
+
+# 2023-12-03 23:52:08.418953
++set_profile("test")
+
+# 2023-12-03 23:52:11.334130
++add_adder("ks.64.basic")
+
+# 2023-12-03 23:52:13.394813
++set_area_list(1,2)
+
+# 2023-12-03 23:52:14.843181
++simulate("program", "test", exp_sub=True)
+
+# 2023-12-06 23:35:36.417804
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();
+
+# 2023-12-06 23:36:12.558815
++quit()
+
+# 2023-12-06 23:37:29.418874
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();
+
+# 2023-12-06 23:37:50.071787
++quit()
+
+# 2023-12-06 23:38:26.264219
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design();
+
+# 2023-12-06 23:40:27.624370
++quit()
+
+# 2023-12-06 23:42:32.558499
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-06 23:44:42.818304
++hlsynthesizer.simulate()
+
+# 2023-12-06 23:44:47.269300
++quit()
+
+# 2023-12-07 00:04:51.441394
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-07 00:06:33.712878
++quit()
+
+# 2023-12-07 00:38:51.670116
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-07 00:39:11.170653
++quit()
+
+# 2023-12-07 00:39:18.470521
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-07 00:40:40.146216
++quit()
+
+# 2023-12-07 00:41:18.953452
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("ks");hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-07 00:44:02.212639
++hlsynthesizer.simulate()
+
+# 2023-12-07 00:48:09.522779
++quit()
+
+# 2023-12-07 00:49:56.040664
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-07 00:53:08.442559
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-08 12:58:13.375955
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-08 12:59:18.028514
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-08 13:02:18.754401
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-08 13:05:06.304849
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders("serial");hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-08 13:17:25.566113
++hlsynthesizer.get_num_adders()
+
+# 2023-12-08 13:17:36.723640
++print(hlsynthesizer)
+
+# 2023-12-08 13:18:03.568336
++print(len(hlsynthesizer.addition_info))
+
+# 2023-12-08 13:18:09.217726
++quit()
+
+# 2023-12-08 15:48:45.381190
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.substitute_adders(None);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-08 15:52:09.749419
++quit()
+
+# 2023-12-08 15:52:15.030924
++quit()
+
+# 2023-12-09 13:51:34.971225
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 14:09:48.282655
++quit()
+
+# 2023-12-09 14:10:06.502347
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 14:12:29.443338
++quit()
+
+# 2023-12-09 14:12:34.666092
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 14:12:58.758115
++quit()
+
+# 2023-12-09 14:13:03.515440
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 14:26:15.842710
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 14:27:10.922814
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 14:27:20.443944
++quit()
+
+# 2023-12-09 14:28:16.547342
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 14:28:33.537916
++quit()
+
+# 2023-12-09 14:29:51.099888
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 14:36:41.182245
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 14:37:21.264255
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 14:38:21.550045
++quit()
+
+# 2023-12-09 14:38:28.648135
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 14:38:36.395701
++quit()
+
+# 2023-12-09 14:39:03.087253
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 14:39:07.791139
++quit()
+
+# 2023-12-09 14:39:26.555426
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 14:40:07.970369
++quit()
+
+# 2023-12-09 14:40:13.633780
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:01:16.496666
++quit()
+
+# 2023-12-09 15:01:23.505883
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:01:36.206500
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:04:47.949096
++quit()
+
+# 2023-12-09 15:04:54.775767
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:05:27.026539
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:06:27.824493
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:06:33.253254
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:06:45.081180
++quit()
+
+# 2023-12-09 15:09:59.059691
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:10:03.386436
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:10:07.647265
++quit()
+
+# 2023-12-09 15:18:36.106990
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:18:40.988576
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:20:32.582348
++quit()
+
+# 2023-12-09 15:20:39.586184
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:20:43.533296
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:21:54.169028
++quit()
+
+# 2023-12-09 15:22:02.586968
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:22:06.498372
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:22:38.247894
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-09 15:22:45.811932
++hlsynthesizer.substitute_adders("serial")
+
+# 2023-12-09 15:23:44.283697
++quit()
+
+# 2023-12-09 15:25:09.848419
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:26:59.121230
++hlsynthesizer.substitute_adders("serial")
+
+# 2023-12-09 15:27:08.912253
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:27:30.135381
++hlsynthesizer.simulate()
+
+# 2023-12-09 15:29:46.790041
++quit()
+
+# 2023-12-09 15:29:57.057476
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:31:49.994016
++hlsynthesizer.simulate()
+
+# 2023-12-09 15:32:00.088253
++quit()
+
+# 2023-12-09 15:32:05.783025
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:34:06.492857
++hlsynthesizer.simulate()
+
+# 2023-12-09 15:35:47.939823
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:37:42.515119
++hlsynthesizer.simulate()
+
+# 2023-12-09 15:48:41.403266
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 15:48:49.368759
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 15:48:57.246444
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 15:49:47.940112
++hlsynthesizer.simulate()
+
+# 2023-12-09 16:01:36.205113
++quit()
+
+# 2023-12-09 16:01:41.192258
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 16:02:40.891476
++quit()
+
+# 2023-12-09 16:02:47.583867
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 16:04:25.646080
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 16:06:08.036200
++quit()
+
+# 2023-12-09 20:26:19.794248
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 20:26:30.782484
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 20:27:00.978233
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 20:28:02.085563
++quit()
+
+# 2023-12-09 20:28:07.803250
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 20:28:11.083713
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 20:28:54.868095
++hlsynthesizer.get_worst_delay()
+
+# 2023-12-09 20:29:10.127970
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 20:29:13.334039
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 20:29:31.967372
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-09 20:30:42.664836
++hlsynthesizer.substitute_adders("serial")
+
+# 2023-12-09 20:34:24.576834
++quit()
+
+# 2023-12-09 20:34:34.301878
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 20:36:31.904807
++hlsynthesizer.substitute_adders("serial")
+
+# 2023-12-09 20:36:42.375536
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-09 20:36:51.327184
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 20:45:39.457647
++quit()
+
+# 2023-12-09 20:54:25.677351
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 20:57:44.739360
++hlsynthesizer.substitute_adders(None)
+
+# 2023-12-09 20:58:58.949072
++quit()
+
+# 2023-12-09 20:59:05.110452
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-09 21:03:15.208195
++hlsynthesizer.substitute_adders(None)
+
+# 2023-12-09 21:03:38.964300
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 21:07:20.321742
++quit()
+
+# 2023-12-09 21:22:38.986472
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 21:22:46.286500
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 21:24:53.632535
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 21:25:05.019157
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-09 21:38:17.755601
++exit
+
+# 2023-12-09 21:38:41.274289
++quit()
+
+# 2023-12-09 21:38:50.572985
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-09 21:39:02.179617
++hlsynthesizer.substitute_adders("ks", 2)
+
+# 2023-12-10 17:27:07.707287
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 17:27:19.292660
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 17:27:38.837647
++hlsynthesizer.simulate()
+
+# 2023-12-10 17:30:10.843868
++quit()
+
+# 2023-12-10 17:30:16.202103
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 17:30:22.686955
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 17:30:40.108206
++hlsynthesizer.simulate()
+
+# 2023-12-10 17:32:01.429828
++quit()
+
+# 2023-12-10 17:47:29.162776
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 17:48:50.586375
++quit()
+
+# 2023-12-10 17:48:55.120476
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 17:59:04.741324
++quit()
+
+# 2023-12-10 17:59:11.593301
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 17:59:43.646995
++quit()
+
+# 2023-12-10 18:00:48.726887
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:01:03.913457
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:01:17.972409
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:01:44.146292
++quit()
+
+# 2023-12-10 18:01:50.649150
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:02:43.076193
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:02:50.904845
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:08:20.112641
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:09:33.626352
++quit()
+
+# 2023-12-10 18:10:27.123699
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:10:42.414903
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:11:08.150729
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:11:12.652241
++quit()
+
+# 2023-12-10 18:16:39.948137
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:16:59.175229
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:17:16.090264
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:18:07.431453
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:18:19.117831
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:19:53.627453
++quit()
+
+# 2023-12-10 18:21:23.378634
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:21:33.746181
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:21:57.987321
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:25:53.876241
++quit()
+
+# 2023-12-10 18:32:18.229514
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:32:29.595407
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:33:14.420042
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:33:45.892347
++quit()
+
+# 2023-12-10 18:34:28.644761
++quit()
+
+# 2023-12-10 18:35:59.162253
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:36:08.600844
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:36:31.290448
++hlsynthesizer.simulate()
+
+# 2023-12-10 18:44:41.641105
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:45:30.519393
++quit()
+
+# 2023-12-10 18:45:56.520254
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:46:22.999899
++quit()
+
+# 2023-12-10 18:48:20.921974
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:48:38.146630
++quit()
+
+# 2023-12-10 18:48:44.897794
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 18:48:52.464594
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:49:05.876679
++quit()
+
+# 2023-12-10 18:49:53.553727
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-10 18:55:45.653929
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 18:55:59.051060
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:01:21.515865
++quit()
+
+# 2023-12-10 19:14:59.208790
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-10 19:15:13.798752
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:15:24.634598
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:19:01.502114
++quit()
+
+# 2023-12-10 19:19:17.369036
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:21:16.029795
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:21:20.438139
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:24:38.068304
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:25:06.642599
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:25:10.802389
++quit()
+
+# 2023-12-10 19:25:16.182018
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:25:23.905756
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:25:48.297576
++quit()
+
+# 2023-12-10 19:25:55.247851
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:26:03.354551
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:26:13.025830
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:27:28.246547
++quit()
+
+# 2023-12-10 19:27:36.984631
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:27:45.838561
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:27:48.812958
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:28:14.400755
++quit()
+
+# 2023-12-10 19:28:42.872188
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:28:50.961513
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:28:53.998996
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:29:01.126553
++quit()
+
+# 2023-12-10 19:31:03.423697
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:31:19.850332
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:31:23.243365
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:31:28.573483
++quit()
+
+# 2023-12-10 19:33:10.576639
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:33:19.493216
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:33:22.277513
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:33:28.798888
++quit()
+
+# 2023-12-10 19:42:30.424069
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-10 19:42:38.603416
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-10 19:42:42.965704
++hlsynthesizer.simulate()
+
+# 2023-12-10 19:51:22.403952
++quit()
+
+# 2023-12-11 17:30:39.581297
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 17:30:46.583625
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 17:30:49.017245
++hlsynthesizer.simulate()
+
+# 2023-12-11 17:31:07.865754
++quit()
+
+# 2023-12-11 17:36:36.134787
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 17:36:42.821748
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 17:36:45.024552
++hlsynthesizer.simulate()
+
+# 2023-12-11 17:37:23.427774
++quit()
+
+# 2023-12-11 17:39:05.166749
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 17:39:10.741637
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 17:39:13.248960
++hlsynthesizer.simulate()
+
+# 2023-12-11 17:39:25.220565
++quit()
+
+# 2023-12-11 17:59:51.584138
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 17:59:57.337635
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 17:59:59.889965
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:00:22.690348
++quit()
+
+# 2023-12-11 18:00:28.463438
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:00:33.859613
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:00:36.055574
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:01:07.120359
++quit()
+
+# 2023-12-11 18:01:11.667685
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:01:17.420205
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:01:19.523273
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:02:13.107105
++quit()
+
+# 2023-12-11 18:02:17.857292
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:02:23.911377
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:02:25.940240
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:02:46.404805
++quit()
+
+# 2023-12-11 18:02:50.848065
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:02:56.280706
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:02:59.516664
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:03:47.861830
++quit()
+
+# 2023-12-11 18:03:53.712544
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:03:58.912180
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:04:02.072014
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:04:26.214801
++quit()
+
+# 2023-12-11 18:04:31.462710
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:04:36.462295
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:04:38.244394
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:04:56.862784
++quit()
+
+# 2023-12-11 18:05:02.581860
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:05:08.454522
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:05:10.927175
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:06:08.893749
++quit()
+
+# 2023-12-11 18:06:13.150774
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:06:18.306499
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:06:21.169135
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:07:59.828088
++quit()
+
+# 2023-12-11 18:08:04.304799
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:08:09.599458
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:08:11.672082
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:08:43.488100
++quit()
+
+# 2023-12-11 18:08:47.667599
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:08:52.662875
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:08:54.747170
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:09:19.271789
++quit()
+
+# 2023-12-11 18:09:38.466430
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:09:44.360219
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:09:46.363724
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:10:37.384766
++quit()
+
+# 2023-12-11 18:12:16.620312
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:12:21.951225
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:12:24.151327
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:13:39.333538
++quit()
+
+# 2023-12-11 18:15:34.503485
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:15:54.169268
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:15:56.731778
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:17:16.240804
++quit()
+
+# 2023-12-11 18:17:21.669331
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:17:30.447945
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:17:32.734451
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:20:56.088156
++quit()
+
+# 2023-12-11 18:21:07.399999
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:21:12.961152
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:21:15.129657
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:21:53.692054
++quit()
+
+# 2023-12-11 18:21:59.551996
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:22:05.524856
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:22:07.426455
++hlsynthesizer.simulate()
+
+# 2023-12-11 18:22:39.729992
++quit()
+
+# 2023-12-11 18:22:44.166463
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 18:22:49.303785
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-11 18:22:51.083575
++hlsynthesizer.simulate()
+
+# 2023-12-11 19:43:41.331026
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 19:43:47.930203
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 19:43:51.840666
++hlsynthesizer.simulate()
+
+# 2023-12-11 19:44:04.222548
++quit()
+
+# 2023-12-11 19:44:48.076118
++quit()
+
+# 2023-12-11 19:44:54.701291
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 19:45:02.444791
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 19:46:14.987448
++hlsynthesizer.simulate()
+
+# 2023-12-11 19:48:29.130261
++quit()
+
+# 2023-12-11 19:48:34.357538
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 19:48:40.692059
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 19:48:47.898969
++quit()
+
+# 2023-12-11 19:50:34.406777
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 19:50:42.624543
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 19:51:18.466607
++quit()
+
+# 2023-12-11 19:51:25.635648
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 19:51:31.093764
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:18:23.841456
++quit()
+
+# 2023-12-11 20:18:29.790666
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:18:35.250497
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:18:47.880005
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:22:05.842649
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:22:10.822195
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:22:16.649780
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:23:07.823328
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:26:00.409365
++quit()
+
+# 2023-12-11 20:26:05.459466
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:26:11.278804
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:26:19.694648
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:28:43.831206
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:28:49.257775
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:28:59.300492
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:29:20.032465
++quit()
+
+# 2023-12-11 20:33:49.135858
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:33:54.571146
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:34:01.295871
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:34:23.820849
++quit()
+
+# 2023-12-11 20:34:28.633878
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:34:34.331249
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:34:41.284997
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:35:01.934159
++quit()
+
+# 2023-12-11 20:36:14.187876
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:36:19.962604
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:36:26.481837
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:43:07.143647
++quit()
+
+# 2023-12-11 20:46:05.392212
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:46:10.867500
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:46:23.926651
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:57:17.711535
++quit()
+
+# 2023-12-11 20:57:23.354485
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:57:30.227667
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:57:36.992351
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:58:17.581367
++quit()
+
+# 2023-12-11 20:58:21.637159
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:58:26.804141
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:58:33.142076
++hlsynthesizer.simulate()
+
+# 2023-12-11 20:59:32.763682
++quit()
+
+# 2023-12-11 20:59:39.121386
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 20:59:44.452358
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 20:59:50.887519
++hlsynthesizer.simulate()
+
+# 2023-12-11 21:00:33.802179
++quit()
+
+# 2023-12-11 21:00:38.413895
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 21:00:44.222676
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 21:00:50.573304
++hlsynthesizer.simulate()
+
+# 2023-12-11 21:05:31.992778
++quit()
+
+# 2023-12-11 21:05:36.499219
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-11 21:05:42.139169
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-11 21:05:51.541495
++hlsynthesizer.simulate()
+
+# 2023-12-11 21:08:12.560282
++quir
+
+# 2023-12-11 21:08:13.930976
++quit()
+
+# 2023-12-11 21:08:23.855099
++quit()
+
+# 2023-12-12 01:14:18.184077
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:14:25.360627
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:14:48.624211
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:15:16.970000
++quit()
+
+# 2023-12-12 01:15:25.865526
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:15:28.380119
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:15:36.677840
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:15:44.313603
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:16:21.814099
++quit()
+
+# 2023-12-12 01:16:28.778489
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:16:35.477550
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:16:42.305500
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:17:25.435080
++quit()
+
+# 2023-12-12 01:17:33.403594
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:17:38.911822
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:17:45.331964
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:18:18.623027
++quit()
+
+# 2023-12-12 01:18:22.767252
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:18:28.288001
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:18:35.019399
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:18:55.220087
++quit()
+
+# 2023-12-12 01:19:00.330286
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:19:05.587252
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:19:11.895167
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:23:01.871994
++quit()
+
+# 2023-12-12 01:30:15.604228
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:31:12.934169
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:32:59.084775
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:33:03.713135
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:33:14.299306
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:42:35.572314
++quit()
+
+# 2023-12-12 01:42:42.402958
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:44:51.082382
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:44:56.517470
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:45:03.323760
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:49:24.305623
++quit()
+
+# 2023-12-12 01:49:30.788404
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:49:36.408186
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:49:45.782401
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:50:42.894260
++quit()
+
+# 2023-12-12 01:50:47.827078
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:50:53.421981
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:51:02.220714
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:52:05.054488
++quit()
+
+# 2023-12-12 01:52:10.972252
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:52:16.175500
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:52:23.319108
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:52:45.418002
++quit()
+
+# 2023-12-12 01:52:54.740296
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 01:52:59.977711
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 01:53:11.363268
++hlsynthesizer.simulate()
+
+# 2023-12-12 01:53:37.577379
++quit()
+
+# 2023-12-12 02:17:21.140473
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:17:34.207429
++quit()
+
+# 2023-12-12 02:17:41.394717
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:17:47.321280
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:18:01.121524
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:19:28.597279
++quit()
+
+# 2023-12-12 02:19:34.254679
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:19:39.311895
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:19:46.643350
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:20:23.950492
++quit()
+
+# 2023-12-12 02:20:32.812252
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:20:41.002160
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:20:52.048316
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:21:29.492635
++quit()
+
+# 2023-12-12 02:21:33.972201
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:21:38.863085
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:21:45.355613
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:22:31.873743
++quit()
+
+# 2023-12-12 02:22:46.417966
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:22:53.694230
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:23:00.469374
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:23:42.752181
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:23:48.825391
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:23:55.560217
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:24:27.001364
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:24:32.079344
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:24:43.108689
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:26:39.970788
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 02:26:51.158911
++hlsynthesizer.substitute_adders("ks")
+
+# 2023-12-12 02:28:40.971961
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:33:01.016302
++hlsynthesizer.substitute_adders("skl")
+
+# 2023-12-12 02:39:39.819654
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:41:46.423440
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 02:42:00.318182
++hlsynthesizer.simulate()
+
+# 2023-12-12 02:45:41.054690
++quit()
+
+# 2023-12-12 02:45:44.722101
++quit()
+
+# 2023-12-12 16:42:40.831749
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 16:43:13.690826
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-12 16:43:24.401954
++hlsynthesizer.simulate()
+
+# 2023-12-12 16:44:18.486197
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:02:18.449229
++ls
+
+# 2023-12-12 18:03:29.847381
++quit()
+
+# 2023-12-12 18:03:36.461689
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:03:59.165393
++ls
+
+# 2023-12-12 18:04:04.368355
++quit()
+
+# 2023-12-12 18:09:05.469581
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:10:29.558121
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-12 18:15:54.231509
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:20:40.292608
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:36:40.150174
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:41:25.966245
++quit()
+
+# 2023-12-12 18:50:46.311716
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-12 18:51:35.444259
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-12 18:51:50.175248
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-12 20:09:59.993561
++quit()
+
+# 2023-12-12 20:35:46.465506
++quit()
+
+# 2023-12-12 20:37:16.464227
++quit()
+
+# 2023-12-13 14:28:41.909067
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:28:55.286392
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 14:29:13.758891
++hlsynthesizer.simulate()
+
+# 2023-12-13 14:35:44.531300
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:35:58.915467
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 14:36:08.435144
++hlsynthesizer.simulate()
+
+# 2023-12-13 14:38:13.466016
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:38:30.105525
++hlsynthesizer.simulate()
+
+# 2023-12-13 14:38:38.967063
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:38:48.166970
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 14:38:59.884933
++hlsynthesizer.simulate()
+
+# 2023-12-13 14:39:37.230807
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:40:18.145430
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 14:40:27.440874
++hlsynthesizer.simulate()
+
+# 2023-12-13 14:42:38.634254
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 14:42:56.066607
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 14:43:05.820708
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:01:27.169909
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 15:01:57.726988
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:02:07.476782
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:03:43.428311
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 15:04:16.687468
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:06:25.327709
++quit()
+
+# 2023-12-13 15:06:32.158952
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 15:06:52.613465
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:07:02.413353
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:13:16.799399
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-13 15:19:14.541876
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:19:27.892203
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:32:39.290670
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 15:32:48.590922
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:33:08.564211
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:33:44.035005
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 15:34:25.398631
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 15:34:34.679952
++hlsynthesizer.simulate()
+
+# 2023-12-13 15:45:55.598059
++quit()
+
+# 2023-12-13 18:21:23.340832
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 18:21:44.371900
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 18:21:51.305409
++hlsynthesizer.simulate()
+
+# 2023-12-13 18:24:46.501206
++quit()
+
+# 2023-12-13 18:24:52.395667
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 18:29:14.508266
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 18:29:28.824275
++hlsynthesizer.simulate()
+
+# 2023-12-13 21:32:28.726284
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 21:33:04.372275
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 21:33:15.086057
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 21:33:25.784619
++hlsynthesizer.simulate()
+
+# 2023-12-13 21:35:13.130756
++quit()
+
+# 2023-12-13 21:35:28.875695
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 21:35:38.463184
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 21:35:48.351989
++hlsynthesizer.simulate()
+
+# 2023-12-13 22:15:54.806838
++quit()
+
+# 2023-12-13 22:34:10.627884
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-13 22:38:28.141232
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 22:38:35.726863
++hlsynthesizer.simulate()
+
+# 2023-12-13 22:41:55.428020
++quit()
+
+# 2023-12-13 22:42:02.895556
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=True);hlsynthesizer.synthesize_design(override_cache=True);
+
+# 2023-12-13 22:42:17.407566
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);
+
+# 2023-12-13 22:42:27.844571
++hlsynthesizer.substitute_adders("bk")
+
+# 2023-12-13 22:42:38.094502
++hlsynthesizer.simulate()
+
+# 2023-12-13 22:43:10.542923
++quit()
+
+# 2023-12-13 22:56:55.623248
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.simulate()
+
+# 2023-12-13 23:24:06.462134
++quit()
+
+# 2023-12-13 23:42:41.116639
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.simulate()
+
+# 2023-12-14 00:09:10.899776
++quit()
+
+# 2023-12-14 00:12:38.603340
++hlsynthesizer.read_file("/home/josh/Extracurriculars/RESEARCH/CHStone/dfadd/dfadd_test.c", "dfadd", override_cache=False);hlsynthesizer.synthesize_design(override_cache=False);hlsynthesizer.substitute_adders("bk");hlsynthesizer.simulate()
+
+# 2023-12-14 00:20:37.197830
++quit()

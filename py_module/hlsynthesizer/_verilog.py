@@ -3,24 +3,51 @@ import math
 
 important_regex_str = r"(plus_expr_FU|ui_plus_expr_FU) #\([\S\s]+?\)\)[\s\n]+?([\S\s]+?\([\s\S\n]+?\));"
 
-
 def replace_addition(self, text):
     pass
+
+def fix_hanging_newlines(text: str) -> str:
+    lines = text.split(";")
+    length = len(lines)
+    for i in range(0, length):
+        if lines[i].isspace():
+            lines[i] = ""
+        lines[i] = lines[i].replace("\n", "")
+        lines[i] = "\n" + lines[i]
+    new_text = ";".join(lines)
+    mod_start = new_text.find("module")
+    new_text = new_text[mod_start:len(new_text)]
+    new_text = re.sub(r"[^\S\r\n]+", " ", new_text)
+    return new_text
 
 def print_module_parameters(text: str):
     modules = get_module_text(text)
     for module in modules:
         parameters = get_module_parameters(module)
-        print(parameters)
 
 def update_plus_modules(text: str):
     regex_str = r"(module (plus_expr_FU|ui_plus_expr_FU)[\S\s\n]+?;)([\S\s\n]+?)endmodule"
 
-    new = "\n\
+    function = "\n\
+    function integer max(input integer a,b);\n\
+    begin\n\
+        if (a > b)\n\
+            max = a;\n\
+        else\n\
+            max = b;\n\
+    end\n\
+    endfunction\n\
+\n\
+    function integer calc_width(input integer in1, in2, out);\n\
+        calc_width = 2**$clog2(max(max(in1,in2), out));\n\
+    endfunction\n"
+
+    new = f"\n\
   parameter BITSIZE_in1=1,\n\
     BITSIZE_in2=1,\n\
     BITSIZE_out1=1,\n\
     FINAL_WIDTH = calc_width(BITSIZE_in1, BITSIZE_in2, BITSIZE_out1);\n\
+{function}\
   input signed [FINAL_WIDTH-1:0] in1;\n\
   input signed [FINAL_WIDTH-1:0] in2;\n\
   output signed [FINAL_WIDTH-1:0] out1;\n\
@@ -28,78 +55,34 @@ def update_plus_modules(text: str):
     text = re.sub(regex_str, f"\\1{new}endmodule", text)
     return text
 
-def inject_function(text: str):
-    function = "\n\
-    function integer max(input integer a,b);\
-    begin\
-        if (a > b)\
-            max = a;\
-        else\
-            max = b;\
-    end\
-    endfunction\
-\
-    function integer calc_width(input integer in1, in2, out);\
-        calc_width = 2**$clog2(max(max(in1,in2), out));\
-    endfunction\n"
-    
-    lines = text.split("\n")
-    lines = [function] + lines
-    return "\n".join(lines)
+def get_addition_info(text):
+    text = fix_hanging_newlines(text)
+    instances = re.findall(r"(([\S]+?) #\(([\S\s]+?\))\s+\) ([\S]+?) \(([\S\s]+?\))\s*\);)", text)
+   
+    info: list = []
 
-def get_addition_info(text: str):
-    instances = get_plus_instances(text)
+    for instance in instances:
+        full_text, mod_type, params_str, name, ports_str = instance
+        if mod_type != "ui_plus_expr_FU" and mod_type != "plus_expr_FU": continue
+        extract_info_regex = r"\.([\S]+?)\(([\S]+?\s*)\)"
+        ports = dict(re.findall(extract_info_regex, ports_str.replace(" ", "").replace("\n","")))
+        params = dict(re.findall(extract_info_regex, params_str.replace(" ", "").replace("\n","")))
+        for key, val in params.items():
+            params[key] = val.split("sd")[1]
+        new_info: dict = dict()
+        new_info["ports"] = ports
+        new_info["type"] = mod_type
+        new_info["name"] = name
+        new_info["parameters"] = params
+        new_info["full_text"] = full_text
+        param_nums = list(map(int, params.values()))
+        new_info["old_width"] = params["BITSIZE_out1"]
+        new_info["new_width"] = int(2**math.ceil(math.log2(max(param_nums))))
+        info.append(new_info)
 
-    return [get_plus_instance_info(instance) for instance in instances]
-
-        
-
-def get_plus_instance_info(instance):
-    full_text, mod_type, parameters, mod_name, ports_str = instance
-
-    ports_regex_str = r"\.([\S]+?)[\s\n]*?\(([\S\s]+?)\)(,[\n\s]*?|[\n\s]*?$)"
-    info: dict = dict()
-    ports = dict([tup[0:2] for tup in re.findall(ports_regex_str, ports_str)])
-    info["ports"] = ports
-    info["type"] = mod_type
-    info["name"] = mod_name
-
-    parameters_regex_str = r"\.(\S+?)\(\d+'[a-zA-Z]+(\d+)\)"
-    parameters = parameters.replace(" ", "").replace("\n", "")
-    parameters = dict(re.findall(parameters_regex_str, parameters))
-    info["parameters"] = parameters
-    param_nums = list(map(int, parameters.values()))
-    info["new_width"] = int(2**math.ceil(math.log2(max(param_nums))))
     return info
 
-def get_plus_instances(text: str):
-    regex_str = r"((plus_expr_FU|ui_plus_expr_FU) #\(([\S\s\n]+?\)[\s\n]*?)\)[\s\n]+?([\S\s\n]+?) \(([\S\s\n]+?)\);)"
-    return re.findall(regex_str, text)
-
-def replace_modules(text: str):
-    old = "\
-  parameter BITSIZE_in1=1,\n\
-    BITSIZE_in2=1,\n\
-    BITSIZE_out1=1;\n\
-  // IN\n\
-  input signed [BITSIZE_in1-1:0] in1;\n\
-  input signed [BITSIZE_in2-1:0] in2;\n\
-  // OUT\n\
-  output signed [BITSIZE_out1-1:0] out1;\n\
-  assign out1 = in1 + in2;"
-
-
-    # to verify understanding
-    old_count = text.count(old)
-    new_text = text.replace(old, new)
-
-    new_old_count = text.replace(old, new)
-    assert new_old_count == 0
-
-    return text.replace(old, new)
-
 def get_module_text(text: str):
-    print(text)
     modules: list = re.findall("module[\\S\\s\\n]+?;([\\S\\n\\s]+?)endmodule", text)
     assert len(modules) > 0
     return modules

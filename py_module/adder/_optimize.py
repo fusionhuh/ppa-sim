@@ -64,7 +64,7 @@ def optimize(self, areas_list: list):
             size = results[info["name"]]
             size = map_opt_size(lib_dict[gate_type], size)
             info["type"] += f"_X{size}"
-            lines[i] = create_module_declaration(info)
+            lines[i] = "  (* keep *)" + create_module_declaration(info)
         syn_text = "\n".join(lines)
         return syn_text
     

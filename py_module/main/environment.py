@@ -24,7 +24,6 @@ def remove_adder(adder):
         del da.adder_list[adder]
         del da.adder_str_list[adder]
         return
-    
 
     if adder not in da.adder_str_list:
         print("Provided adder not in working list.")

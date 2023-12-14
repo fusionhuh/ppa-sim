@@ -313,8 +313,8 @@ def generate_basic_adder(adder_info: dict):
             up_connection: str
             right_connection: str
 
-            output_declaration = "\twire node_level{level}_pos{bit_pos}_outg;\n".format(level=curr.level, bit_pos=curr.bit_pos)
-            output_declaration += "\twire node_level{level}_pos{bit_pos}_outp;\n".format(level=curr.level, bit_pos=curr.bit_pos)
+            output_declaration = "\t(* keep *) wire node_level{level}_pos{bit_pos}_outg;\n".format(level=curr.level, bit_pos=curr.bit_pos)
+            output_declaration += "\t(* keep *) wire node_level{level}_pos{bit_pos}_outp;\n".format(level=curr.level, bit_pos=curr.bit_pos)
 
             module_definition += output_declaration
 
@@ -328,7 +328,7 @@ def generate_basic_adder(adder_info: dict):
 
             operator_type: str = "neg_operator" if level % 2 == 1 else "pos_operator"
 
-            operator_declaration = "\t{type} node_level{level}_pos{bit_pos}".format(type=operator_type, level=level, bit_pos=bit_pos)
+            operator_declaration = "(* keep *) {type} node_level{level}_pos{bit_pos}".format(type=operator_type, level=level, bit_pos=bit_pos)
             operator_declaration = operator_declaration + "({up}, {right}, {output})".format(up=up_connection, right=right_connection, output=output_connection)
 
             operator_declaration += ";\n"

@@ -117,6 +117,6 @@ def synthesize(self) -> None:
     write_text(self._syn_file_path, cleaned_text)
     fix_gate_counts()
     self.synthesized_text = cleaned_text
-    if (os.system("make clean_script") != 0):
-        print("synthesize.synthesize(): Could not clean script file (Makefile error)")
-        exit()
+    #if (os.system("make clean_script") != 0):
+    #    print("synthesize.synthesize(): Could not clean script file (Makefile error)")
+    #    exit()

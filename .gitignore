@@ -14,10 +14,11 @@
 verilog/structured/**/*.v
 verilog/base/**/*.v
 
+synthesis/verilog/
 synthesis/**/*.v
 
 misc/
-
+notes/
 optimization/verilog/*
 optimization/sdf/*
 optimization/size_data/*
@@ -29,3 +30,9 @@ simulation/pintool/operands_output.txt
 
 report_out
 **/script.tcl
+
+*.mem
+*.sdf
+
+substitution/hlsynthesis/out/*
+substitution/hlsynthesis/working/*

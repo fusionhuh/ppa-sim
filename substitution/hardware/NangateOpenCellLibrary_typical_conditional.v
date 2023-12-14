@@ -471,24 +471,22 @@ module AOI222_X1 (A1, A2, B1, B2, C1, C2, ZN);
     if((A1 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0) || (A1 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (A2 => ZN) = (0.1, 0.1);
     if((A1 == 1'b1) && (B1 == 1'b1) && (B2 == 1'b0) && (C1 == 1'b0) && (C2 == 1'b0)) (A2 => ZN) = (0.1, 0.1);
     (B1 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (A2 == 1'b1) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (B1 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b1) && (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0) || (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0)) (B1 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b1) && (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0)) (B1 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0)) (B1 => ZN) = (0.1, 0.1);
+    if((A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0)) (B1 => ZN) = (0.1, 0.1);
+    if((A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0)) (B1 => ZN) = (0.1, 0.1);
+    if((A1 == 1'b0) && (A2 == 1'b1) && (B2 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0) || (A1 == 1'b1) && (A2 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b1) && (B2 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (B1 => ZN) = (0.1, 0.1);
     (B2 => ZN) = (0.1, 0.1);
-    if((A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0)) (B2 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (B2 => ZN) = (0.1, 0.1);
-    if((A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0)) (B2 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0) || (A1 == 1'b1) && (A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (B2 => ZN) = (0.1, 0.1);
+    if((A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b0) || (A1 == 1'b0) && (A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0)) (B2 => ZN) = (0.1, 0.1);
+    if((A1 == 1'b1) && (A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0) || (A2 == 1'b0) && (B1 == 1'b1) && (C1 == 1'b1) && (C2 == 1'b0)) (B2 => ZN) = (0.1, 0.1);
+    if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b1) && (C1 == 1'b0) && (C2 == 1'b1)) (B2 => ZN) = (0.1, 0.1);
     (C1 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b0) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
-    if((A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b0) && (B1 == 1'b0) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
+    if((A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b0) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
     if((A1 == 1'b1) && (A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b1) && (C2 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b1) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
     if((A2 == 1'b0) && (B1 == 1'b1) && (B2 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (B1 == 1'b1) && (B2 == 1'b0) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
+    if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b0) && (C2 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b1) && (C2 == 1'b1)) (C1 => ZN) = (0.1, 0.1);
     (C2 => ZN) = (0.1, 0.1);
-    if((A2 == 1'b0) && (B1 == 1'b1) && (B2 == 1'b0) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
-    if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b1) && (B2 == 1'b0) && (C1 == 1'b1) || (A1 == 1'b1) && (A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
+    if((A1 == 1'b1) && (A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b1) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
     if((A2 == 1'b0) && (B1 == 1'b0) && (B2 == 1'b0) && (C1 == 1'b1) || (A1 == 1'b0) && (A2 == 1'b0) && (B1 == 1'b0) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
+    if((A2 == 1'b0) && (B1 == 1'b1) && (B2 == 1'b0) && (C1 == 1'b1) || (A1 == 1'b0) && (B1 == 1'b1) && (B2 == 1'b0) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
     if((A1 == 1'b0) && (A2 == 1'b1) && (B1 == 1'b0) && (B2 == 1'b0) && (C1 == 1'b1)) (C2 => ZN) = (0.1, 0.1);
   endspecify
 
@@ -804,7 +802,7 @@ module CLKBUF_X3 (A, Z);
 
 endmodule
 
-primitive seq3 (IQ, nextstate, CK, NOTIFIER);
+primitive seq3_0 (IQ, nextstate, CK, NOTIFIER);
   output IQ;
   input nextstate;
   input CK;
@@ -823,6 +821,8 @@ endprimitive
 
 module CLKGATETST_X1 (CK, E, SE, GCK);
 
+
+
   input CK;
   input E;
   input SE;
@@ -830,7 +830,7 @@ module CLKGATETST_X1 (CK, E, SE, GCK);
   reg NOTIFIER;
 
   and(GCK, IQ, CK);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_0(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   or(nextstate, E, SE);
 
@@ -852,7 +852,22 @@ module CLKGATETST_X1 (CK, E, SE, GCK);
 
 endmodule
 
+primitive seq3_1 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATETST_X2 (CK, E, SE, GCK);
 
@@ -863,7 +878,7 @@ module CLKGATETST_X2 (CK, E, SE, GCK);
   reg NOTIFIER;
 
   and(GCK, IQ, CK);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_1(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   or(nextstate, E, SE);
 
@@ -885,7 +900,22 @@ module CLKGATETST_X2 (CK, E, SE, GCK);
 
 endmodule
 
+primitive seq3_2 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATETST_X4 (CK, E, SE, GCK);
 
@@ -896,7 +926,7 @@ module CLKGATETST_X4 (CK, E, SE, GCK);
   reg NOTIFIER;
 
   and(GCK, IQ, CK);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_2(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   or(nextstate, E, SE);
 
@@ -918,7 +948,22 @@ module CLKGATETST_X4 (CK, E, SE, GCK);
 
 endmodule
 
+primitive seq3_3 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATETST_X8 (CK, E, SE, GCK);
 
@@ -929,7 +974,7 @@ module CLKGATETST_X8 (CK, E, SE, GCK);
   reg NOTIFIER;
 
   and(GCK, IQ, CK);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_3(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   or(nextstate, E, SE);
 
@@ -951,7 +996,22 @@ module CLKGATETST_X8 (CK, E, SE, GCK);
 
 endmodule
 
+primitive seq3_4 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATE_X1 (CK, E, GCK);
 
@@ -961,7 +1021,7 @@ module CLKGATE_X1 (CK, E, GCK);
   reg NOTIFIER;
 
   and(GCK, CK, IQ);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_4(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   buf(nextstate, E);
 
@@ -979,7 +1039,22 @@ module CLKGATE_X1 (CK, E, GCK);
 
 endmodule
 
+primitive seq3_5 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATE_X2 (CK, E, GCK);
 
@@ -989,7 +1064,7 @@ module CLKGATE_X2 (CK, E, GCK);
   reg NOTIFIER;
 
   and(GCK, CK, IQ);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_5(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   buf(nextstate, E);
 
@@ -1007,7 +1082,22 @@ module CLKGATE_X2 (CK, E, GCK);
 
 endmodule
 
+primitive seq3_6 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATE_X4 (CK, E, GCK);
 
@@ -1017,7 +1107,7 @@ module CLKGATE_X4 (CK, E, GCK);
   reg NOTIFIER;
 
   and(GCK, CK, IQ);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_6(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   buf(nextstate, E);
 
@@ -1035,7 +1125,22 @@ module CLKGATE_X4 (CK, E, GCK);
 
 endmodule
 
+primitive seq3_7 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module CLKGATE_X8 (CK, E, GCK);
 
@@ -1045,7 +1150,7 @@ module CLKGATE_X8 (CK, E, GCK);
   reg NOTIFIER;
 
   and(GCK, CK, IQ);
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_7(IQ, nextstate, CK, NOTIFIER);
   not(IQn, IQ);
   buf(nextstate, E);
 
@@ -1063,22 +1168,428 @@ module CLKGATE_X8 (CK, E, GCK);
 
 endmodule
 
+primitive seq3_8 (IQ, SN, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           ?           0           r           ?       : ? :           0;
+           ?           1           1           r           ?       : ? :           1;
+           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           1           ?           ?           ?       : ? :           1; // SN activated
+           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           0           ?           ?           ?       : ? :           0; // RN activated
+           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFRS_X1 (CK, D, RN, SN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_8(IQ, SN, RN, nextstate, CK, NOTIFIER);
+  and(IQN, i_15, i_16);
+  not(i_15, IQ);
+  not(i_16, i_17);
+  and(i_17, i_18, i_19);
+  not(i_18, SN);
+  not(i_19, RN);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
+
+    and(id_3, SN, RN);
+
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_9 (IQ, SN, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           ?           0           r           ?       : ? :           0;
+           ?           1           1           r           ?       : ? :           1;
+           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           1           ?           ?           ?       : ? :           1; // SN activated
+           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           0           ?           ?           ?       : ? :           0; // RN activated
+           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFRS_X2 (CK, D, RN, SN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_9(IQ, SN, RN, nextstate, CK, NOTIFIER);
+  and(IQN, i_15, i_16);
+  not(i_15, IQ);
+  not(i_16, i_17);
+  and(i_17, i_18, i_19);
+  not(i_18, SN);
+  not(i_19, RN);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
+
+    and(id_3, SN, RN);
+
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_10 (IQ, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           ?           0           r           ?       : ? :           0;
+           1           1           r           ?       : ? :           1;
+           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           0; // RN activated
+           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFR_X1 (CK, D, RN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_10(IQ, RN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_11 (IQ, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           ?           0           r           ?       : ? :           0;
+           1           1           r           ?       : ? :           1;
+           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           0; // RN activated
+           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFR_X2 (CK, D, RN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_11(IQ, RN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_12 (IQ, SN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           0           r           ?       : ? :           0;
+           ?           1           r           ?       : ? :           1;
+           1           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           1; // SN activated
+           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFS_X1 (CK, D, SN, Q, QN);
+
+  input CK;
+  input D;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_12(IQ, SN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_13 (IQ, SN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           0           r           ?       : ? :           0;
+           ?           1           r           ?       : ? :           1;
+           1           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           1; // SN activated
+           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module DFFS_X2 (CK, D, SN, Q, QN);
+
+  input CK;
+  input D;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_13(IQ, SN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  buf(nextstate, D);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
 
+    $width(negedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
 
+endmodule
 
+primitive seq3_14 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
-
-
-
-
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           r           ?       : ? :           0;
+           1           r           ?       : ? :           1;
+           0           *           ?       : 0 :           0; // reduce pessimism
+           1           *           ?       : 1 :           1; // reduce pessimism
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DFF_X1 (CK, D, Q, QN);
 
@@ -1088,13 +1599,17 @@ module DFF_X1 (CK, D, Q, QN);
   output QN;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  parameter identifier = 0;
+
+  seq3_14(IQ, nextstate, CK, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(QN, IQN);
   buf(nextstate, D);
+ 
+  always@(posedge D) $display($realtime,,"%m \\\\EVENT:DFF_INPUT_CHANGE");
+  always@(negedge D) $display($realtime,,"%m \\\\EVENT:DFF_INPUT_CHANGE");
 
-  
 
   specify
     (posedge CK => (Q +: D)) = (0.1, 0.1);
@@ -1110,7 +1625,24 @@ module DFF_X1 (CK, D, Q, QN);
 
 endmodule
 
+primitive seq3_15 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           r           ?       : ? :           0;
+           1           r           ?       : ? :           1;
+           0           *           ?       : 0 :           0; // reduce pessimism
+           1           *           ?       : 1 :           1; // reduce pessimism
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DFF_X2 (CK, D, Q, QN);
 
@@ -1120,7 +1652,7 @@ module DFF_X2 (CK, D, Q, QN);
   output QN;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_15(IQ, nextstate, CK, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(QN, IQN);
@@ -1141,7 +1673,22 @@ module DFF_X2 (CK, D, Q, QN);
 
 endmodule
 
+primitive seq3_16 (IQ, nextstate, G, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input G;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate           G    NOTIFIER     : @IQ :          IQ
+           0           1           ?       : ? :           0;
+           1           1           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DLH_X1 (D, G, Q);
 
@@ -1150,7 +1697,7 @@ module DLH_X1 (D, G, Q);
   output Q;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, G, NOTIFIER);
+  seq3_16(IQ, nextstate, G, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(nextstate, D);
@@ -1170,7 +1717,22 @@ module DLH_X1 (D, G, Q);
 
 endmodule
 
+primitive seq3_17 (IQ, nextstate, G, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input G;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate           G    NOTIFIER     : @IQ :          IQ
+           0           1           ?       : ? :           0;
+           1           1           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DLH_X2 (D, G, Q);
 
@@ -1179,7 +1741,7 @@ module DLH_X2 (D, G, Q);
   output Q;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, G, NOTIFIER);
+  seq3_17(IQ, nextstate, G, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(nextstate, D);
@@ -1199,7 +1761,22 @@ module DLH_X2 (D, G, Q);
 
 endmodule
 
+primitive seq3_18 (IQ, nextstate, GN, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input GN;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          GN    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DLL_X1 (D, GN, Q);
 
@@ -1208,7 +1785,7 @@ module DLL_X1 (D, GN, Q);
   output Q;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, GN, NOTIFIER);
+  seq3_18(IQ, nextstate, GN, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(nextstate, D);
@@ -1228,7 +1805,22 @@ module DLL_X1 (D, GN, Q);
 
 endmodule
 
+primitive seq3_19 (IQ, nextstate, GN, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input GN;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          GN    NOTIFIER     : @IQ :          IQ
+           0           0           ?       : ? :           0;
+           1           0           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           1           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module DLL_X2 (D, GN, Q);
 
@@ -1237,7 +1829,7 @@ module DLL_X2 (D, GN, Q);
   output Q;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, GN, NOTIFIER);
+  seq3_19(IQ, nextstate, GN, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(nextstate, D);
@@ -2309,7 +2901,6 @@ module OAI22_X4 (A1, A2, B1, B2, ZN);
 
 endmodule
 
-/*
 module OAI33_X1 (A1, A2, A3, B1, B2, B3, ZN);
 
   input A1;
@@ -2358,7 +2949,6 @@ module OAI33_X1 (A1, A2, A3, B1, B2, B3, ZN);
   endspecify
 
 endmodule
-*/
 
 module OR2_X1 (A1, A2, ZN);
 
@@ -2522,22 +3112,506 @@ module OR4_X4 (A1, A2, A3, A4, ZN);
 
 endmodule
 
+primitive seq3_20 (IQ, SN, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           ?           0           r           ?       : ? :           0;
+           ?           1           1           r           ?       : ? :           1;
+           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           1           ?           ?           ?       : ? :           1; // SN activated
+           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           0           ?           ?           ?       : ? :           0; // RN activated
+           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFRS_X1 (CK, D, RN, SE, SI, SN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SE;
+  input SI;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_20(IQ, SN, RN, nextstate, CK, NOTIFIER);
+  and(IQN, i_33, i_34);
+  not(i_33, IQ);
+  not(i_34, i_35);
+  and(i_35, i_36, i_37);
+  not(i_36, SN);
+  not(i_37, RN);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_38, i_39);
+  and(i_38, SE, SI);
+  and(i_39, D, i_40);
+  not(i_40, SE);
+
+    and(id_3, SN, RN);
+
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_21 (IQ, SN, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN          RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           ?           0           r           ?       : ? :           0;
+           ?           1           1           r           ?       : ? :           1;
+           1           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           1           ?           ?           ?       : ? :           1; // SN activated
+           *           1           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           0           ?           ?           ?       : ? :           0; // RN activated
+           1           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFRS_X2 (CK, D, RN, SE, SI, SN, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SE;
+  input SI;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_21(IQ, SN, RN, nextstate, CK, NOTIFIER);
+  and(IQN, i_33, i_34);
+  not(i_33, IQ);
+  not(i_34, i_35);
+  and(i_35, i_36, i_37);
+  not(i_36, SN);
+  not(i_37, RN);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_38, i_39);
+  and(i_38, SE, SI);
+  and(i_39, D, i_40);
+  not(i_40, SE);
+
+    and(id_3, SN, RN);
+
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b0)) (RN => Q) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0) && (SN == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b1) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b0)) (SN => QN) = (0.1, 0.1);
+    if((CK == 1'b0) && (RN == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& id_3, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_22 (IQ, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           ?           0           r           ?       : ? :           0;
+           1           1           r           ?       : ? :           1;
+           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           0; // RN activated
+           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFR_X1 (CK, D, RN, SE, SI, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SE;
+  input SI;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_22(IQ, RN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_18, i_19);
+  and(i_18, SE, SI);
+  and(i_19, D, i_20);
+  not(i_20, SE);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_23 (IQ, RN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input RN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // RN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           ?           0           r           ?       : ? :           0;
+           1           1           r           ?       : ? :           1;
+           ?           0           *           ?       : 0 :           0; // reduce pessimism
+           1           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           0; // RN activated
+           *           ?           ?           ?       : 0 :           0; // Cover all transitions on RN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFR_X2 (CK, D, RN, SE, SI, Q, QN);
+
+  input CK;
+  input D;
+  input RN;
+  input SE;
+  input SI;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_23(IQ, RN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_18, i_19);
+  and(i_18, SE, SI);
+  and(i_19, D, i_20);
+  not(i_20, SE);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (Q +: 1'b0)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge RN => (QN +: 1'b1)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((RN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $recovery(posedge RN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge RN, 0.1, NOTIFIER);
+    $width(negedge RN, 0.1, 0, NOTIFIER);
+    $width(posedge RN, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_24 (IQ, SN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           0           r           ?       : ? :           0;
+           ?           1           r           ?       : ? :           1;
+           1           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           1; // SN activated
+           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFS_X1 (CK, D, SE, SI, SN, Q, QN);
+
+  input CK;
+  input D;
+  input SE;
+  input SI;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_24(IQ, SN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_18, i_19);
+  and(i_18, SE, SI);
+  and(i_19, D, i_20);
+  not(i_20, SE);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+
+    $width(negedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
+
+endmodule
+
+primitive seq3_25 (IQ, SN, nextstate, CK, NOTIFIER);
+  output IQ;
+  input SN;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
+
+  table
+       // SN   nextstate          CK    NOTIFIER     : @IQ :          IQ
+           1           0           r           ?       : ? :           0;
+           ?           1           r           ?       : ? :           1;
+           1           0           *           ?       : 0 :           0; // reduce pessimism
+           ?           1           *           ?       : 1 :           1; // reduce pessimism
+           1           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           1           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           0           ?           ?           ?       : ? :           1; // SN activated
+           *           ?           ?           ?       : 1 :           1; // Cover all transitions on SN
+           ?           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
+
+module SDFFS_X2 (CK, D, SE, SI, SN, Q, QN);
+
+  input CK;
+  input D;
+  input SE;
+  input SI;
+  input SN;
+  output Q;
+  output QN;
+  reg NOTIFIER;
+
+  seq3_25(IQ, SN, nextstate, CK, NOTIFIER);
+  not(IQN, IQ);
+  buf(Q, IQ);
+  buf(QN, IQN);
+  or(nextstate, i_18, i_19);
+  and(i_18, SE, SI);
+  and(i_19, D, i_20);
+  not(i_20, SE);
 
 
+  specify
+    (posedge CK => (Q +: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (Q +: 1'b1)) = (0.1, 0.1);
+    (posedge CK => (QN -: D)) = (0.1, 0.1);
+    if((CK == 1'b1)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
+    if((CK == 1'b0)) (negedge SN => (QN +: 1'b0)) = (0.1, 0.1);
 
+    $width(negedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $width(posedge CK &&& ((SN)), 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
+    $width(negedge D, 0.1, 0, NOTIFIER);
+    $width(posedge D, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SE, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SE, 0.1, 0.1, NOTIFIER);
+    $width(negedge SE, 0.1, 0, NOTIFIER);
+    $width(posedge SE, 0.1, 0, NOTIFIER);
+    $setuphold(posedge CK, negedge SI, 0.1, 0.1, NOTIFIER);
+    $setuphold(posedge CK, posedge SI, 0.1, 0.1, NOTIFIER);
+    $width(negedge SI, 0.1, 0, NOTIFIER);
+    $width(posedge SI, 0.1, 0, NOTIFIER);
+    $recovery(posedge SN, posedge CK, 0.1, NOTIFIER);
+    $hold(posedge CK, posedge SN, 0.1, NOTIFIER);
+    $width(negedge SN, 0.1, 0, NOTIFIER);
+    $width(posedge SN, 0.1, 0, NOTIFIER);
+  endspecify
 
+endmodule
 
+primitive seq3_26 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
-
-
-
-
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           r           ?       : ? :           0;
+           1           r           ?       : ? :           1;
+           0           *           ?       : 0 :           0; // reduce pessimism
+           1           *           ?       : 1 :           1; // reduce pessimism
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module SDFF_X1 (CK, D, SE, SI, Q, QN);
 
@@ -2549,7 +3623,7 @@ module SDFF_X1 (CK, D, SE, SI, Q, QN);
   output QN;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_26(IQ, nextstate, CK, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(QN, IQN);
@@ -2581,7 +3655,24 @@ module SDFF_X1 (CK, D, SE, SI, Q, QN);
 
 endmodule
 
+primitive seq3_27 (IQ, nextstate, CK, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input CK;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate          CK    NOTIFIER     : @IQ :          IQ
+           0           r           ?       : ? :           0;
+           1           r           ?       : ? :           1;
+           0           *           ?       : 0 :           0; // reduce pessimism
+           1           *           ?       : 1 :           1; // reduce pessimism
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           f           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module SDFF_X2 (CK, D, SE, SI, Q, QN);
 
@@ -2593,7 +3684,7 @@ module SDFF_X2 (CK, D, SE, SI, Q, QN);
   output QN;
   reg NOTIFIER;
 
-  seq3(IQ, nextstate, CK, NOTIFIER);
+  seq3_27(IQ, nextstate, CK, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(QN, IQN);
@@ -2727,7 +3818,22 @@ module TINV_X1 (EN, I, ZN);
 
 endmodule
 
+primitive seq3_28 (IQ, nextstate, G, NOTIFIER);
+  output IQ;
+  input nextstate;
+  input G;
+  input NOTIFIER;
+  reg IQ;
 
+  table
+// nextstate           G    NOTIFIER     : @IQ :          IQ
+           0           1           ?       : ? :           0;
+           1           1           ?       : ? :           1;
+           *           ?           ?       : ? :           -; // Ignore all edges on nextstate
+           ?           0           ?       : ? :           -; // Ignore non-triggering clock edge
+           ?           ?           *       : ? :           x; // Any NOTIFIER change
+  endtable
+endprimitive
 
 module TLAT_X1 (D, G, OE, Q);
 
@@ -2739,7 +3845,7 @@ module TLAT_X1 (D, G, OE, Q);
 
   bufif0(Q, Q_in, Q_enable);
   not(Q_enable, OE);
-  seq3(IQ, nextstate, G, NOTIFIER);
+  seq3_28(IQ, nextstate, G, NOTIFIER);
   not(IQN, IQ);
   buf(Q_in, IQ);
   buf(nextstate, D);

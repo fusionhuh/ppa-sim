@@ -142,6 +142,15 @@ class Adder(object):
 
 # ---------------------------- PUBLIC -----------------------------------------
 
+    def prepare_sdf_files(self, areas:list) -> list: # returns list of constructed sdf paths
+        path_list: list = []
+        for area in areas:
+            self._construct_sdf_file(int(self.get_min_area()*int(area)+1))
+            path_list.append(self._get_sdf_path(int(self.get_min_area()*int(area)+1)))
+        return path_list
+
+
+
     def get_worst_case_delays(self, areas: list) -> list:
         delay_list: list = []
         data: dict
@@ -152,6 +161,16 @@ class Adder(object):
             delay_list.append(data[f"{areas[i]}"][0]["worst"])
         return delay_list
 
+    def get_optimized_verilog_path(self, area: int, type="scalar"):
+        if type == "scalar":
+            return f"{self._opt_verilog_folder_path}/{self.adder_name}_MAX_AREA_{int(self.get_min_area()*int(area)+1)}.v"
+        elif type == "real":
+            return f"{self._opt_verilog_folder_path}/{self.adder_name}_MAX_AREA_{area}.v"
+        else:
+            raise Exception("get_optimized_verilog_path (Error): Area type must be 'scalar' or 'real'")       
+
+    def get_unoptimized_verilog_path(self):
+        return self._verilog_file_path
 
     def get_min_area(self) -> float:
         if not self.is_synthesized:
@@ -251,9 +270,25 @@ class Adder(object):
         else:
             raise Exception("get_module_name_with_area (Error): Invalid format type specified")
 
-    @staticmethod
-    def create_module_declaration(self, type: str, area, name: str, ports: dict):
-        name = self.get_module_name_with_area()
+    def create_module_declaration(self, name, ports, area=0):
+        port_list_str: str = ""
+
+        for i, (port,net) in enumerate(ports.items()):
+            declaration = f".{port}({net})"
+            if i < len(ports.items())-1:
+                declaration += ", "
+            port_list_str += declaration
+
+        if area == 0:
+            return f"{self.adder_name} {name}({port_list_str})"
+        else:
+            return f"{self.get_module_name_with_area(area)} {name} ({port_list_str});"
+        
+
+    #@staticmethod
+    #def create_module_declaration(self, type: str, area, name: str, ports: dict):
+    #    name = self.get_module_name_with_area()
+
 
 
     from ._generate import generate_verilog

@@ -63,10 +63,6 @@ def gui():
     w.show()
     sys.exit(app.exec_())
 
-
-
-
-
 command_completer = WordCompleter(["add_adder(", "remove_adder(", "print_adder_list()", '""', "quit()", "call(", "set_area_list(", 
                                    "print_area_list()", "simulate(", "set_match(", "print_match()", "draw_hist()", "set_program(", 
                                    "print_program()", "print_path()", "set_instruction_category(", "print_instruction_category()",
