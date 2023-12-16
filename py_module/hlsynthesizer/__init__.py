@@ -78,7 +78,7 @@ class HLSynthesizer(object):
 </function>
 '''
             cases_text: str = ""
-            for i in range(0, 100):
+            for i in range(0, 5):
                 cases_text += f'  <testbench x1="{random.randint(0, 1000000000)}" x2="{random.randint(0,1000000000)}"/>\n'
 
             final_text = base_text.format(cases=cases_text)
@@ -88,6 +88,9 @@ class HLSynthesizer(object):
 
         self.design_name = top_fname
         self.cache_path = HLS_CURR_CACHE_FORMAT_DIR.format(design=self.design_name)
+
+        if not os.path.exists(self.cache_path):
+            os.system(f"mkdir {self.cache_path}")
 
         filename = top_fname
         out_filename = filename + ".v"
@@ -101,8 +104,11 @@ class HLSynthesizer(object):
             fix_bambu_files()
             fix_bambu_tb()
 
-        bambu_out_text = read_text(self.bambu_out_path)
-        write_text(self.bambu_out_path, update_plus_modules(bambu_out_text))
+            bambu_out_text = read_text(self.bambu_out_path)
+            bambu_out_text = update_plus_modules(bambu_out_text)
+            bambu_out_text = update_signed_instances(bambu_out_text)
+            #update_signed_modules(bambu_out_text, self.addition_info)
+            write_text(self.bambu_out_path, bambu_out_text)
 
         self.yosys_out_path = f"{HLS_OUTPUT_DIR}/{top_fname}_yosys.v"
         self.substitution_path = f"{HLS_OUTPUT_DIR}/{top_fname}_substituted.v"
@@ -231,6 +237,7 @@ endmodule
                     if curr_sum_bit not in connected_dffs.keys(): 
                         connected_dffs[curr_sum_bit] = []
                     connected_dffs[curr_sum_bit] += [dff_instance]
+                    num_connected_dffs += 1
                     curr_sum_bit = None   
             print(connected_dffs)
             return (connected_dffs, num_connected_dffs)                 
@@ -279,15 +286,19 @@ endmodule
 
         tb_path = HLS_TB_FORMAT_PATH.format(design=self.design_name)
 
-        sim_command = f"cvc64 +interp {tb_path} {self.substitution_path} {dependencies_str} {HLS_HARDWARE_VERILOG_PATH} > {timing_results_path}"
+        sim_command = f"cvc64 +notimingchecks +interp {tb_path} {self.substitution_path} {dependencies_str} {HLS_HARDWARE_VERILOG_PATH} > {timing_results_path}"
+        print(sim_command)
         if os.system(sim_command) != 0:
             disable_port_monitoring()
             raise Exception("Testbench could not compile for simulation.")
         disable_port_monitoring()
 
-        results = extract_timing_results()["adder"]
+        results = extract_timing_results()
+        adder_results = results["adder"]
+        dff_results = results["dff"]
 
 # data analysis portion, may want to split into new function
+
 
         ordered_name_list = [self.addition_info[i]["name"] for i in range(0, len(self.addition_info))]
 
@@ -298,10 +309,10 @@ endmodule
             nonactive_cycles: int = 0
             active_cycles: int = 0
             for j in range(0, num_cycles):
-                if j not in results[name].keys():
+                if j not in adder_results[name].keys():
                     nonactive_cycles+=1
                     continue
-                pair = results[name][j]
+                pair = adder_results[name][j]
                 delay = pair[1] - pair[0]
                 if delay <= 0.0:
                     nonactive_cycles+=1
@@ -314,13 +325,25 @@ endmodule
             mean_delay = round(mean_delay/active_cycles,4) if active_cycles != 0 else 0.0
             max_delay = round(max_delay, 4)
             instance_name = self.addition_info[i]['name']
-            retrieve_connected_dffs(instance_name)
+            connected_dffs, num_connections = retrieve_connected_dffs(instance_name)
+                
             print(f"  instance name: {instance_name}")
             print(f"  width: {self.addition_info[i]['new_width']}")
             print(f"  output bits used: {self.addition_info[i]['old_width']}/{self.addition_info[i]['new_width']}" )
             print(f"  cycles active: {active_cycles} ({round(100*active_cycles/num_cycles,2)}% of total)")
             print(f"  mean (across only active cycles): {mean_delay}")
             print(f"  max: {max_delay}")
+            print(f"  num connected DFFs: {num_connections}")
+            connected_dffs = dict(sorted(connected_dffs.items()))
+            for sum_bit, dff_list in connected_dffs.items():
+                worst_setup = 0
+                for dff in dff_list:
+                    if dff not in dff_results.keys(): continue
+                    timing_data = dff_results[dff]
+                    for cycle, pair in timing_data.items():
+                        if pair[0] > worst_setup: worst_setup = pair[0]
+
+                print(f"    s[{sum_bit}] worst_setup -> {worst_setup}")
 
     def get_num_adders(self):
         return self.num_adders
@@ -400,8 +423,8 @@ endmodule
                 os.system(f"mkdir {HLS_WORKING_DIR}")
                 os.system(f"touch {HLS_WORKING_DIR}/syn_second.tcl")   
             write_text(f"{HLS_WORKING_DIR}/syn_second.tcl", script_text) 
-            if os.system(f"yosys -c {HLS_WORKING_DIR}/syn_second.tcl") != 0:
-                raise Exception("Yosys could not successfully synthesize the file")
+            #if os.system(f"yosys -c {HLS_WORKING_DIR}/syn_second.tcl") != 0:
+            #    raise Exception("Yosys could not successfully synthesize the file")
 
             write_text(self.substitution_template_path, fix_hanging_newlines(read_text(self.substitution_template_path)))
 

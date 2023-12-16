@@ -1,5 +1,6 @@
 import re
 import math
+from ._file import *
 
 important_regex_str = r"(plus_expr_FU|ui_plus_expr_FU) #\([\S\s]+?\)\)[\s\n]+?([\S\s]+?\([\s\S\n]+?\));"
 
@@ -42,23 +43,69 @@ def update_plus_modules(text: str):
         calc_width = 2**$clog2(max(max(in1,in2), out));\n\
     endfunction\n"
 
-    new = f"\n\
+    signed_new = f"\n\
   parameter BITSIZE_in1=1,\n\
     BITSIZE_in2=1,\n\
     BITSIZE_out1=1,\n\
     FINAL_WIDTH = calc_width(BITSIZE_in1, BITSIZE_in2, BITSIZE_out1);\n\
 {function}\
-  input signed [FINAL_WIDTH-1:0] in1;\n\
-  input signed [FINAL_WIDTH-1:0] in2;\n\
-  output signed [FINAL_WIDTH-1:0] out1;\n\
-  assign out1 = in1 + in2;\n"
-    text = re.sub(regex_str, f"\\1{new}endmodule", text)
+  input signed [BITSIZE_out1-1:0] in1;\n\
+  input signed [BITSIZE_out1-1:0] in2;\n\
+  wire signed [BITSIZE_out1-1:0] internal_sum;\n\
+  output signed [BITSIZE_out1-1:0] out1;\n\
+  assign internal_sum = in1+in2;\n\
+  assign out1 = internal_sum;\n"
+    
+    unsigned_new = f"\n\
+  parameter BITSIZE_in1=1,\n\
+    BITSIZE_in2=1,\n\
+    BITSIZE_out1=1,\n\
+    FINAL_WIDTH = calc_width(BITSIZE_in1, BITSIZE_in2, BITSIZE_out1);\n\
+{function}\
+  input [BITSIZE_out1-1:0] in1;\n\
+  input [BITSIZE_out1-1:0] in2;\n\
+  wire [BITSIZE_out1-1:0] internal_sum;\n\
+  output [BITSIZE_out1-1:0] out1;\n\
+  assign internal_sum = in1+in2;\n\
+  assign out1 = internal_sum;\n"
+    def replace(matchobj):
+        type = matchobj.group(2)
+        if type == "plus_expr_FU":
+            full = matchobj.group(1) + signed_new + "endmodule"
+            return full
+        elif type == "ui_plus_expr_FU":
+            full = matchobj.group(1) + unsigned_new + "endmodule"
+            return full
+
+    text = re.sub(regex_str, replace, text)
     return text
 
-def get_addition_info(text):
-    text = fix_hanging_newlines(text)
-    instances = re.findall(r"(([\S]+?) #\(([\S\s]+?\))\s+\) ([\S]+?) \(([\S\s]+?\))\s*\);)", text)
-   
+def update_signed_instances(text):
+    info = get_addition_info(text, gate_level=False)
+    curr = 0
+    for instance in info:
+        if instance["type"] != "plus_expr_FU": continue
+        ports = instance["ports"]
+        new_in1 = f"in1_replacement{curr}"
+        new_in2 = f"in2_replacement{curr}"
+        in1_declaration = f"  wire signed [{instance['new_width']-1}:0] {new_in1};\n  assign {new_in1} = $signed({ports['in1']});\n"
+        in2_declaration = f"  wire signed [{instance['new_width']-1}:0] {new_in2};\n  assign {new_in2} = $signed({ports['in2']});\n"
+        new_text = in1_declaration + in2_declaration + instance["full_text"].replace(ports['in1'], new_in1).replace(ports['in2'], new_in2) # kind of jank, may not work
+        print(new_text)
+        text = text.replace(instance["full_text"], new_text)
+        curr+=1
+    return text
+
+
+def get_addition_info(text, gate_level: bool = True):
+    instances = None
+    if gate_level == True:
+        text = fix_hanging_newlines(text)
+        instances = re.findall(r"(([\S]+?) #\(([\S\s]+?\))\s+\) ([\S]+?) \(([\S\s]+?\))\s*\);)", text)
+    else:
+        instances = re.findall(r"(^  (\S+?) #\(([\S\s\n]+?\))\) (\S+?) \(([\S\s\n]+?\))\));", text, flags=re.MULTILINE)
+        print(instances)
+
     info: list = []
 
     for instance in instances:
@@ -68,7 +115,7 @@ def get_addition_info(text):
         ports = dict(re.findall(extract_info_regex, ports_str.replace(" ", "").replace("\n","")))
         params = dict(re.findall(extract_info_regex, params_str.replace(" ", "").replace("\n","")))
         for key, val in params.items():
-            params[key] = val.split("sd")[1]
+            params[key] = val.split("sd")[1] if gate_level == True else val
         new_info: dict = dict()
         new_info["ports"] = ports
         new_info["type"] = mod_type
@@ -76,11 +123,19 @@ def get_addition_info(text):
         new_info["parameters"] = params
         new_info["full_text"] = full_text
         param_nums = list(map(int, params.values()))
-        new_info["old_width"] = params["BITSIZE_out1"]
-        new_info["new_width"] = int(2**math.ceil(math.log2(max(param_nums))))
+        new_info["old_width"] = int(params["BITSIZE_out1"])
+        new_info["new_width"] = new_info["old_width"]
         info.append(new_info)
 
     return info
+
+def update_signed_modules(text, addition_info):
+    for instance in addition_info:
+        type = instance["type"]
+        if type != "plus_expr_FU": continue
+        ports = instance["ports"]
+        print(ports["in2"])
+
 
 def get_module_text(text: str):
     modules: list = re.findall("module[\\S\\s\\n]+?;([\\S\\n\\s]+?)endmodule", text)

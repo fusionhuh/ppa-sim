@@ -68,6 +68,7 @@ command_completer = WordCompleter(["add_adder(", "remove_adder(", "print_adder_l
                                    "print_program()", "print_path()", "set_instruction_category(", "print_instruction_category()",
                                    "print_operands_within_percentile()", "print_operands_above_percentile()"], ignore_case=False)
 
+
 while True:
     try:
         profile = "" if da.curr_results_profile == None else f"('{da.curr_results_profile}') "
