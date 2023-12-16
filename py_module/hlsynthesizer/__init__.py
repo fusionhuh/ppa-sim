@@ -103,11 +103,10 @@ class HLSynthesizer(object):
                 raise Exception("Bambu couldn't compile provided file")
             fix_bambu_files()
             fix_bambu_tb()
-
             bambu_out_text = read_text(self.bambu_out_path)
             bambu_out_text = update_plus_modules(bambu_out_text)
+            bambu_out_text = convert_minus_modules(bambu_out_text)
             bambu_out_text = update_signed_instances(bambu_out_text)
-            #update_signed_modules(bambu_out_text, self.addition_info)
             write_text(self.bambu_out_path, bambu_out_text)
 
         self.yosys_out_path = f"{HLS_OUTPUT_DIR}/{top_fname}_yosys.v"
@@ -195,7 +194,10 @@ endmodule
 
         def retrieve_connected_dffs(adder_name: str)->tuple: # returns (connected_dffs: dict (sum_bit -> dff_instance), num_connections: int) 
             text = read_text(HLS_CONNECTED_DFFS_SCRIPT_PATH)
-            script_text = text.replace(r"\\ADDER_INST_NAME", adder_name)
+            adder_text = ""
+            for adder_path in self.adder_dependencies:
+                adder_text += f"read_verilog {adder_path};\n"
+            script_text = text.replace(r"\\ADDER_INST_NAME", adder_name).replace(r"\\ADDER_READS", adder_text).replace(r"\\DESIGN_FILE", self.substitution_path).replace(r"\\DESIGN_NAME", self.design_name)
             script_path = HLS_WORKING_DIR+"/connected_dffs.tcl"
             script_output_path = HLS_WORKING_DIR+"/connected_dffs_out.txt"
             write_text(script_path, script_text)
@@ -326,7 +328,7 @@ endmodule
             max_delay = round(max_delay, 4)
             instance_name = self.addition_info[i]['name']
             connected_dffs, num_connections = retrieve_connected_dffs(instance_name)
-                
+
             print(f"  instance name: {instance_name}")
             print(f"  width: {self.addition_info[i]['new_width']}")
             print(f"  output bits used: {self.addition_info[i]['old_width']}/{self.addition_info[i]['new_width']}" )
@@ -374,7 +376,10 @@ endmodule
             old_ports = curr_add_expr["ports"]
             new_adder_declaration = ""
 
-            new_ports = {"x1" : old_ports['in1']+" ", "x2" : old_ports['in2']+" ", "s" : old_ports['out1']+" ", "cin":"1'b0", "cout" : "cout_placeholder"}
+            mod_type = curr_add_expr["type"]
+            cin = "1'b1" if mod_type == "ui_minus_expr_FU" or mod_type == "minus_expr_FU" else "1'b0"
+
+            new_ports = {"x1" : old_ports['in1']+" ", "x2" : old_ports['in2']+" ", "s" : old_ports['out1']+" ", "cin":cin, "cout" : "cout_placeholder"}
             old_adder_declaration = curr_add_expr["full_text"]
 
             new_ports["cout"] = f"cout_placeholder_{total_index}"

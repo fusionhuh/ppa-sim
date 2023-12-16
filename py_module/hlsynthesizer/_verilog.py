@@ -4,6 +4,8 @@ from ._file import *
 
 important_regex_str = r"(plus_expr_FU|ui_plus_expr_FU) #\([\S\s]+?\)\)[\s\n]+?([\S\s]+?\([\s\S\n]+?\));"
 
+converted_minus_modules = []
+
 def replace_addition(self, text):
     pass
 
@@ -27,7 +29,7 @@ def print_module_parameters(text: str):
         parameters = get_module_parameters(module)
 
 def update_plus_modules(text: str):
-    regex_str = r"(module (plus_expr_FU|ui_plus_expr_FU)[\S\s\n]+?;)([\S\s\n]+?)endmodule"
+    regex_str = r"(module (plus_expr_FU|ui_plus_expr_FU|minus_expr_FU|ui_minus_expr_FU)[\S\s\n]+?;)([\S\s\n]+?)endmodule"
 
     function = "\n\
     function integer max(input integer a,b);\n\
@@ -53,7 +55,7 @@ def update_plus_modules(text: str):
   input signed [BITSIZE_out1-1:0] in2;\n\
   wire signed [BITSIZE_out1-1:0] internal_sum;\n\
   output signed [BITSIZE_out1-1:0] out1;\n\
-  assign internal_sum = in1+in2;\n\
+  assign internal_sum = in1{{operator}}in2;\n\
   assign out1 = internal_sum;\n"
     
     unsigned_new = f"\n\
@@ -66,32 +68,50 @@ def update_plus_modules(text: str):
   input [BITSIZE_out1-1:0] in2;\n\
   wire [BITSIZE_out1-1:0] internal_sum;\n\
   output [BITSIZE_out1-1:0] out1;\n\
-  assign internal_sum = in1+in2;\n\
+  assign internal_sum = in1{{operator}}in2;\n\
   assign out1 = internal_sum;\n"
     def replace(matchobj):
         type = matchobj.group(2)
-        if type == "plus_expr_FU":
-            full = matchobj.group(1) + signed_new + "endmodule"
-            return full
-        elif type == "ui_plus_expr_FU":
-            full = matchobj.group(1) + unsigned_new + "endmodule"
-            return full
+        body = unsigned_new if "ui" in type else signed_new
+        operator = "+" if "plus" in type else "-"
+        full = matchobj.group(1) + body.format(operator=operator) + "endmodule"
+        return full
+#        if type == "plus_expr_FU":
+ #           full = matchobj.group(1) + signed_new.format(operator="+") + "endmodule"
+  #          return full
+   #     elif type == "ui_plus_expr_FU":
+    #        full = matchobj.group(1) + unsigned_new.format() + "endmodule"
+     #       return full
 
     text = re.sub(regex_str, replace, text)
+    return text
+
+
+def convert_minus_modules(text):
+    info = get_addition_info(text, gate_level=False)
+    curr = 0
+    print("here")
+    for instance in info:
+        if instance["type"] != "ui_minus_expr_FU" and instance["type"] != "minus_expr_FU": continue
+        in2_net: str = instance["ports"]["in2"]
+        #new_type: str = instance["type"].replace("minus", "plus")
+        new_instance_text: str = instance["full_text"]
+        #new_instance_text = new_instance_text.replace(instance["type"], new_type, 1)
+        new_instance_text = new_instance_text.replace(in2_net, "~"+in2_net)
+        text = text.replace(instance["full_text"], new_instance_text)
     return text
 
 def update_signed_instances(text):
     info = get_addition_info(text, gate_level=False)
     curr = 0
     for instance in info:
-        if instance["type"] != "plus_expr_FU": continue
+        if instance["type"] != "plus_expr_FU" and instance["type"] != "minus_expr_FU": continue
         ports = instance["ports"]
         new_in1 = f"in1_replacement{curr}"
         new_in2 = f"in2_replacement{curr}"
         in1_declaration = f"  wire signed [{instance['new_width']-1}:0] {new_in1};\n  assign {new_in1} = $signed({ports['in1']});\n"
         in2_declaration = f"  wire signed [{instance['new_width']-1}:0] {new_in2};\n  assign {new_in2} = $signed({ports['in2']});\n"
         new_text = in1_declaration + in2_declaration + instance["full_text"].replace(ports['in1'], new_in1).replace(ports['in2'], new_in2) # kind of jank, may not work
-        print(new_text)
         text = text.replace(instance["full_text"], new_text)
         curr+=1
     return text
@@ -110,7 +130,8 @@ def get_addition_info(text, gate_level: bool = True):
 
     for instance in instances:
         full_text, mod_type, params_str, name, ports_str = instance
-        if mod_type != "ui_plus_expr_FU" and mod_type != "plus_expr_FU": continue
+        if mod_type != "ui_plus_expr_FU" and mod_type != "plus_expr_FU":
+            if mod_type != "ui_minus_expr_FU" and mod_type != "minus_expr_FU": continue
         extract_info_regex = r"\.([\S]+?)\(([\S]+?\s*)\)"
         ports = dict(re.findall(extract_info_regex, ports_str.replace(" ", "").replace("\n","")))
         params = dict(re.findall(extract_info_regex, params_str.replace(" ", "").replace("\n","")))
@@ -153,13 +174,4 @@ def get_module_parameters(text: str):
             parameters[lhs] = rhs
     return parameters
 
-def get_addition_information(line, parameters, text) -> dict:
-    net_names = re.findall(r"(\S+?)\s\+\s(\S+?);", line)
-    if net_names == []: return None
 
-    lines = text.split('\n')
-
-    line = line.replace(" ", "").split("+")
-
-    for i, line in enumerate(lines):
-        pass
