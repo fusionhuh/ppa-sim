@@ -4,8 +4,11 @@ from ._verilog import *
 from adder._verilog import *
 import random
 from adder import Adder
+from multiprocessing.pool import ThreadPool
+import json
 
 CLOCK_TIME = 10
+NUM_THREADS = 12
 
 # PLEASE FIX THIS!
 def fix_hanging_newlines(text: str) -> str:
@@ -38,8 +41,9 @@ class HLSynthesizer(object):
         self.dependencies: str = ""
         self.no_substitution: bool = False
         self.blackbox_list: set = set()
+        self.connected_dffs_path = None
 
-    def read_file(self, path: str, top_fname: str, override_cache = False):
+    def read_file(self, path: str, top_fname: str, xml_tb=None, override_cache = False):
         xml_tb_filepath = HLS_WORKING_DIR + "/tb.xml"
 
         def fix_bambu_files():
@@ -96,7 +100,13 @@ class HLSynthesizer(object):
         out_filename = filename + ".v"
         self.bambu_out_path = f"{HLS_OUTPUT_DIR}/{out_filename}"
         
-        generate_tb_xml(xml_tb_filepath)
+
+        if xml_tb == None:
+            generate_tb_xml(xml_tb_filepath)
+        elif xml_tb == "bambu-default":
+            xml_tb_filepath = "test.xml" # bambu default path
+        else:
+            xml_tb_filepath = xml_tb
 
         if not file_exists(self.bambu_out_path) or override_cache == True:
             if os.system(f"bambu {path} --generate-tb=\"{xml_tb_filepath}\" --top-fname={top_fname} --simulate --simulator=ICARUS") != 0:
@@ -111,6 +121,7 @@ class HLSynthesizer(object):
 
         self.yosys_out_path = f"{HLS_OUTPUT_DIR}/{top_fname}_yosys.v"
         self.substitution_path = f"{HLS_OUTPUT_DIR}/{top_fname}_substituted.v"
+        self.connected_dffs_path = self.cache_path + "/connected_dffs.json"
 
     def get_worst_case_delay(self):
         submodule_text: str = ""
@@ -350,8 +361,8 @@ endmodule
     def get_num_adders(self):
         return self.num_adders
 
-    def substitute_adders(self, adder_type: str, area=1, override_cache:bool=False):
-        if adder_type == None:
+    def substitute_adders(self, adder_types: list, areas: list, override_cache:bool=False):
+        if adder_types == None:
             self.no_substitution = True
             self.get_worst_case_delay()
             return
@@ -364,14 +375,14 @@ endmodule
             curr = i
             width = curr_add_expr["new_width"]
 
-            curr_adder: Adder = Adder(f"{adder_type}.{width}.basic")
+            curr_adder: Adder = Adder(f"{adder_types[i]}.{width}.basic")
             if not curr_adder.is_generated():
                 curr_adder.generate_verilog()
             if not curr_adder.is_synthesized():
                 curr_adder.synthesize()
-            if not curr_adder.is_optimized([area]): curr_adder.optimize([area])
+            if not curr_adder.is_optimized([areas[i]]): curr_adder.optimize([areas[i]])
 
-            self.adder_dependencies.add(curr_adder.get_optimized_verilog_path(area))
+            self.adder_dependencies.add(curr_adder.get_optimized_verilog_path(areas[i]))
 
             old_ports = curr_add_expr["ports"]
             new_adder_declaration = ""
@@ -383,7 +394,7 @@ endmodule
             old_adder_declaration = curr_add_expr["full_text"]
 
             new_ports["cout"] = f"cout_placeholder_{total_index}"
-            new_adder_declaration += f"wire {new_ports['cout']} ;\n {curr_adder.create_module_declaration(curr_add_expr['name'], new_ports, area=area)}\n"
+            new_adder_declaration += f"wire {new_ports['cout']} ;\n {curr_adder.create_module_declaration(curr_add_expr['name'], new_ports, area=areas[i])}\n"
             text = text.replace(old_adder_declaration, new_adder_declaration)
             total_index += 1
         text = re.sub(r"(\\\S+?)\[", r"\1 [", text)
@@ -395,6 +406,58 @@ endmodule
 
 
     def synthesize_design(self, override_cache=False):
+        def retrieve_connected_dffs(adder_name: list, thread_id = 0)->tuple: # returns (connected_dffs: dict (sum_bit -> dff_instance), num_connections: int) 
+            adder_text = ""
+            for adder_path in self.adder_dependencies:
+                adder_text += f"read_verilog {adder_path};\n"
+
+            text = read_text(HLS_CONNECTED_DFFS_SCRIPT_PATH)
+            script_text = text.replace(r"\\ADDER_INST_NAME", adder_name).replace(r"\\ADDER_READS", adder_text).replace(r"\\DESIGN_FILE", self.substitution_path).replace(r"\\DESIGN_NAME", self.design_name)
+            script_path = HLS_WORKING_DIR+f"/connected_dffs{thread_id}.tcl"
+            script_output_path = HLS_WORKING_DIR+f"/connected_dffs_out{thread_id}.txt"
+            write_text(script_path, script_text)
+            if os.system(f"sta {script_path} > {script_output_path}") != 0:
+                raise Exception("Could not run connected DFFs script")
+            
+            connected_dffs: dict = dict() # maps sum bit to corresponding connected dff
+            text = read_text(script_output_path)
+            lines = text.split("\n")
+            
+            num_connected_dffs = 0
+            curr_sum_bit = None
+            normalized_instance_name = adder_name.replace("\\", "")
+            for i, line in enumerate(lines):
+                split_line = line.split(":")
+                if len(split_line) != 2: continue
+                tag, value = split_line
+                if tag not in ["NUM_CONNECTIONS", "PORT", "NET", "DEST_PIN"]: continue
+                if tag == "NUM_CONNECTIONS": num_connections = int(value)
+                elif tag == "PORT":
+                    split_value = value.rsplit("/", 1)
+                    if len(split_value) != 2: continue
+                    reference, name = split_value
+                    # not sure if we actually need to do anything here? I think we can
+                    # sufficiently verify the net if we just look at the net name
+                elif tag == "NET":
+                    split_value = value.rsplit("/", 1)
+                    if len(split_value) != 2: continue
+                    reference, name = split_value
+                    if reference == normalized_instance_name and name[0:2] == "s[":
+                        #test_name = name.replace("s[", "")[0:-1]
+                        if curr_sum_bit != None:
+                            raise Exception("Found duplicate sum bit for one DFF connection")
+                        curr_sum_bit = int(name.replace("s[", "")[0:-1])
+                elif tag == "DEST_PIN":
+                    dff_instance = value.rsplit("/", 1)[0]
+                    if curr_sum_bit == None:
+                        raise Exception("No sum bit found for current DFF connection")
+                    if curr_sum_bit not in connected_dffs.keys(): 
+                        connected_dffs[curr_sum_bit] = []
+                    connected_dffs[curr_sum_bit] += [dff_instance]
+                    num_connected_dffs += 1
+                    curr_sum_bit = None   
+            connected_dffs["NUM_CONNECTIONS"] = num_connected_dffs
+            return connected_dffs
 
         exists_in_cache: bool = False
         cache_dir = HLS_CACHE_DIR + f"/{self.design_name}"
@@ -436,7 +499,32 @@ endmodule
         self.addition_info = get_addition_info(read_text(self.substitution_template_path))
         self.num_adders = len(self.addition_info)
 
+        # performing initial substitution and connected dff retrieval
+        initial_types = ["serial"]*self.num_adders
+        initial_areas = [1]*self.num_adders
 
+        self.substitute_adders(initial_types, initial_areas)
+        curr_adder = 0
+        connected_dffs = dict()
+        while curr_adder != self.num_adders:
+            available_threads = min(NUM_THREADS, self.num_adders-curr_adder)
+
+            pool = ThreadPool(available_threads)
+            thread_list = [None]*available_threads
+
+            start_reference = curr_adder
+            for thread_num in range(0, available_threads):
+                name = self.addition_info[curr_adder]["name"]
+                thread_list[thread_num] = pool.apply_async(retrieve_connected_dffs, (name, thread_num))
+                curr_adder+=1
+
+            pool.close()
+            pool.join()
+            for thread_num in range(0, available_threads):
+                result = thread_list[thread_num].get()
+                name = self.addition_info[start_reference+thread_num]["name"]
+                connected_dffs[name] = result
+        write_text(self.connected_dffs_path, json.dumps(connected_dffs))
 
 
 

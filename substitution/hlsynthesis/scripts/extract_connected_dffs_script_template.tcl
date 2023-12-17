@@ -1,11 +1,7 @@
 read_liberty substitution/hardware/NangateOpenCellLibrary_typical.lib;
-read_verilog substitution/hlsynthesis/out/dfadd_substituted.v;
-read_verilog optimization/verilog/base/bk/bk16_MAX_AREA_160.v
-read_verilog optimization/verilog/base/bk/bk8_MAX_AREA_76.v
-read_verilog optimization/verilog/base/bk/bk64_MAX_AREA_680.v
-read_verilog optimization/verilog/base/bk/bk4_MAX_AREA_35.v
-
-link_design dfadd;
+read_verilog \\DESIGN_FILE;
+\\ADDER_READS
+link_design \\DESIGN_NAME;
 write_sdf -include_typ temp.sdf;
 read_sdc substitution/hardware/hardware_info.sdc
 set adder [get_cells "\\ADDER_INST_NAME"]
