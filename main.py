@@ -74,9 +74,9 @@ while True:
         profile = "" if da.curr_results_profile == None else f"('{da.curr_results_profile}') "
         user_input = prompt(f"{profile}>> ", history=FileHistory("interface/history.txt"), completer=command_completer)
         cust_eval(user_input)
-    except NameError as e:
-        print(e)
-        print("Invalid command specified.")
+    #except NameError as e:
+    #    print(e)
+    #    print("Invalid command specified.")
     except SyntaxError as e:
         print(e)
         print("Invalid command syntax.")

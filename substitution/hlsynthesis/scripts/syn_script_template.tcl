@@ -6,11 +6,11 @@ blackbox plus_expr_FU;
 blackbox ui_minus_expr_FU;
 blackbox minus_expr_FU;
 #opt
-hierarchy -check -top {design_name}
-synth -top {design_name}
+hierarchy -check -top {design_name};
+synth -top {design_name};
 memory_bram;
 dfflibmap -liberty substitution/hardware/NangateOpenCellLibrary_typical.lib
-abc -D 10000000 -liberty substitution/hardware/NangateOpenCellLibrary_typical.lib;  
+abc -D {clock_time} -liberty substitution/hardware/NangateOpenCellLibrary_typical.lib;  
 techmap;
 opt_clean -purge;
 flatten;

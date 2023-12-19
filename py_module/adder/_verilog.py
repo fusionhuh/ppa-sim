@@ -297,7 +297,7 @@ def generate_basic_adder(adder_info: dict):
         module_name = "{adder_type}{bit_width}".format(adder_type=base_type, bit_width=block_size)
     module_definition += generate_module_declaration(verilog_base_name)
     module_definition += generate_port_declare_block(block_size, False)
-    module_definition += "\toutput[{len}:0]p_out;\n\toutput[{len}:0]g_out;\n".format(len=block_size-1)
+    module_definition += f"\toutput[{block_size-1}:0]p_out;\n\toutput[{block_size-1}:0]g_out;\n"
     module_definition += "\tassign p_in = x1 ^ x2;\n\tassign p_out = p_in;\n"
     module_definition += "\tassign g_in[{len}:1] = x1[{len}:1] & x2[{len}:1];\n".format(len=block_size-1)
     module_definition += "\tassign g_in[0] = (x1[0] & x2[0]) | (p_in[0] & cin);\n"
@@ -306,6 +306,9 @@ def generate_basic_adder(adder_info: dict):
         row = ppa_graph[level]
         for bit_pos, curr in row.items():
             if curr.is_operator == False or curr.level != level: continue
+
+            if bit_pos >= block_size:  # experimental change for non-power-of-two width adders
+                continue
 
             pred_up = curr.pred_up
             pred_right = curr.pred_right

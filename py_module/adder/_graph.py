@@ -37,7 +37,8 @@ def is_sum_bit_complete(bit_pos: int, graph) -> bool:
     return (bounds[0] == bit_pos and bounds[1] == 0)
 
 def generate_ks_graph(bit_width: int):
-    assert math.floor(math.log(bit_width, 2)) == math.log(bit_width,2)
+    if int(math.log(bit_width,2)) != math.log(bit_width,2):
+        bit_width = 2**(int(math.log(bit_width,2))+1)
 
     node_graph = generate_precalc_layer(bit_width)
 
@@ -65,7 +66,8 @@ def get_lowest_node(bit_pos: int, graph):
     return lowest
 
 def generate_bk_graph(bit_width: int):
-    assert math.floor(math.log(bit_width, 2)) == math.log(bit_width,2)
+    if int(math.log(bit_width,2)) != math.log(bit_width,2):
+        bit_width = 2**(int(math.log(bit_width,2))+1)
 
     node_graph = generate_precalc_layer(bit_width)
 
@@ -112,7 +114,8 @@ def get_node_count(node_graph):
     return count
 
 def generate_hybrid_graph(bit_width: int, bk_levels: int):
-    assert math.floor(math.log(bit_width, 2)) == math.log(bit_width,2)
+    if int(math.log(bit_width,2)) != math.log(bit_width,2):
+        bit_width = 2**(int(math.log(bit_width,2))+1)
     assert int(math.log(bit_width, 2)) - 3 >= bk_levels
 
     node_graph = generate_precalc_layer
@@ -175,6 +178,8 @@ def generate_serial_graph(bit_width: int):
     return node_graph
 
 def generate_skl_graph(bit_width: int) -> list:
+    if int(math.log(bit_width,2)) != math.log(bit_width,2):
+        bit_width = 2**(int(math.log(bit_width,2))+1)
     node_graph = generate_precalc_layer(bit_width)
 
     curr_level = 1
