@@ -11,7 +11,7 @@ def _run_hls_syn_script(in_script_path: str, top_level_file: str, design_name: s
         out_path=syn_output_path
     )
     write_text(script_path, script_text)
-    run_command(f"yosys -c {script_path}", touch_list=syn_output_path)
+    run_command(f"yosys -c {script_path}", touch_list=[syn_output_path])
 
 def run_hls_template_syn_script(top_level_file: str, design_name: str, clock_time: float = 100.0, syn_output_path: str = "temp.v", script_path: str = "temp.tcl"):
     _run_hls_syn_script(HLS_SYN_SCRIPT_PATH, top_level_file, design_name, clock_time, syn_output_path, script_path)

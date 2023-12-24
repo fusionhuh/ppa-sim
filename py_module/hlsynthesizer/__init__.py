@@ -11,6 +11,9 @@ from tool_utils import sta
 from tool_utils import vsyn
 from tool_utils import vsim
 from tool_utils import hls
+from tool_utils.multithreading import *
+import numpy
+from numpy import arange
 
 SIM_CLOCK_TIME = 20
 REAL_CLOCK_TIME = 3
@@ -27,10 +30,13 @@ ERROR_THRESHOLD = 0.05
 
 def limd(curr_voltage: float, window_error: float, threshold: float, min_voltage: float) -> float:
     if window_error > threshold:
-        curr_voltage += 0.05
+        curr_voltage *= 1.1
     else:
-        curr_voltage -= 0.01
+        curr_voltage -= 0.05
         curr_voltage = max(curr_voltage, min_voltage)
+    return curr_voltage
+
+def constant_v(curr_voltage: float, window_error: float):
     return curr_voltage
 
 # PLEASE FIX THIS!
@@ -59,6 +65,9 @@ class HLSynthesizer(object):
         self.design_name: str
         self.no_substitution: bool = False
         self.connected_dffs_path = None
+        self.connected_dffs = dict()
+        self.dff_to_adder = dict()
+        self.worst_case_delay = None
 
     def read_file(self, path: str, top_fname: str, xml_tb=None, override_cache = False):
         xml_tb_filepath = HLS_WORKING_DIR + "/tb.xml"
@@ -97,19 +106,24 @@ class HLSynthesizer(object):
             print(f"  name: {adder_info['name']}")
             print(f"  width: {adder_info['new_width']}")
  
-    def simulate(self) -> dict:
-        print("here in simulate")
+    def simulate(self, init_clock_time, thread_id = 0) -> dict:
+        print(init_clock_time)
         return vsim.simulate_hls_tb(
-            tb_file=HLS_TB_FORMAT_PATH.format(design=self.design_name),
+            template_tb_file=HLS_TB_FORMAT_PATH.format(design=self.design_name),
             design_file=self.substitution_path,
             submodules=self.adder_dependencies,
             design_name=self.design_name,
-            clock_time=SIM_CLOCK_TIME
+            clock_time=init_clock_time,
+            thread_id=thread_id
         )
 
-    def check_error_rate(self, update_func, window_size, clock_time):
+    def check_error_rate(self, update_func, window_size, clock_time, thread_id = 0):
         curr_voltage = STANDARD_VOLTAGE
-        timing_results: dict = self.simulate()
+        timing_results, completed = self.simulate(SIM_CLOCK_TIME,thread_id=thread_id)
+        print(f"Number of timing violations: {len(timing_results['violations'])}, completed? {completed}")
+
+
+
         num_cycles = timing_results["NUM_CYCLES"]
         timing_results = timing_results["dff"]
         num_dffs = len(list(timing_results.keys()))
@@ -118,6 +132,8 @@ class HLSynthesizer(object):
         voltage_results = [0] * num_cycles # maps each cycle to the current voltage
         window_total_error = 0.0
         window_average = 0.0
+        critical_errors: dict =  dict()
+
         for cycle in range(0,num_cycles):
             num_violations = 0
             for dff, cycle_to_delay in timing_results.items():
@@ -141,12 +157,10 @@ class HLSynthesizer(object):
 
             average_error_results[cycle] = window_average
 
-        return (average_error_results, error_results, voltage_results, num_cycles)                    
+        return (critical_errors, average_error_results, error_results, voltage_results, num_cycles)                    
 
     def analyze_limd(self, window_size, min_voltage, threshold, clock_time):
-        print("here finally")
-        average_error, error, voltage, num_cycles = self.check_error_rate(lambda curr_voltage, window_average: limd(curr_voltage, window_average, threshold, min_voltage), window_size, clock_time)
-        print(voltage)
+        critical_errors, average_error, error, voltage, num_cycles = self.check_error_rate(lambda curr_voltage, window_average: limd(curr_voltage, window_average, threshold, min_voltage), window_size, clock_time)
         fig, ax1 = plt.subplots()
         ax1.plot(range(0, num_cycles),average_error, color='red')
         ax2 = ax1.twinx()
@@ -154,6 +168,23 @@ class HLSynthesizer(object):
         fig.tight_layout()
         plt.show()
                 
+    def determine_critical_values(self):
+        min_time = self.worst_case_delay/(STANDARD_VOLTAGE/MIN_VOLTAGE)
+        cycle_times = arange(min_time, self.worst_case_delay, 0.1)
+        results = perform_sync_tasks(function=self.simulate, 
+                                     inputs=cycle_times, 
+                                     dynamic_arg_index=0,
+                                     args=(None,))
+        for i, time in enumerate(cycle_times):
+            print(f"With cycle time = {time}:")
+            result = results[i]
+            print(f"  completed: {result[1]}")
+            print(f"  number of violations: {len(result[0]['violations'])}")   
+            attached_adders: set = set()         
+            for dff, time in results[0]['violations']:
+                attached_adders.add(self.dff_to_adder[dff])
+
+
 # data analysis portion, may want to split into new function
     def analyze_and_replace_adders(self, index: int, priority="area", allow_errors="False"):
         adder = self.addition_info[index]
@@ -163,7 +194,11 @@ class HLSynthesizer(object):
 
         connected_dffs: dict = json.loads(read_text(self.connected_dffs_path))
         print(connected_dffs)
+        critical_errors, average_error, error, voltage, num_cycles = self.check_error_rate(lambda curr_voltage, window_average: constant_v(MIN_VOLTAGE, 1), window_size, clock_time)        
+        
+
         exit()
+
 
         for i, name in enumerate(ordered_name_list):
             print(f"Adder {i}: ")
@@ -211,10 +246,9 @@ class HLSynthesizer(object):
         return self.num_adders
 
     def substitute_adders(self, adder_types: list, areas: list, override_cache:bool=False):
-        print("here in substitute")
         if adder_types == None:
             self.no_substitution = True
-            self.get_worst_case_delay()
+            self.worst_case_delay = self.get_worst_case_delay()
             return
 
         self.no_substitution = False
@@ -230,7 +264,8 @@ class HLSynthesizer(object):
                 curr_adder.generate_verilog()
             if not curr_adder.is_synthesized():
                 curr_adder.synthesize()
-            if not curr_adder.is_optimized([areas[i]]): curr_adder.optimize([areas[i]])
+            if not curr_adder.is_optimized([areas[i]]): 
+                curr_adder.optimize([areas[i]])
 
             self.adder_dependencies.add(curr_adder.get_optimized_verilog_path(areas[i]))
 
@@ -252,11 +287,10 @@ class HLSynthesizer(object):
         text = re.sub(r"(\\\S+?)\}", r"\1 }", text)
 
         write_text(self.substitution_path, text)
-        self.get_worst_case_delay()
+        self.worst_case_delay = self.get_worst_case_delay()
 
 
     def synthesize_design(self, override_cache=False):
-        print("HERE")
         def retrieve_connected_dffs(adder_name: str, thread_id = 0)->tuple: # returns (connected_dffs: dict (sum_bit -> dff_instance), num_connections: int) 
             return sta.run_connected_dffs_script(
                 top_level_file=self.substitution_path,
@@ -325,7 +359,13 @@ class HLSynthesizer(object):
                     connected_dffs[name] = result
             write_text(self.connected_dffs_path, json.dumps(connected_dffs))
 
+        self.adder_to_dffs = json.loads(read_text(self.connected_dffs_path))
+        for adder, list in self.adder_to_dffs.items():
+            for dff in list:
+                self.dff_to_adder[dff] = adder
+
         self.addition_info = get_addition_info(read_text(self.substitution_template_path))
+
         self.num_adders = len(self.addition_info)
 
         self.substitute_adders(["serial"]*self.num_adders, [1]*self.num_adders)

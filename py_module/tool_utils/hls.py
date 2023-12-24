@@ -20,13 +20,17 @@ def synthesize_file(file: str, top_fname: str, clock_time: float, output_path: s
 
     def fix_bambu_tb():
         text = read_text(tb_path)
-        new_text = f'''
+        sdf_annotate_statement = f'''
 initial
 begin
 $sdf_annotate("{HLS_WORKING_SDF_PATH}", {top_fname});
 '''
-        text = text.replace("  initial\n  begin\n", new_text, 1)
+        text = text.replace("  initial\n  begin\n", sdf_annotate_statement, 1)
         text = text.replace(f'"{os.getcwd()}/HLS_output//simulation/values.txt"', f'"{tb_dir}/values.txt"')
+        old_clock_switching_statement = "always # `HALF_CLOCK_PERIOD clock = !clock;"
+        assert text.count(old_clock_switching_statement) == 1
+        new_clock_switching_statement = "time half_clock_time = \\\\CLOCK_TIME/2;\nalways # half_clock_time clock = !clock;\n" 
+        text = text.replace(old_clock_switching_statement, new_clock_switching_statement)
         write_text(tb_path, text)
 
     def generate_tb_xml():

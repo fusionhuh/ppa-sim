@@ -136,7 +136,7 @@ class Adder(object):
             data = json.load(fp)
         optimized_areas = data.keys()
         for area in areas:
-            if f"{area}" not in optimized_areas:
+            if f"{area}" not in optimized_areas or not file_exists(self.get_optimized_verilog_path(area)):
                 unoptimized_areas.append(area)
         return unoptimized_areas
 

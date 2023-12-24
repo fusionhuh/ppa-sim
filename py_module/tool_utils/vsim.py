@@ -1,6 +1,14 @@
-from .command import run_command
+from .command import *
 from file_structure import *
 from hlsynthesizer._file import *
+import time
+import threading
+import os
+import datetime
+import pexpect
+import re
+
+lock: threading.Lock = threading.Lock()
 
 _monitoring_code_str = r'''
     reg [63:0] stored_x1 = 0;
@@ -37,9 +45,14 @@ endmodule
 
 
 
-def simulate_hls_tb(tb_file: str, design_file: str, submodules: list, design_name: str, clock_time: float):
-    timing_results_path = HLS_WORKING_DIR + "/time_results.txt"
+def simulate_hls_tb(template_tb_file: str, design_file: str, submodules: list, design_name: str, clock_time: float, thread_id: int=0):
+    timing_results_path = HLS_WORKING_DIR + f"/time_results{thread_id}.txt"
     num_cycles = 0
+    sim_failed = False
+    working_tb_path = HLS_WORKING_DIR + f"/tb{thread_id}.v"
+
+    write_text(working_tb_path, read_text(template_tb_file).replace(r"\\CLOCK_TIME", str(clock_time)))
+
     def enable_port_monitoring():
         for dep in submodules:
             text = read_text(dep)
@@ -59,9 +72,28 @@ def simulate_hls_tb(tb_file: str, design_file: str, submodules: list, design_nam
         results_dict: dict = dict() # maps (adder|dff) -> mod name -> clock cycle -> (start time, end time)
         results_dict["dff"] = dict()
         results_dict["adder"] = dict()
+        results_dict["violations"] = list()
         found_start = False
-        for i, line in enumerate(lines):
-            if r"\\EVENT" not in line: continue
+        timing_violation_pattern = r"\*\*[\S\s]+?WARN\*\*[\S\s]+?timing violation in (\S+?) [\S\s\n]+? setup[\S\s]+?:(\d+?) ps"
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            if r"\\EVENT" not in line:
+                if i < len(lines)-1:
+                    if line[0:2] != "**": 
+                        i+=1
+                        continue
+                    match = re.findall(timing_violation_pattern, line+f"\n{lines[i+1]}", flags=re.MULTILINE)
+                    if len(match) == 0:
+                        i+=1
+                        continue
+                    dff_name = match[0][0].rsplit(".", 1)[1]
+                    time = float(match[0][1])/1000
+                    results_dict["violations"].append((dff_name, time))
+                    i+=2
+                    continue
+                i+=1
+                continue
             line = line.replace("  ", " ")
 
             event_time, mod_name, event_type = line.split(" ")
@@ -80,26 +112,54 @@ def simulate_hls_tb(tb_file: str, design_file: str, submodules: list, design_nam
             
             prev_pair = results_dict[mod_type][mod_name][clock_cycle]
             adjusted_time = event_time - (clock_time * clock_cycle)
-
             if "INPUT_CHANGE" in event_type:
                 results_dict[mod_type][mod_name][clock_cycle][0] = max(adjusted_time, prev_pair[0])
             elif "OUTPUT_CHANGE" in event_type: 
                 results_dict[mod_type][mod_name][clock_cycle][1] = max(adjusted_time, prev_pair[1])
-            else:
-                raise Exception("Invalid event type detected")
+            i+=1
         results_dict["NUM_CYCLES"] = num_cycles
         return results_dict
 
     mod_list_str = ""
     for mod in submodules:
         mod_list_str += f"{mod} "
-    command_str = f"cvc64 +interp +notimingchecks {tb_file} {design_file} {mod_list_str} substitution/hardware/NangateOpenCellLibrary_typical_conditional.v"
-    enable_port_monitoring()
-    run_command(command_str, timing_results_path, fail_func=disable_port_monitoring)
-    disable_port_monitoring()
+    command_str = f"cvc64 +interp {working_tb_path} {design_file} {mod_list_str} substitution/hardware/NangateOpenCellLibrary_typical_conditional.v"
+    #enable_port_monitoring()
+    latest_modify_time = None
+    output_started = False
+    simulation_halted = False
+    proc: pexpect.spawn = run_command(command_str, redirect=timing_results_path, touch_list=[timing_results_path], as_subprocess=True)
+    init_modify_time = os.path.getmtime(timing_results_path)
+
+    while True:
+        if output_started == True:
+            status = proc.isalive()
+            time.sleep(3)
+            if latest_modify_time == os.path.getmtime(timing_results_path):
+                if status == False:
+                    break
+                proc.sendintr()
+                time.sleep(0.1) # bad approach
+                proc.send("$finish;")
+                simulation_halted = True
+                print(f"HALTED HERE IN THREAD {thread_id}")
+                break
+            else:
+                latest_modify_time = os.path.getmtime(timing_results_path)
+        else:
+            time.sleep(0.1)
+            text = read_text(timing_results_path)
+            lines = text.split("\n")
+            for i in range(len(lines)-1, 0, -1):
+                if r"\\EVENT" in lines[i]:
+                    output_started = True
+                    latest_modify_time = os.path.getmtime(timing_results_path)
+                    break
+
+    #disable_port_monitoring()
     results = extract_timing_results()
     assert len(results) > 0
-    return results
+    return (results, not simulation_halted)
 
 
 
