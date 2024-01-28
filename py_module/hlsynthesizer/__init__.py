@@ -14,6 +14,8 @@ from tool_utils import hls
 from tool_utils.multithreading import *
 import numpy
 from numpy import arange
+from numpy.fft import fft, ifft
+import numpy as np
 
 SIM_CLOCK_TIME = 20
 REAL_CLOCK_TIME = 3
@@ -21,12 +23,71 @@ NUM_THREADS = 12
 VOLTAGE = 1.1
 STANDARD_VOLTAGE = 1.1
 ERROR_WINDOW_SIZE = 10
-MIN_VOLTAGE = 0.5
+MIN_VOLTAGE = 0.3
+THRESHOLD_VOLTAGE = 0.5
+ALPHA=1.3
 MAX_VOLTAGE = 5
 ERROR_THRESHOLD = 0.05
 
 # replacement function args format: (curr_voltage, average window error rate)
 # returns next voltage
+
+class DynamicSimState(object):
+    def __init__(self):
+        self.integral_error = 0
+        self.instantaneous_error = 0
+        self.window_error = 0
+        self.curr_voltage = 0
+
+class DynamicSimResults(object):
+    def __init__(self, num_cycles: int):
+        self.cycle_error = [0] * num_cycles
+        self.cycle_voltage = [0] * num_cycles
+        self.cycle_scaled_worst_case_delay = [0] * num_cycles
+        self.cycle_unscaled_worst_case_delay = [0] * num_cycles
+        self.cycle_speedup = [0] * num_cycles
+        self.num_cycles = num_cycles
+
+        self.mean_voltage = None
+        self.voltage_stdev = None
+        self.mean_error = None
+        self.error_stdev = None
+
+    def filter_empty_cycles(self):
+        new_num_cycles = 0
+        new_cycle_error = []
+        new_cycle_voltage = []
+        new_cycle_scaled_worst_case_delay = []
+        new_cycle_unscaled_worst_case_delay = []
+        new_cycle_speedup = []
+
+        for i in range(0, self.num_cycles):
+            if self.cycle_unscaled_worst_case_delay[i] != 0:
+                new_num_cycles += 1
+                new_cycle_error.append(self.cycle_error[i])
+                new_cycle_voltage.append(self.cycle_voltage[i])
+                new_cycle_scaled_worst_case_delay.append(self.cycle_scaled_worst_case_delay[i])
+                new_cycle_unscaled_worst_case_delay.append(self.cycle_unscaled_worst_case_delay[i])
+                new_cycle_speedup.append(self.cycle_speedup[i])
+        self.num_cycles = new_num_cycles
+        self.cycle_error = new_cycle_error
+        self.cycle_voltage = new_cycle_voltage
+        self.cycle_scaled_worst_case_delay = new_cycle_scaled_worst_case_delay
+        self.cycle_unscaled_worst_case_delay = new_cycle_unscaled_worst_case_delay
+
+    def calculate_stats(self):
+        self.mean_voltage = np.mean(self.cycle_voltage)
+        self.voltage_stdev = np.std(self.cycle_voltage)
+        self.mean_error = np.mean(self.cycle_error)
+        self.error_stdev = np.std(self.cycle_error)
+        
+
+def calculate_speedup(voltage: float):
+    ratio = (STANDARD_VOLTAGE*((voltage - THRESHOLD_VOLTAGE)**ALPHA))/(voltage*((STANDARD_VOLTAGE - THRESHOLD_VOLTAGE)**ALPHA))
+    if ratio == 0: ratio = 0.0001
+    if isinstance(ratio, complex): return 0.0001
+    return ratio
+
 
 def limd(curr_voltage: float, window_error: float, threshold: float, min_voltage: float) -> float:
     if window_error > threshold:
@@ -35,6 +96,10 @@ def limd(curr_voltage: float, window_error: float, threshold: float, min_voltage
         curr_voltage -= 0.05
         curr_voltage = max(curr_voltage, min_voltage)
     return curr_voltage
+
+def pi(sim_state: DynamicSimState, Kc, T1):
+    next = STANDARD_VOLTAGE + Kc*sim_state.instantaneous_error + (Kc/T1)*sim_state.integral_error
+    return min(max(MIN_VOLTAGE, next), STANDARD_VOLTAGE)
 
 def constant_v(curr_voltage: float, window_error: float):
     return curr_voltage
@@ -69,6 +134,8 @@ class HLSynthesizer(object):
         self.dff_to_adder = dict()
         self.worst_case_delay = None
 
+        self.working_results = None # temp variable, remove later
+
     def read_file(self, path: str, top_fname: str, xml_tb=None, override_cache = False):
         xml_tb_filepath = HLS_WORKING_DIR + "/tb.xml"
 
@@ -86,7 +153,7 @@ class HLSynthesizer(object):
                 clock_time=SIM_CLOCK_TIME,
                 output_path=self.bambu_out_path,
                 tb_path=HLS_TB_FORMAT_PATH.format(design=self.design_name),
-                xml_tb=None
+                xml_tb=xml_tb
             )
 
     def get_worst_case_delay(self):
@@ -117,37 +184,56 @@ class HLSynthesizer(object):
             thread_id=thread_id
         )
 
-    def check_error_rate(self, update_func, window_size, clock_time, thread_id = 0):
+    def dynamic_sim(self, sim_results: vsim.SimResults, update_func, window_size, clock_time, target_error, skip_zeros: bool = True):
         curr_voltage = STANDARD_VOLTAGE
-        timing_results, completed = self.simulate(SIM_CLOCK_TIME,thread_id=thread_id)
-        print(f"Number of timing violations: {len(timing_results['violations'])}, completed? {completed}")
 
-
-
-        num_cycles = timing_results["NUM_CYCLES"]
-        timing_results = timing_results["dff"]
-        num_dffs = len(list(timing_results.keys()))
+        num_cycles = sim_results.num_cycles
+        timing_results: vsim.TimeResults = sim_results.dff_results
+        num_dffs = timing_results.num_objects()
         error_results = [0.0] * num_cycles # maps each cycle to the instantaneous error rate at that cycle
         average_error_results = [0.0]*num_cycles # maps each cycle to the window average error at that cycle
         voltage_results = [0] * num_cycles # maps each cycle to the current voltage
         window_total_error = 0.0
         window_average = 0.0
-        critical_errors: dict =  dict()
+        violated_dffs: set = set()
+        speedups = []
 
+        results: DynamicSimResults = DynamicSimResults(num_cycles)
+        sim_state: DynamicSimState = DynamicSimState()
         for cycle in range(0,num_cycles):
             num_violations = 0
-            for dff, cycle_to_delay in timing_results.items():
-                setup_time = 0.0 if cycle not in cycle_to_delay.keys() else cycle_to_delay[cycle][0]
-                scaled_time = setup_time*(STANDARD_VOLTAGE/curr_voltage)
+            dff_to_delay = timing_results.get_cycle_delays(cycle)
+            speedup = calculate_speedup(curr_voltage)
+            results.cycle_speedup[cycle] = speedup
+            for dff, delay_pair in dff_to_delay.items():
+                setup_time = delay_pair[0]
+                results.cycle_unscaled_worst_case_delay[cycle] = max(results.cycle_unscaled_worst_case_delay[cycle], setup_time)
+                scaled_time = 0
+                if setup_time != 0:
+                    scaled_time = setup_time/speedup
+                    results.cycle_scaled_worst_case_delay[cycle] = max(results.cycle_scaled_worst_case_delay[cycle], scaled_time)
                 if scaled_time > clock_time: # may need to apply some scaling here
                     num_violations += 1
-            voltage_results[cycle] = curr_voltage
-            curr_voltage = update_func(curr_voltage, window_average)
+                    violated_dffs.add(dff)
 
-            cycle_error_rate = num_violations/num_dffs
+            
+            voltage_results[cycle] = curr_voltage
+            results.cycle_voltage[cycle] = curr_voltage
+            
+            cycle_error_rate = num_violations/num_dffs - target_error
             error_results[cycle] = cycle_error_rate
 
+            results.cycle_error[cycle] = cycle_error_rate
+
             window_total_error += cycle_error_rate
+
+            if skip_zeros == True and results.cycle_unscaled_worst_case_delay[cycle] == 0:
+                continue
+
+            sim_state.instantaneous_error = cycle_error_rate
+            sim_state.integral_error += cycle_error_rate
+
+            curr_voltage = update_func(sim_state)
 
             if cycle+1 > window_size:
                 window_total_error -= error_results[cycle-window_size] # should never produce a negative result
@@ -157,32 +243,184 @@ class HLSynthesizer(object):
 
             average_error_results[cycle] = window_average
 
-        return (critical_errors, average_error_results, error_results, voltage_results, num_cycles)                    
+        if skip_zeros: results.filter_empty_cycles()
+
+        results.calculate_stats()
+
+        return results                    
+
+
+    def analyze_update_func(self, update_func, window_size, clock_time, target_error, skip_zeros: bool = True):
+        sim_results = self.simulate(math.ceil(clock_time), 0)
+        dsr: DynamicSimResults = self.dynamic_sim(sim_results, update_func, window_size, clock_time, target_error, skip_zeros)
+        fig, ax1 = plt.subplots()
+        ax1.plot(range(0, dsr.num_cycles),dsr.cycle_voltage, color='red')
+        ax1.set(ylabel="Voltage")
+        ax2 = ax1.twinx()
+        ax2.plot(range(0, dsr.num_cycles), dsr.cycle_error, color='green')
+        ax2.set(ylabel="Error rate")
+        fig.tight_layout()
+        plt.title(self.design_name)
+        plt.show()
+
+    def analyze_delays(self, update_func, window_size, clock_time, target_error, skip_zeros: bool = True):
+        sim_results = self.simulate(math.ceil(clock_time)*2, 0)
+        dsr: DynamicSimResults = self.dynamic_sim(sim_results, update_func, window_size, clock_time, target_error, skip_zeros)
+        fig, ax1 = plt.subplots()
+        ax1.plot(range(0, dsr.num_cycles),dsr.cycle_unscaled_worst_case_delay, color='red')
+        #ax1.set(ylabel="Unscaled worst case cycle delay")
+        #ax2 = ax1.twinx()
+        ax1.plot(range(0, dsr.num_cycles), [self.worst_case_delay]*dsr.num_cycles, color='green')
+        #ax2.set(ylabel="Clock time")
+        #fig.tight_layout()
+        plt.title(self.design_name)
+        plt.show() 
 
     def analyze_limd(self, window_size, min_voltage, threshold, clock_time):
-        critical_errors, average_error, error, voltage, num_cycles = self.check_error_rate(lambda curr_voltage, window_average: limd(curr_voltage, window_average, threshold, min_voltage), window_size, clock_time)
-        fig, ax1 = plt.subplots()
-        ax1.plot(range(0, num_cycles),average_error, color='red')
-        ax2 = ax1.twinx()
-        ax2.plot(range(0, num_cycles), voltage, color='green')
-        fig.tight_layout()
-        plt.show()
-                
+
+        critical_errors, average_error, error, voltage, num_cycles = self.dynamic_sim(self.working_results, lambda curr_voltage, window_average: limd(curr_voltage, window_average, threshold, min_voltage), window_size, clock_time)
+        
+
+    def analyze_pi(self, Kc, T1, target_error):
+        #if self.working_results == None:
+        #    self.working_results = sim_results = self.simulate(math.ceil(self.worst_case_delay*2), 0)
+        update_func = lambda x: pi(x, Kc, T1)
+        self.analyze_delays(update_func, 10, self.worst_case_delay, target_error)
+
+    def analyze_bla(self, Kc, T1, target_error):
+        update_func = lambda x: pi(x, Kc, T1)
+        self.analyze_delays(update_func, 10, self.worst_case_delay, target_error)
+
     def determine_critical_values(self):
-        min_time = self.worst_case_delay/(STANDARD_VOLTAGE/MIN_VOLTAGE)
+        min_time = self.worst_case_delay/(STANDARD_VOLTAGE/1.0)
         cycle_times = arange(min_time, self.worst_case_delay, 0.1)
         results = perform_sync_tasks(function=self.simulate, 
                                      inputs=cycle_times, 
                                      dynamic_arg_index=0,
                                      args=(None,))
+        critical_time, critical_results = None, None
+        supercritical_time, supercritical_results = None, None
+
         for i, time in enumerate(cycle_times):
-            print(f"With cycle time = {time}:")
+            sim_results: vsim.SimResults = results[i]
+            if sim_results.completed == False: continue
+            invalid_result = False
+            for case in sim_results.case_results:
+                if case[0] == False:
+                    invalid_result = True
+            if invalid_result == True: continue
+            
+            critical_time = time
+            critical_results = results[i]
+            if i > 1 and results[i-1].completed == True: 
+                supercritical_time = cycle_times[i-1]
+                supercritical_results = results[i-1]
+            break
+
+        print(supercritical_time)
+        print(critical_time)
+
+        self._determine_worst_case_cycle_delays(critical_results)
+
+        return
+
+        # need to update this part of the code to reflect SimResults implementation
+        violated_dffs, average_error, error, voltage, num_cycles = self.dynamic_sim(critical_results[0], constant_v, 10, round(supercritical_time,2))
+        fig, ax1 = plt.subplots()
+        ax1.plot(range(0, num_cycles),average_error, color='red')
+        ax2 = ax1.twinx()
+        ax2.plot(range(0, num_cycles), voltage, color='green')
+        fig.tight_layout()
+        plt.show()    
+
+        print(violated_dffs)
+        implicated_adders: dict = dict()
+        adderless_dffs: set = set()
+        for dff in violated_dffs:
+            if dff in self.dff_to_adder.keys():
+                adders = self.dff_to_adder[dff]
+                for adder_bit_pair in adders:
+                    adder = adder_bit_pair[0]
+                    if adder not in implicated_adders.keys(): implicated_adders[adder] = 1
+                    else: implicated_adders[adder]+=1
+            else:
+                adderless_dffs.add(dff)
+
+        print(implicated_adders)
+        print(adderless_dffs)
+
+        exit()
+
+        # if no "supercritical" cases, skip this phase of analysis
+
+        supercritical_case_results = supercritical_results[1]
+        failed_cases = [i for i in range(0, len(case_results)) if supercritical_case_results[i][0] == False]
+
+
+
+
+        for i, time in enumerate(cycle_times):
             result = results[i]
-            print(f"  completed: {result[1]}")
-            print(f"  number of violations: {len(result[0]['violations'])}")   
-            attached_adders: set = set()         
-            for dff, time in results[0]['violations']:
-                attached_adders.add(self.dff_to_adder[dff])
+            attached_adders: set = set()   
+            num_adderless_dffs = 0 
+            unique_dffs: set = set()
+            dff_to_num_violations: dict = dict()
+            for dff, time in result[0]['violations']:
+                unique_dffs.add(dff)
+                if dff not in dff_to_num_violations.keys():
+                    dff_to_num_violations[dff] = 1
+                else:
+                    dff_to_num_violations[dff] += 1
+
+                if dff not in self.dff_to_adder.keys():
+                    num_adderless_dffs += 1
+                else:
+                    adders = self.dff_to_adder[dff]
+                    for adder in adders: attached_adders.add(adder)
+
+    def _determine_worst_case_cycle_delays(self, results: vsim.SimResults):
+        num_cycles = results.num_cycles
+        cycle_to_delay = [None]*num_cycles
+        real_cycle_delays = []
+        dff_results: vsim.TimeResults = results.dff_results
+        for i in range(40, num_cycles):
+            cycle_results: dict = map(lambda x: x[0], dff_results.get_cycle_delays(i).values())
+            worst = max(list(cycle_results))
+            cycle_to_delay[i] = worst
+            if worst == 0: # naive way of handling empty cycles, may need to change later
+                continue
+            real_cycle_delays += [worst]
+
+
+
+        sr = 20000
+        ts = 1.0/sr
+
+        X = fft(real_cycle_delays)
+        N = len(X)
+        n = np.arange(N)
+        T = N/sr
+        freq = n/T
+
+        enumerated_X = enumerate(X)
+        print(list(enumerated_X))
+
+
+
+
+        bound = 20
+        for i in range(bound, len(X)):
+            X[i] = 0
+
+        plt.stem(freq, np.abs(X))
+        plt.show()
+
+
+        fig, ax = plt.subplots()
+        ax.plot(range(0, len(real_cycle_delays)), real_cycle_delays)
+        #ax.plot(range(0, len(real_cycle_delays)), ifft(X), 'r')
+        plt.show()
+
 
 
 # data analysis portion, may want to split into new function
@@ -194,7 +432,7 @@ class HLSynthesizer(object):
 
         connected_dffs: dict = json.loads(read_text(self.connected_dffs_path))
         print(connected_dffs)
-        critical_errors, average_error, error, voltage, num_cycles = self.check_error_rate(lambda curr_voltage, window_average: constant_v(MIN_VOLTAGE, 1), window_size, clock_time)        
+        critical_errors, average_error, error, voltage, num_cycles = self.dynamic_sim(lambda curr_voltage, window_average: constant_v(MIN_VOLTAGE, 1), window_size, clock_time)        
         
 
         exit()
@@ -258,6 +496,7 @@ class HLSynthesizer(object):
         for i, curr_add_expr in enumerate(self.addition_info):
             curr = i
             width = curr_add_expr["new_width"]
+            if width < 4: width = 4
 
             curr_adder: Adder = Adder(f"{adder_types[i]}.{width}.basic")
             if not curr_adder.is_generated():
@@ -319,13 +558,13 @@ class HLSynthesizer(object):
                 syn_output_path=self.substitution_template_path,
                 script_path=HLS_WORKING_DIR+"/syn_template.tcl"
             )
-            vsyn.run_hls_generic_syn_script(
-                top_level_file=self.bambu_out_path,
-                design_name=self.design_name,
-                clock_time=REAL_CLOCK_TIME,
-                syn_output_path=self.generic_design_path,
-                script_path=HLS_WORKING_DIR+"/syn_generic.tcl"
-            )
+            #vsyn.run_hls_generic_syn_script(
+            #    top_level_file=self.bambu_out_path,
+            #    design_name=self.design_name,
+            #    clock_time=REAL_CLOCK_TIME,
+            #    syn_output_path=self.generic_design_path,
+            #    script_path=HLS_WORKING_DIR+"/syn_generic.tcl"
+            #)
 
             write_text(self.substitution_template_path, fix_hanging_newlines(read_text(self.substitution_template_path)))
 
@@ -338,7 +577,18 @@ class HLSynthesizer(object):
 
             self.substitute_adders(initial_types, initial_areas)
             curr_adder = 0
+
             connected_dffs = dict()
+
+            inputs = [adder["name"] for adder in self.addition_info]
+
+            results = perform_sync_tasks(retrieve_connected_dffs, inputs, 0, (None,))
+            
+            for i, name in enumerate(inputs):
+                self.connected_dffs[name] = results[i]
+
+
+            '''
             while curr_adder != self.num_adders:
                 available_threads = min(NUM_THREADS, self.num_adders-curr_adder)
 
@@ -357,12 +607,23 @@ class HLSynthesizer(object):
                     result = thread_list[thread_num].get()
                     name = self.addition_info[start_reference+thread_num]["name"]
                     connected_dffs[name] = result
-            write_text(self.connected_dffs_path, json.dumps(connected_dffs))
+            '''
+            print(json.dumps(self.connected_dffs))
+            write_text(self.connected_dffs_path, json.dumps(self.connected_dffs))
+
+
+        self.addition_info = get_addition_info(read_text(self.substitution_template_path))
+        self.num_adders = len(self.addition_info)
 
         self.adder_to_dffs = json.loads(read_text(self.connected_dffs_path))
-        for adder, list in self.adder_to_dffs.items():
-            for dff in list:
-                self.dff_to_adder[dff] = adder
+        for adder, bit_to_list in self.adder_to_dffs.items():
+            for key, dff_list in bit_to_list.items():
+                if key == "NUM_CONNECTIONS": continue
+                for dff in dff_list:
+                    if dff in self.dff_to_adder.keys():
+                        self.dff_to_adder[dff] += [(adder, key)]
+                    else:
+                        self.dff_to_adder[dff] = [(adder, key)]
 
         self.addition_info = get_addition_info(read_text(self.substitution_template_path))
 

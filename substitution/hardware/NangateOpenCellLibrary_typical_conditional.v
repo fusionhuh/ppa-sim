@@ -1597,20 +1597,18 @@ module DFF_X1 (CK, D, Q, QN);
   input D;
   output Q;
   output QN;
-  reg NOTIFIER;
+  reg NOTIFIER, dummy;
 
-  parameter identifier = 0;
 
+  wire IQ;
   seq3_14(IQ, nextstate, CK, NOTIFIER);
   not(IQN, IQ);
   buf(Q, IQ);
   buf(QN, IQN);
   buf(nextstate, D);
+
+  always@(D) $display($realtime,,"%m \\\\EVENT:DFF_INPUT_CHANGE");
  
-  always@(posedge D) $display($realtime,,"%m \\\\EVENT:DFF_INPUT_CHANGE");
-  always@(negedge D) $display($realtime,,"%m \\\\EVENT:DFF_INPUT_CHANGE");
-
-
   specify
     (posedge CK => (Q +: D)) = (0.1, 0.1);
     (posedge CK => (QN -: D)) = (0.1, 0.1);
@@ -1619,9 +1617,16 @@ module DFF_X1 (CK, D, Q, QN);
     $width(posedge CK, 0.1, 0, NOTIFIER);
     $setuphold(posedge CK, negedge D, 0.1, 0.1, NOTIFIER);
     $setuphold(posedge CK, posedge D, 0.1, 0.1, NOTIFIER);
-    $width(negedge D, 0.1, 0, NOTIFIER);
-    $width(posedge D, 0.1, 0, NOTIFIER);
+    $width(negedge D, 0.1, 0, dummy); // can COMPLETELY wall simulation for some reason
+    $width(posedge D, 0.1, 0, dummy); //
   endspecify
+
+	always@(NOTIFIER) begin
+		if (NOTIFIER !== 1'bx) begin
+			$display($realtime,,"%m \\\\EVENT:DFF_TIMING_VIOLATION");
+		end
+	end
+
 
 endmodule
 

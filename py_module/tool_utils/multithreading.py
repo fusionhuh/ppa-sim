@@ -1,6 +1,6 @@
 from multiprocessing.pool import ThreadPool
 
-NUM_THREADS = 6
+NUM_THREADS = 8
 
 
 def perform_sync_tasks(function, inputs: list, dynamic_arg_index: int, args: tuple) -> list:
@@ -25,7 +25,6 @@ def perform_sync_tasks(function, inputs: list, dynamic_arg_index: int, args: tup
         pool.join()
         for i in range(0, available_threads):
             result = thread_list[i].get()
-            print(f"NUMBER OF VIOLATIONS: {len(result[0])}")
             outputs[start+i] = result
 
     return outputs

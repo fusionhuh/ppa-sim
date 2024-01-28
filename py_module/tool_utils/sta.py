@@ -26,7 +26,7 @@ def run_worst_case_delay_script(top_level_file: str, design_name: str, submodule
     run_command(f"sta {script_path}", redirect=report_path)
     report_out_text = read_text(report_path)
     run_command(f"rm {report_path}")
-    worst_case_delay = float(re.findall(r"^\s+?(\d\.\d+?)\s+?data arrival time", report_out_text, flags=re.MULTILINE)[0])
+    worst_case_delay = float(re.findall(r"^\s+?(\d+\.\d+?)\s+?data arrival time", report_out_text, flags=re.MULTILINE)[0])
     return worst_case_delay
 
 

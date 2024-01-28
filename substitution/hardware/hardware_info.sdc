@@ -1,5 +1,5 @@
 set_units -time ns
-create_clock -name clk -period 500.0 -waveform { 0 0.5 } [get_ports clock]
+create_clock -name clk -period 6.61 -waveform { 0 0.5 } [get_ports clock]
 
 
 # ------------------------- Input constraints ----------------------------------
